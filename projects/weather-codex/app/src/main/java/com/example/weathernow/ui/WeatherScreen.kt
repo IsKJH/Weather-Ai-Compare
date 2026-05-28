@@ -12,17 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -54,8 +52,6 @@ private val AppColorScheme = darkColorScheme(
     onSurfaceVariant = Color(0xFFB8C4D6)
 )
 
-private val cityLabels = listOf("서울", "부산", "제주")
-
 @Composable
 fun WeatherNowTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = AppColorScheme, content = content)
@@ -66,7 +62,7 @@ fun WeatherScreen(
     uiState: WeatherUiState,
     onCitySelected: (Int) -> Unit,
     onRefresh: () -> Unit,
-    onToggleFavorite: () -> Unit,
+    onFavoriteToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val weather = uiState.selectedWeather
@@ -89,8 +85,8 @@ fun WeatherScreen(
                 .fillMaxSize()
                 .statusBarsPadding()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 18.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(horizontal = 20.dp, vertical = 22.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
             Header(
                 lastUpdated = uiState.lastUpdated,
@@ -98,26 +94,26 @@ fun WeatherScreen(
                 onRefresh = onRefresh
             )
             CitySelector(
+                cities = uiState.weatherList.map { it.city },
                 selectedIndex = uiState.selectedCityIndex,
+                favoriteCityIndex = uiState.favoriteCityIndex,
                 onCitySelected = onCitySelected
             )
             CurrentWeatherCard(
                 weather = weather,
-                isFavorite = uiState.favoriteCityIndex == uiState.selectedCityIndex,
-                onToggleFavorite = onToggleFavorite
+                isFavorite = uiState.isSelectedCityFavorite,
+                onFavoriteToggle = onFavoriteToggle
             )
-            PrimaryMetrics(weather)
-            SectionTitle("시간별 예보")
-            HourlyForecastStrip(weather.hourlyForecast)
-            SectionTitle("상세 날씨")
-            ExtraDetails(weather)
-            SectionTitle("5일 예보")
+            CurrentMetrics(weather = weather)
+            SectionTitle(text = "시간별 예보")
+            HourlyForecastStrip(items = weather.hourlyForecast)
+            SectionTitle(text = "5일 예보")
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 weather.forecast.forEach { forecastDay ->
                     ForecastRow(day = forecastDay)
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }
@@ -128,56 +124,60 @@ private fun Header(
     isRefreshing: Boolean,
     onRefresh: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "WeatherNow",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = "마지막 업데이트 $lastUpdated",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Button(
-            onClick = onRefresh,
-            enabled = !isRefreshing,
-            shape = RoundedCornerShape(8.dp),
-            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp)
-        ) {
-            if (isRefreshing) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(18.dp),
-                    strokeWidth = 2.dp,
-                    color = MaterialTheme.colorScheme.onPrimary
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "WeatherNow",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
-            } else {
-                Text("새로고침")
+                Text(
+                    text = "마지막 업데이트 $lastUpdated",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
+            OutlinedButton(
+                onClick = onRefresh,
+                enabled = !isRefreshing,
+                shape = RoundedCornerShape(8.dp),
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.55f),
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
+                Text(text = if (isRefreshing) "갱신 중" else "새로고침")
+            }
+        }
+        if (isRefreshing) {
+            LinearProgressIndicator(
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.surface
+            )
         }
     }
 }
 
 @Composable
 private fun CitySelector(
+    cities: List<String>,
     selectedIndex: Int,
+    favoriteCityIndex: Int?,
     onCitySelected: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        cityLabels.forEachIndexed { index, label ->
+        cities.forEachIndexed { index, label ->
             val selected = selectedIndex == index
             OutlinedButton(
                 onClick = { onCitySelected(index) },
@@ -185,7 +185,7 @@ private fun CitySelector(
                     .weight(1f)
                     .height(44.dp),
                 shape = RoundedCornerShape(8.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp),
+                contentPadding = PaddingValues(horizontal = 6.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = if (selected) {
                         MaterialTheme.colorScheme.primary
@@ -200,7 +200,7 @@ private fun CitySelector(
                 )
             ) {
                 Text(
-                    text = label,
+                    text = if (favoriteCityIndex == index) "★ $label" else label,
                     maxLines = 1,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.SemiBold
@@ -214,7 +214,7 @@ private fun CitySelector(
 private fun CurrentWeatherCard(
     weather: WeatherData,
     isFavorite: Boolean,
-    onToggleFavorite: () -> Unit
+    onFavoriteToggle: () -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -223,8 +223,7 @@ private fun CurrentWeatherCard(
     ) {
         Column(
             modifier = Modifier.padding(22.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -234,7 +233,7 @@ private fun CurrentWeatherCard(
                 Column {
                     Text(
                         text = weather.city,
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -245,22 +244,35 @@ private fun CurrentWeatherCard(
                     )
                 }
                 OutlinedButton(
-                    onClick = onToggleFavorite,
+                    onClick = onFavoriteToggle,
                     shape = RoundedCornerShape(8.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp)
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = if (isFavorite) {
+                            MaterialTheme.colorScheme.secondary
+                        } else {
+                            Color.Transparent
+                        },
+                        contentColor = if (isFavorite) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        }
+                    )
                 ) {
-                    Text(if (isFavorite) "★ 즐겨찾기" else "☆ 즐겨찾기")
+                    Text(text = if (isFavorite) "★ 즐겨찾기" else "☆ 즐겨찾기")
                 }
             }
+            Spacer(modifier = Modifier.height(14.dp))
             Text(
-                text = conditionIcon(weather.condition),
-                fontSize = 54.sp,
-                lineHeight = 58.sp
+                text = weather.icon,
+                fontSize = 58.sp,
+                lineHeight = 62.sp
             )
             Text(
                 text = "${weather.currentTemp}°C",
-                fontSize = 68.sp,
-                lineHeight = 72.sp,
+                fontSize = 72.sp,
+                lineHeight = 76.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -274,73 +286,85 @@ private fun CurrentWeatherCard(
 }
 
 @Composable
-private fun PrimaryMetrics(weather: WeatherData) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        MetricTile(
-            label = "습도",
-            value = "${weather.humidity}%",
-            modifier = Modifier.weight(1f)
-        )
-        MetricTile(
-            label = "풍속",
-            value = "${weather.windSpeed} m/s",
-            modifier = Modifier.weight(1f)
-        )
-    }
-}
-
-@Composable
-private fun ExtraDetails(weather: WeatherData) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+private fun CurrentMetrics(weather: WeatherData) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            MetricTile("강수확률", "${weather.precipitationProbability}%", Modifier.weight(1f))
-            MetricTile("자외선 지수", weather.uvIndex.toString(), Modifier.weight(1f))
+            MetricTile(
+                label = "습도",
+                value = "${weather.humidity}%",
+                modifier = Modifier.weight(1f)
+            )
+            MetricTile(
+                label = "풍속",
+                value = "${weather.windSpeed} m/s",
+                modifier = Modifier.weight(1f)
+            )
         }
-        MetricTile("대기질", weather.airQuality)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            MetricTile(
+                label = "강수확률",
+                value = "${weather.precipitationProbability}%",
+                modifier = Modifier.weight(1f)
+            )
+            MetricTile(
+                label = "자외선 지수",
+                value = weather.uvIndex.toString(),
+                modifier = Modifier.weight(1f)
+            )
+        }
+        MetricTile(
+            label = "대기질",
+            value = weather.airQuality
+        )
     }
 }
 
 @Composable
-private fun HourlyForecastStrip(hourlyForecast: List<HourlyForecast>) {
+private fun HourlyForecastStrip(items: List<HourlyForecast>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        hourlyForecast.forEach { item ->
-            HourlyForecastItem(item)
+        items.forEach { item ->
+            HourlyForecastCard(item = item)
         }
     }
 }
 
 @Composable
-private fun HourlyForecastItem(item: HourlyForecast) {
+private fun HourlyForecastCard(item: HourlyForecast) {
     Card(
-        modifier = Modifier.width(82.dp),
+        modifier = Modifier.width(86.dp),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.76f)
         )
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 14.dp, horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
             Text(
                 text = item.time,
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Text(text = item.condition, fontSize = 26.sp, lineHeight = 30.sp)
+            Text(
+                text = item.icon,
+                fontSize = 28.sp,
+                lineHeight = 32.sp
+            )
             Text(
                 text = "${item.temperature}°",
                 style = MaterialTheme.typography.titleMedium,
@@ -360,11 +384,3 @@ private fun SectionTitle(text: String) {
         color = MaterialTheme.colorScheme.onBackground
     )
 }
-
-private fun conditionIcon(condition: String): String =
-    when (condition) {
-        "맑음" -> "☀️"
-        "구름많음" -> "☁️"
-        "비" -> "🌧️"
-        else -> "🌤️"
-    }

@@ -9,8 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,8 +25,8 @@ import com.example.weathernow.ui.components.*
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {
-    val weatherData by viewModel.uiState.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val weatherData = uiState.weatherData
     val cities = listOf("서울", "부산", "제주")
 
     Box(
@@ -34,38 +34,37 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(Color(0xFF0D47A1), Color(0xFF1976D2), Color(0xFF42A5F5))
+                    colors = listOf(Color(0xFF1A237E), Color(0xFF303F9F), Color(0xFF3F51B5))
                 )
             )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
+                .padding(horizontal = 20.dp)
         ) {
-            // City Selector & Refresh
+            // Top Bar: City Selector & Refresh
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                    .padding(top = 48.dp, bottom = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(modifier = Modifier.weight(1f)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     cities.forEach { city ->
                         val isSelected = weatherData.city == city
                         Text(
                             text = city,
                             color = if (isSelected) Color.White else Color.White.copy(alpha = 0.5f),
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                             fontSize = 18.sp,
                             modifier = Modifier
                                 .clickable { viewModel.selectCity(city) }
-                                .padding(8.dp)
                         )
                     }
                 }
-                IconButton(onClick = { viewModel.refreshWeather() }) {
+                IconButton(onClick = { viewModel.refresh() }) {
                     Icon(Icons.Default.Refresh, contentDescription = "새로고침", tint = Color.White)
                 }
             }
@@ -73,110 +72,109 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(bottom = 32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    
-                    // City & Favorite
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = weatherData.city,
-                            style = MaterialTheme.typography.headlineLarge,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        IconButton(onClick = { viewModel.toggleFavorite() }) {
-                            Icon(
-                                imageVector = if (weatherData.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                contentDescription = "즐겨찾기",
-                                tint = if (weatherData.isFavorite) Color.Red else Color.White
+                    // Current Weather Section
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = weatherData.city,
+                                style = MaterialTheme.typography.headlineLarge,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
                             )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            IconButton(onClick = { viewModel.toggleFavorite(weatherData.city) }) {
+                                Icon(
+                                    imageVector = if (uiState.favoriteCity == weatherData.city) 
+                                        Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                    contentDescription = "즐겨찾기",
+                                    tint = if (uiState.favoriteCity == weatherData.city) Color.Red else Color.White
+                                )
+                            }
                         }
+                        
+                        Text(
+                            text = "마지막 업데이트: ${uiState.lastUpdated}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color.White.copy(alpha = 0.6f)
+                        )
+                        
+                        Spacer(modifier = Modifier.height(16.dp))
+                        WeatherIcon(condition = weatherData.condition, fontSize = 100)
+                        
+                        Text(
+                            text = "${weatherData.currentTemp}°",
+                            fontSize = 84.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.ExtraLight
+                        )
+                        Text(
+                            text = weatherData.condition,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = Color.White.copy(alpha = 0.9f)
+                        )
                     }
-                    
-                    Text(
-                        text = "마지막 업데이트: ${weatherData.lastUpdated}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.White.copy(alpha = 0.6f)
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    WeatherIcon(condition = weatherData.condition, size = 100)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "${weatherData.currentTemp}°",
-                        fontSize = 90.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Light
-                    )
-                    Text(
-                        text = weatherData.condition,
-                        style = MaterialTheme.typography.titleLarge,
-                        color = Color.White.copy(alpha = 0.9f),
-                        fontWeight = FontWeight.Medium
-                    )
-                    
-                    Spacer(modifier = Modifier.height(40.dp))
+                }
 
-                    // Main Details Grid
-                    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            InfoCard(label = "체감온도", value = "${weatherData.feelsLike}°", modifier = Modifier.weight(1f))
-                            InfoCard(label = "습도", value = "${weatherData.humidity}%", modifier = Modifier.weight(1f))
-                            InfoCard(label = "풍속", value = "${weatherData.windSpeed}m/s", modifier = Modifier.weight(1f))
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            InfoCard(label = "강수확률", value = "${weatherData.precipitationProbability}%", modifier = Modifier.weight(1f))
-                            InfoCard(label = "자외선 지수", value = "${weatherData.uvIndex}", modifier = Modifier.weight(1f))
-                            InfoCard(label = "대기질", value = weatherData.airQuality, modifier = Modifier.weight(1f))
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    // Hourly Forecast
+                item {
+                    // Hourly Forecast Section
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(16.dp))
-                            .padding(vertical = 16.dp)
+                            .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(20.dp))
+                            .padding(16.dp)
                     ) {
                         Text(
                             text = "시간별 예보",
                             color = Color.White,
                             style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                            fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         LazyRow(
-                            contentPadding = PaddingValues(horizontal = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             items(weatherData.hourlyForecast) { hourly ->
                                 HourlyForecastItem(hourly = hourly)
                             }
                         }
                     }
+                }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                item {
+                    // Weather Details Grid
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            InfoCard(label = "체감 온도", value = "${weatherData.feelsLike}°", modifier = Modifier.weight(1f))
+                            InfoCard(label = "습도", value = "${weatherData.humidity}%", modifier = Modifier.weight(1f))
+                            InfoCard(label = "풍속", value = "${weatherData.windSpeed}m/s", modifier = Modifier.weight(1f))
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            InfoCard(label = "강수확률", value = "${weatherData.precipitation}%", modifier = Modifier.weight(1f))
+                            InfoCard(label = "자외선 지수", value = "${weatherData.uvIndex}", modifier = Modifier.weight(1f))
+                            InfoCard(label = "대기질", value = weatherData.airQuality, modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
 
-                    // 5-day Forecast
+                item {
+                    // 5-Day Forecast Section
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(16.dp))
+                            .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(20.dp))
                             .padding(16.dp)
                     ) {
                         Text(
@@ -194,16 +192,8 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
             }
         }
 
-        // Loading State
-        if (isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.3f)),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = Color.White)
-            }
+        if (uiState.isLoading) {
+            LoadingOverlay()
         }
     }
 }

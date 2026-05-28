@@ -3,6 +3,7 @@ package com.example.weathernow.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +17,7 @@ import com.example.weathernow.ForecastDay
 import com.example.weathernow.HourlyForecast
 
 @Composable
-fun WeatherIcon(condition: String, modifier: Modifier = Modifier, size: Int = 48) {
+fun WeatherIcon(condition: String, fontSize: Int = 48, modifier: Modifier = Modifier) {
     val emoji = when (condition) {
         "맑음" -> "☀️"
         "구름많음" -> "☁️"
@@ -25,14 +26,14 @@ fun WeatherIcon(condition: String, modifier: Modifier = Modifier, size: Int = 48
         "눈" -> "❄️"
         else -> "❓"
     }
-    Text(text = emoji, fontSize = size.sp, modifier = modifier)
+    Text(text = emoji, fontSize = fontSize.sp, modifier = modifier)
 }
 
 @Composable
 fun InfoCard(label: String, value: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .background(Color.White.copy(alpha = 0.15f), RoundedCornerShape(12.dp))
+            .background(Color.White.copy(alpha = 0.15f), RoundedCornerShape(16.dp))
             .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -53,21 +54,6 @@ fun InfoCard(label: String, value: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun HourlyForecastItem(hourly: HourlyForecast) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = hourly.time, color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp)
-        Spacer(modifier = Modifier.height(8.dp))
-        WeatherIcon(condition = hourly.condition, size = 28)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "${hourly.temp}°", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-    }
-}
-
-@Composable
 fun ForecastItem(forecast: ForecastDay) {
     Row(
         modifier = Modifier
@@ -83,12 +69,12 @@ fun ForecastItem(forecast: ForecastDay) {
             fontWeight = FontWeight.Medium
         )
         Row(
-            modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.Start
         ) {
-            WeatherIcon(condition = forecast.condition, size = 20)
-            Spacer(modifier = Modifier.width(8.dp))
+            WeatherIcon(condition = forecast.condition, fontSize = 24)
+            Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = forecast.condition, 
                 color = Color.White.copy(alpha = 0.9f), 
@@ -99,9 +85,43 @@ fun ForecastItem(forecast: ForecastDay) {
             text = "${forecast.high}° / ${forecast.low}°",
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.width(60.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.End
+            fontWeight = FontWeight.Bold
         )
+    }
+}
+
+@Composable
+fun HourlyForecastItem(hourly: HourlyForecast) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = hourly.time, 
+            color = Color.White.copy(alpha = 0.8f), 
+            style = MaterialTheme.typography.labelSmall
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        WeatherIcon(condition = hourly.condition, fontSize = 28)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "${hourly.temp}°", 
+            color = Color.White, 
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun LoadingOverlay() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.3f)),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(color = Color.White)
     }
 }

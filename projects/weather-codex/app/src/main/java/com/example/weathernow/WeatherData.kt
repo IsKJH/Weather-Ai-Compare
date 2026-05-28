@@ -5,6 +5,7 @@ data class WeatherData(
     val currentTemp: Int,
     val feelsLike: Int,
     val condition: String,
+    val icon: String,
     val humidity: Int,
     val windSpeed: Double,
     val precipitationProbability: Int,
@@ -17,12 +18,14 @@ data class WeatherData(
 data class HourlyForecast(
     val time: String,
     val condition: String,
+    val icon: String,
     val temperature: Int
 )
 
 data class ForecastDay(
     val day: String,
     val condition: String,
+    val icon: String,
     val high: Int,
     val low: Int
 )
@@ -33,25 +36,26 @@ val mockWeatherList = listOf(
         currentTemp = 23,
         feelsLike = 21,
         condition = "맑음",
+        icon = "☀️",
         humidity = 55,
         windSpeed = 3.2,
         precipitationProbability = 10,
         uvIndex = 6,
         airQuality = "보통",
         hourlyForecast = listOf(
-            HourlyForecast("지금", "☀️", 23),
-            HourlyForecast("13시", "☀️", 24),
-            HourlyForecast("14시", "🌤️", 25),
-            HourlyForecast("15시", "🌤️", 25),
-            HourlyForecast("16시", "☁️", 24),
-            HourlyForecast("17시", "☁️", 22)
+            HourlyForecast("10시", "맑음", "☀️", 23),
+            HourlyForecast("11시", "맑음", "☀️", 24),
+            HourlyForecast("12시", "맑음", "☀️", 25),
+            HourlyForecast("13시", "구름많음", "⛅", 25),
+            HourlyForecast("14시", "구름많음", "☁️", 24),
+            HourlyForecast("15시", "맑음", "☀️", 23)
         ),
         forecast = listOf(
-            ForecastDay("오늘", "맑음", 25, 16),
-            ForecastDay("금", "구름많음", 22, 15),
-            ForecastDay("토", "비", 18, 13),
-            ForecastDay("일", "맑음", 20, 14),
-            ForecastDay("월", "맑음", 26, 17)
+            ForecastDay("오늘", "맑음", "☀️", 25, 16),
+            ForecastDay("내일", "구름많음", "☁️", 22, 15),
+            ForecastDay("토요일", "비", "🌧️", 18, 13),
+            ForecastDay("일요일", "맑음", "☀️", 20, 14),
+            ForecastDay("월요일", "맑음", "☀️", 26, 17)
         )
     ),
     WeatherData(
@@ -59,25 +63,26 @@ val mockWeatherList = listOf(
         currentTemp = 26,
         feelsLike = 28,
         condition = "구름많음",
+        icon = "☁️",
         humidity = 72,
         windSpeed = 5.1,
         precipitationProbability = 35,
-        uvIndex = 5,
+        uvIndex = 4,
         airQuality = "좋음",
         hourlyForecast = listOf(
-            HourlyForecast("지금", "☁️", 26),
-            HourlyForecast("13시", "☁️", 27),
-            HourlyForecast("14시", "🌧️", 26),
-            HourlyForecast("15시", "🌧️", 25),
-            HourlyForecast("16시", "☁️", 25),
-            HourlyForecast("17시", "🌤️", 24)
+            HourlyForecast("10시", "구름많음", "☁️", 26),
+            HourlyForecast("11시", "구름많음", "☁️", 27),
+            HourlyForecast("12시", "맑음", "☀️", 28),
+            HourlyForecast("13시", "맑음", "☀️", 28),
+            HourlyForecast("14시", "구름많음", "⛅", 27),
+            HourlyForecast("15시", "비", "🌧️", 25)
         ),
         forecast = listOf(
-            ForecastDay("오늘", "구름많음", 27, 20),
-            ForecastDay("금", "비", 24, 19),
-            ForecastDay("토", "비", 22, 18),
-            ForecastDay("일", "맑음", 25, 19),
-            ForecastDay("월", "맑음", 28, 21)
+            ForecastDay("오늘", "구름많음", "☁️", 27, 20),
+            ForecastDay("내일", "비", "🌧️", 24, 19),
+            ForecastDay("토요일", "비", "🌧️", 22, 18),
+            ForecastDay("일요일", "맑음", "☀️", 25, 19),
+            ForecastDay("월요일", "맑음", "☀️", 28, 21)
         )
     ),
     WeatherData(
@@ -85,25 +90,26 @@ val mockWeatherList = listOf(
         currentTemp = 28,
         feelsLike = 30,
         condition = "맑음",
+        icon = "☀️",
         humidity = 68,
         windSpeed = 6.8,
         precipitationProbability = 20,
         uvIndex = 7,
         airQuality = "좋음",
         hourlyForecast = listOf(
-            HourlyForecast("지금", "☀️", 28),
-            HourlyForecast("13시", "☀️", 29),
-            HourlyForecast("14시", "☀️", 30),
-            HourlyForecast("15시", "🌤️", 30),
-            HourlyForecast("16시", "🌤️", 29),
-            HourlyForecast("17시", "☁️", 27)
+            HourlyForecast("10시", "맑음", "☀️", 28),
+            HourlyForecast("11시", "맑음", "☀️", 29),
+            HourlyForecast("12시", "맑음", "☀️", 30),
+            HourlyForecast("13시", "구름많음", "⛅", 30),
+            HourlyForecast("14시", "구름많음", "☁️", 29),
+            HourlyForecast("15시", "비", "🌧️", 27)
         ),
         forecast = listOf(
-            ForecastDay("오늘", "맑음", 29, 22),
-            ForecastDay("금", "맑음", 30, 23),
-            ForecastDay("토", "구름많음", 27, 21),
-            ForecastDay("일", "비", 24, 20),
-            ForecastDay("월", "맑음", 25, 21)
+            ForecastDay("오늘", "맑음", "☀️", 29, 22),
+            ForecastDay("내일", "맑음", "☀️", 30, 23),
+            ForecastDay("토요일", "구름많음", "☁️", 27, 21),
+            ForecastDay("일요일", "비", "🌧️", 24, 20),
+            ForecastDay("월요일", "맑음", "☀️", 25, 21)
         )
     )
 )

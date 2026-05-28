@@ -14,11 +14,12 @@ data class WeatherUiState(
     val selectedCityIndex: Int = 0,
     val weatherList: List<WeatherData> = mockWeatherList,
     val favoriteCityIndex: Int? = null,
-    val lastUpdated: String = currentUpdateTime(),
     val isRefreshing: Boolean = false,
+    val lastUpdated: String = currentUpdateTime(),
     val refreshCount: Int = 0
 ) {
     val selectedWeather: WeatherData = weatherList[selectedCityIndex]
+    val isSelectedCityFavorite: Boolean = selectedCityIndex == favoriteCityIndex
 }
 
 class WeatherViewModel : ViewModel() {
@@ -32,12 +33,9 @@ class WeatherViewModel : ViewModel() {
     }
 
     fun toggleFavorite() {
-        val newFavorite = if (uiState.favoriteCityIndex == uiState.selectedCityIndex) {
-            null
-        } else {
-            uiState.selectedCityIndex
-        }
-        uiState = uiState.copy(favoriteCityIndex = newFavorite)
+        uiState = uiState.copy(
+            favoriteCityIndex = if (uiState.isSelectedCityFavorite) null else uiState.selectedCityIndex
+        )
     }
 
     fun refresh() {
@@ -45,13 +43,12 @@ class WeatherViewModel : ViewModel() {
 
         viewModelScope.launch {
             uiState = uiState.copy(isRefreshing = true)
-            delay(650)
-
+            delay(700)
             val nextRefreshCount = uiState.refreshCount + 1
             uiState = uiState.copy(
                 weatherList = refreshedWeather(nextRefreshCount),
-                lastUpdated = currentUpdateTime(),
                 isRefreshing = false,
+                lastUpdated = currentUpdateTime(),
                 refreshCount = nextRefreshCount
             )
         }
@@ -64,13 +61,13 @@ private fun refreshedWeather(refreshCount: Int): List<WeatherData> {
         2 -> -1
         else -> 0
     }
-    val rainOffset = (refreshCount % 2) * 5
+    val precipitationOffset = (refreshCount % 2) * 5
 
     return mockWeatherList.map { weather ->
         weather.copy(
             currentTemp = weather.currentTemp + tempOffset,
             feelsLike = weather.feelsLike + tempOffset,
-            precipitationProbability = (weather.precipitationProbability + rainOffset).coerceAtMost(95),
+            precipitationProbability = (weather.precipitationProbability + precipitationOffset).coerceAtMost(95),
             hourlyForecast = weather.hourlyForecast.mapIndexed { index, hourly ->
                 hourly.copy(temperature = hourly.temperature + tempOffset + if (index > 2) -1 else 0)
             }
@@ -78,5 +75,6 @@ private fun refreshedWeather(refreshCount: Int): List<WeatherData> {
     }
 }
 
-private fun currentUpdateTime(): String =
-    LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+private fun currentUpdateTime(): String {
+    return LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+}

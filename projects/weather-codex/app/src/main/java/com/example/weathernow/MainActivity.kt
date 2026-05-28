@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
                     uiState = viewModel.uiState,
                     onCitySelected = viewModel::selectCity,
                     onRefresh = viewModel::refresh,
-                    onToggleFavorite = viewModel::toggleFavorite
+                    onFavoriteToggle = viewModel::toggleFavorite
                 )
             }
         }
