@@ -4,195 +4,81 @@
 <meta charset="utf-8">
 <title>WeatherNow AI v2 Comparison</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 32px; background: #f6f7f9; color: #172033; }
+body { font-family: Arial, 'Malgun Gothic', sans-serif; margin: 32px; background: #f6f7f9; color: #172033; }
 h1 { margin-bottom: 4px; }
 .meta { color: #5f6b7a; margin-bottom: 24px; }
 table { border-collapse: collapse; width: 100%; background: #fff; margin: 18px 0 28px; }
 th, td { border: 1px solid #d8dde6; padding: 10px; vertical-align: top; }
-th { background: #eef2f7; text-align: left; }
+th { background: #eef2f7; text-align: left; width: 170px; }
 img { max-width: 280px; border: 1px solid #d8dde6; border-radius: 8px; }
 pre { white-space: pre-wrap; word-break: break-word; background: #101828; color: #e8eef7; padding: 14px; border-radius: 8px; overflow: auto; }
-.detail { background: #fff; padding: 18px; border: 1px solid #d8dde6; border-radius: 10px; margin: 18px 0; }
+section { background: #fff; padding: 18px; border: 1px solid #d8dde6; border-radius: 10px; margin: 18px 0; }
+.warn { background: #fff8e5; border: 1px solid #f0cf75; padding: 12px; border-radius: 8px; }
 </style>
 </head>
 <body>
-<h1>WeatherNow AI v2 Improvement Comparison</h1>
-<div class="meta">Generated at 2026-05-28T14:42:25 / baseline: weather-v1 / prompt: prompt_v2.txt</div>
-<table>
-<thead><tr><th>Metric</th><th>Claude</th><th>Codex</th><th>Gemini</th></tr></thead>
-<tbody><tr><th>Elapsed sec</th><td>341</td><td>272.7</td><td>507.7</td></tr><tr><th>Build success</th><td>PASS</td><td>PASS</td><td>PASS</td></tr><tr><th>Screenshot</th><td>PASS</td><td>PASS</td><td>PASS</td></tr><tr><th>Kotlin files</th><td>5</td><td>6</td><td>5</td></tr><tr><th>Kotlin lines</th><td>603</td><td>709</td><td>522</td></tr><tr><th>Changed files from v1</th><td>3</td><td>6</td><td>4</td></tr><tr><th>Input tokens</th><td>N/A</td><td>N/A</td><td>N/A</td></tr><tr><th>Output tokens</th><td>N/A</td><td>N/A</td><td>N/A</td></tr><tr><th>Total tokens</th><td>N/A</td><td>N/A</td><td>N/A</td></tr></tbody>
-</table>
-<h2>Screenshots</h2>
-<table><tr><th>Claude</th><th>Codex</th><th>Gemini</th></tr><tr><td><img src="../screenshots/v2/claude.png" alt="claude v2 screenshot"></td><td><img src="../screenshots/v2/codex.png" alt="codex v2 screenshot"></td><td><img src="../screenshots/v2/gemini.png" alt="gemini v2 screenshot"></td></tr></table>
+<h1>WeatherNow AI v2 개선 비교</h1>
+<div class="meta">Generated at 2026-05-28T14:54:12 / baseline: weather-v1 / result: weather-v2 / prompt: prompt_v2.txt</div>
+<div class="warn"><b>토큰 계측 주의:</b> Codex는 로그에서 총 토큰 128,899를 파싱했습니다. Claude와 Gemini는 이번 v2 실행 옵션에서 토큰 통계를 로그로 남기지 않아 사후 복구가 불가능합니다. v3에서는 JSON/stream-json 출력으로 토큰 계측을 먼저 고정해야 합니다.</div>
+<h2>종합 비교</h2>
+<table><thead><tr><th>기준</th><th>Claude</th><th>Codex</th><th>Gemini</th></tr></thead><tbody><tr><th>모델/CLI</th><td>Claude Code CLI v2.1.153</td><td>OpenAI Codex CLI v0.134.0 / gpt-5.5</td><td>Gemini CLI v0.43.0</td></tr><tr><th>소요 시간(초)</th><td>341</td><td>272.7</td><td>507.7</td></tr><tr><th>토큰</th><td>로그 미제공</td><td>128899</td><td>로그 미제공</td></tr><tr><th>토큰 비고</th><td>이번 v2 실행 옵션의 CLI 로그에 토큰 통계가 출력되지 않아 사후 복구 불가. v3부터 json/stream-json 출력으로 캡처 필요</td><td>Codex CLI text output의 'tokens used' 값을 파싱</td><td>이번 v2 실행 옵션의 CLI 로그에 토큰 통계가 출력되지 않아 사후 복구 불가. v3부터 json/stream-json 출력으로 캡처 필요</td></tr><tr><th>Kotlin 파일 수</th><td>5</td><td>6</td><td>5</td></tr><tr><th>Kotlin 라인 수</th><td>603</td><td>709</td><td>522</td></tr><tr><th>v1 대비 변경 파일</th><td>3</td><td>6</td><td>4</td></tr><tr><th>빌드</th><td>성공</td><td>성공</td><td>성공</td></tr><tr><th>스크린샷</th><td>성공</td><td>성공</td><td>성공</td></tr><tr><th>요구 기능 완료</th><td>6/6</td><td>6/6</td><td>6/6</td></tr><tr><th>한국어</th><td>화면 기준 정상</td><td>화면 기준 정상</td><td>화면 기준 정상</td></tr><tr><th>UI 테마</th><td>밝은 블루 그라디언트, v1 감성 유지</td><td>다크 네이비 대시보드</td><td>블루 그라디언트, 상단 액션 중심</td></tr><tr><th>특징</th><td>시간별 예보, 상세 날씨 6개 카드, 새로고침/마지막 업데이트, 즐겨찾기</td><td>시간별 예보, 상세 날씨, 새로고침, 즐겨찾기</td><td>시간별 예보, 상세 날씨 6개 카드, 새로고침 아이콘, 즐겨찾기 하트</td></tr><tr><th>관찰</th><td>기존 화면 스타일을 가장 많이 보존했지만 하단 시간별 예보가 내비게이션 바와 겹침</td><td>구조와 정보 위계가 가장 명확하지만 v1 대비 시각 스타일 변화가 큼</td><td>앱다운 액션 배치가 좋지만 시간별 예보 영역이 하단에서 일부 잘림</td></tr></tbody></table>
+<h2>요구사항 체크</h2>
+<table><thead><tr><th>요구사항</th><th>Claude</th><th>Codex</th><th>Gemini</th></tr></thead><tbody><tr><th>한국어 복구</th><td>성공</td><td>성공</td><td>성공</td></tr><tr><th>시간별 예보</th><td>성공</td><td>성공</td><td>성공</td></tr><tr><th>상세 날씨</th><td>성공</td><td>성공</td><td>성공</td></tr><tr><th>새로고침</th><td>성공</td><td>성공</td><td>성공</td></tr><tr><th>즐겨찾기</th><td>성공</td><td>성공</td><td>성공</td></tr><tr><th>5일 예보 보존</th><td>성공</td><td>성공</td><td>성공</td></tr></tbody></table>
+<h2>스크린샷</h2>
+<table><tr><th>Claude</th><th>Codex</th><th>Gemini</th></tr><tr><td><img src="../screenshots/v2/claude.png"></td><td><img src="../screenshots/v2/codex.png"></td><td><img src="../screenshots/v2/gemini.png"></td></tr></table>
+<h2>비교 결론</h2>
+<table><tbody>
+<tr><th>가장 빠름</th><td colspan="3">codex (272.7초)</td></tr>
+<tr><th>가장 많은 변경</th><td colspan="3">codex (6개 파일)</td></tr>
+<tr><th>빌드/실행</th><td colspan="3">세 결과 모두 assembleDebug, APK 설치, 스크린샷 성공</td></tr>
+<tr><th>해석</th><td colspan="3">Codex는 계측 가능한 토큰과 구조적 변경이 강점, Claude는 기존 UI 보존, Gemini는 앱 액션 배치가 강점</td></tr>
+</tbody></table>
 
-<section class="detail">
-  <h2>Claude</h2>
-  <h3>Diff stat from weather-v1</h3>
-  <pre>.../com/example/weathernow/data/WeatherData.kt     |  54 ++++-
+<section>
+<h2>Claude</h2>
+<h3>Diff stat from weather-v1</h3>
+<pre>.../com/example/weathernow/data/WeatherData.kt     |  54 ++++-
  .../com/example/weathernow/ui/WeatherScreen.kt     | 239 ++++++++++++++++-----
  .../weathernow/viewmodel/WeatherViewModel.kt       |  45 +++-
  3 files changed, 273 insertions(+), 65 deletions(-)</pre>
-  <h3>Changed files</h3>
-  <pre>M	projects/weather-claude/app/src/main/java/com/example/weathernow/data/WeatherData.kt
-M	projects/weather-claude/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt
-M	projects/weather-claude/app/src/main/java/com/example/weathernow/viewmodel/WeatherViewModel.kt</pre>
-  <h3>Build output tail</h3>
-  <pre>&gt; Task :app:generateDebugResValues UP-TO-DATE
-&gt; Task :app:mapDebugSourceSetPaths UP-TO-DATE
-&gt; Task :app:generateDebugResources UP-TO-DATE
-&gt; Task :app:mergeDebugResources UP-TO-DATE
-&gt; Task :app:packageDebugResources UP-TO-DATE
-&gt; Task :app:parseDebugLocalResources UP-TO-DATE
-&gt; Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
-&gt; Task :app:extractDeepLinksDebug UP-TO-DATE
-&gt; Task :app:processDebugMainManifest UP-TO-DATE
-&gt; Task :app:processDebugManifest UP-TO-DATE
-&gt; Task :app:processDebugManifestForPackage UP-TO-DATE
-&gt; Task :app:processDebugResources UP-TO-DATE
-&gt; Task :app:compileDebugKotlin UP-TO-DATE
-&gt; Task :app:javaPreCompileDebug UP-TO-DATE
-&gt; Task :app:compileDebugJavaWithJavac NO-SOURCE
-&gt; Task :app:mergeDebugShaders UP-TO-DATE
-&gt; Task :app:compileDebugShaders NO-SOURCE
-&gt; Task :app:generateDebugAssets UP-TO-DATE
-&gt; Task :app:mergeDebugAssets UP-TO-DATE
-&gt; Task :app:compressDebugAssets UP-TO-DATE
-&gt; Task :app:processDebugJavaRes UP-TO-DATE
-&gt; Task :app:mergeDebugJavaResource UP-TO-DATE
-&gt; Task :app:checkDebugDuplicateClasses UP-TO-DATE
-&gt; Task :app:desugarDebugFileDependencies UP-TO-DATE
-&gt; Task :app:mergeExtDexDebug UP-TO-DATE
-&gt; Task :app:mergeLibDexDebug UP-TO-DATE
-&gt; Task :app:dexBuilderDebug UP-TO-DATE
-&gt; Task :app:mergeProjectDexDebug UP-TO-DATE
-&gt; Task :app:mergeDebugJniLibFolders UP-TO-DATE
-&gt; Task :app:mergeDebugNativeLibs UP-TO-DATE
-&gt; Task :app:stripDebugDebugSymbols UP-TO-DATE
-&gt; Task :app:validateSigningDebug UP-TO-DATE
-&gt; Task :app:writeDebugAppMetadata UP-TO-DATE
-&gt; Task :app:writeDebugSigningConfigVersions UP-TO-DATE
-&gt; Task :app:packageDebug UP-TO-DATE
-&gt; Task :app:createDebugApkListingFileRedirect UP-TO-DATE
-&gt; Task :app:assembleDebug UP-TO-DATE
-
-BUILD SUCCESSFUL in 1s
-34 actionable tasks: 34 up-to-date</pre>
+<h3>Changed files</h3>
+<pre>projects/weather-claude/app/src/main/java/com/example/weathernow/data/WeatherData.kt
+projects/weather-claude/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt
+projects/weather-claude/app/src/main/java/com/example/weathernow/viewmodel/WeatherViewModel.kt</pre>
 </section>
 
-<section class="detail">
-  <h2>Codex</h2>
-  <h3>Diff stat from weather-v1</h3>
-  <pre>.../java/com/example/weathernow/MainActivity.kt    |   4 +-
+<section>
+<h2>Codex</h2>
+<h3>Diff stat from weather-v1</h3>
+<pre>.../java/com/example/weathernow/MainActivity.kt    |   4 +-
  .../java/com/example/weathernow/WeatherData.kt     |  85 ++++--
  .../com/example/weathernow/WeatherViewModel.kt     |  60 +++-
  .../com/example/weathernow/ui/WeatherScreen.kt     | 310 +++++++++++++++------
  .../weathernow/ui/components/ForecastRow.kt        |  12 +-
  .../example/weathernow/ui/components/MetricTile.kt |   5 +-
  6 files changed, 367 insertions(+), 109 deletions(-)</pre>
-  <h3>Changed files</h3>
-  <pre>M	projects/weather-codex/app/src/main/java/com/example/weathernow/MainActivity.kt
-M	projects/weather-codex/app/src/main/java/com/example/weathernow/WeatherData.kt
-M	projects/weather-codex/app/src/main/java/com/example/weathernow/WeatherViewModel.kt
-M	projects/weather-codex/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt
-M	projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/ForecastRow.kt
-M	projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/MetricTile.kt</pre>
-  <h3>Build output tail</h3>
-  <pre>&gt; Task :app:parseDebugLocalResources UP-TO-DATE
-&gt; Task :app:generateDebugRFile UP-TO-DATE
-&gt; Task :app:compileDebugKotlin UP-TO-DATE
-&gt; Task :app:javaPreCompileDebug UP-TO-DATE
-&gt; Task :app:compileDebugJavaWithJavac NO-SOURCE
-&gt; Task :app:generateDebugAssets UP-TO-DATE
-&gt; Task :app:mergeDebugAssets UP-TO-DATE
-&gt; Task :app:compressDebugAssets UP-TO-DATE
-&gt; Task :app:generateDebugGlobalSynthetics UP-TO-DATE
-&gt; Task :app:processDebugJavaRes UP-TO-DATE
-&gt; Task :app:mergeDebugJavaResource UP-TO-DATE
-&gt; Task :app:checkDebugDuplicateClasses UP-TO-DATE
-&gt; Task :app:desugarDebugFileDependencies UP-TO-DATE
-&gt; Task :app:mergeExtDexDebug UP-TO-DATE
-&gt; Task :app:mergeLibDexDebug UP-TO-DATE
-&gt; Task :app:checkDebugAarMetadata UP-TO-DATE
-&gt; Task :app:mapDebugSourceSetPaths UP-TO-DATE
-&gt; Task :app:compileDebugNavigationResources UP-TO-DATE
-&gt; Task :app:mergeDebugResources UP-TO-DATE
-&gt; Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
-&gt; Task :app:extractDeepLinksDebug UP-TO-DATE
-&gt; Task :app:processDebugMainManifest UP-TO-DATE
-&gt; Task :app:processDebugManifest UP-TO-DATE
-&gt; Task :app:processDebugManifestForPackage UP-TO-DATE
-&gt; Task :app:processDebugResources UP-TO-DATE
-&gt; Task :app:dexBuilderDebug UP-TO-DATE
-&gt; Task :app:mergeProjectDexDebug UP-TO-DATE
-&gt; Task :app:mergeDebugJniLibFolders UP-TO-DATE
-&gt; Task :app:mergeDebugNativeLibs UP-TO-DATE
-&gt; Task :app:stripDebugDebugSymbols UP-TO-DATE
-&gt; Task :app:validateSigningDebug UP-TO-DATE
-&gt; Task :app:writeDebugAppMetadata UP-TO-DATE
-&gt; Task :app:writeDebugSigningConfigVersions UP-TO-DATE
-&gt; Task :app:packageDebug UP-TO-DATE
-&gt; Task :app:createDebugApkListingFileRedirect UP-TO-DATE
-&gt; Task :app:assembleDebug UP-TO-DATE
-
-BUILD SUCCESSFUL in 2s
-36 actionable tasks: 36 up-to-date
-Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.4.1/userguide/configuration_cache_enabling.html</pre>
+<h3>Changed files</h3>
+<pre>projects/weather-codex/app/src/main/java/com/example/weathernow/MainActivity.kt
+projects/weather-codex/app/src/main/java/com/example/weathernow/WeatherData.kt
+projects/weather-codex/app/src/main/java/com/example/weathernow/WeatherViewModel.kt
+projects/weather-codex/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt
+projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/ForecastRow.kt
+projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/MetricTile.kt</pre>
 </section>
 
-<section class="detail">
-  <h2>Gemini</h2>
-  <h3>Diff stat from weather-v1</h3>
-  <pre>.../java/com/example/weathernow/WeatherData.kt     |  48 ++++++
+<section>
+<h2>Gemini</h2>
+<h3>Diff stat from weather-v1</h3>
+<pre>.../java/com/example/weathernow/WeatherData.kt     |  48 ++++++
  .../com/example/weathernow/WeatherViewModel.kt     |  54 ++++++-
  .../com/example/weathernow/ui/WeatherScreen.kt     | 165 ++++++++++++++++-----
  .../weathernow/ui/components/WeatherComponents.kt  |  71 ++++++---
  4 files changed, 278 insertions(+), 60 deletions(-)</pre>
-  <h3>Changed files</h3>
-  <pre>M	projects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherData.kt
-M	projects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherViewModel.kt
-M	projects/weather-gemini/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt
-M	projects/weather-gemini/app/src/main/java/com/example/weathernow/ui/components/WeatherComponents.kt</pre>
-  <h3>Build output tail</h3>
-  <pre>&gt; Task :app:parseDebugLocalResources UP-TO-DATE
-&gt; Task :app:generateDebugRFile UP-TO-DATE
-&gt; Task :app:compileDebugKotlin UP-TO-DATE
-&gt; Task :app:javaPreCompileDebug UP-TO-DATE
-&gt; Task :app:compileDebugJavaWithJavac NO-SOURCE
-&gt; Task :app:generateDebugAssets UP-TO-DATE
-&gt; Task :app:mergeDebugAssets UP-TO-DATE
-&gt; Task :app:compressDebugAssets UP-TO-DATE
-&gt; Task :app:generateDebugGlobalSynthetics UP-TO-DATE
-&gt; Task :app:processDebugJavaRes UP-TO-DATE
-&gt; Task :app:mergeDebugJavaResource UP-TO-DATE
-&gt; Task :app:checkDebugDuplicateClasses UP-TO-DATE
-&gt; Task :app:desugarDebugFileDependencies UP-TO-DATE
-&gt; Task :app:mergeExtDexDebug UP-TO-DATE
-&gt; Task :app:mergeLibDexDebug UP-TO-DATE
-&gt; Task :app:checkDebugAarMetadata UP-TO-DATE
-&gt; Task :app:mapDebugSourceSetPaths UP-TO-DATE
-&gt; Task :app:compileDebugNavigationResources UP-TO-DATE
-&gt; Task :app:mergeDebugResources UP-TO-DATE
-&gt; Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
-&gt; Task :app:extractDeepLinksDebug UP-TO-DATE
-&gt; Task :app:processDebugMainManifest UP-TO-DATE
-&gt; Task :app:processDebugManifest UP-TO-DATE
-&gt; Task :app:processDebugManifestForPackage UP-TO-DATE
-&gt; Task :app:processDebugResources UP-TO-DATE
-&gt; Task :app:dexBuilderDebug UP-TO-DATE
-&gt; Task :app:mergeProjectDexDebug UP-TO-DATE
-&gt; Task :app:mergeDebugJniLibFolders UP-TO-DATE
-&gt; Task :app:mergeDebugNativeLibs UP-TO-DATE
-&gt; Task :app:stripDebugDebugSymbols UP-TO-DATE
-&gt; Task :app:validateSigningDebug UP-TO-DATE
-&gt; Task :app:writeDebugAppMetadata UP-TO-DATE
-&gt; Task :app:writeDebugSigningConfigVersions UP-TO-DATE
-&gt; Task :app:packageDebug UP-TO-DATE
-&gt; Task :app:createDebugApkListingFileRedirect UP-TO-DATE
-&gt; Task :app:assembleDebug UP-TO-DATE
-
-BUILD SUCCESSFUL in 2s
-36 actionable tasks: 36 up-to-date
-Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.4.1/userguide/configuration_cache_enabling.html</pre>
+<h3>Changed files</h3>
+<pre>projects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherData.kt
+projects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherViewModel.kt
+projects/weather-gemini/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt
+projects/weather-gemini/app/src/main/java/com/example/weathernow/ui/components/WeatherComponents.kt</pre>
 </section>
 
 </body>
