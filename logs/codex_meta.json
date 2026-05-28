@@ -1,0 +1,11 @@
+﻿{
+    "startTime":  "2026-05-27T18:14:56.5452887+09:00",
+    "endTime":  "2026-05-27T18:22:34.2357507+09:00",
+    "outputTokens":  "N/A (총 165,761)",
+    "ktLineCount":  451,
+    "ktFileCount":  6,
+    "ai":  "codex",
+    "inputTokens":  "N/A",
+    "elapsedSec":  457.7,
+    "totalTokens":  165761
+}

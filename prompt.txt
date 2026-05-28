@@ -1,0 +1,149 @@
+Build a complete Android weather app project in the current directory based on the following specification. Create ALL necessary files including build.gradle, settings.gradle, AndroidManifest.xml, and all Kotlin source files.
+
+---
+
+# Weather App Specification
+
+## Tech Stack (Fixed — do not change)
+- Language: Kotlin
+- UI: Jetpack Compose
+- Architecture: MVVM (ViewModel + UiState)
+- minSdk: 26
+- targetSdk: 35
+- No external libraries (standard Compose + ViewModel only)
+- No real API — Mock data only
+- App name: WeatherNow
+- Package name: com.example.weathernow
+
+## Required Features
+
+### Screens
+- Single main screen (single Activity + Compose)
+
+### Information to display
+1. City name
+2. Current temperature (°C)
+3. Weather condition (맑음, 흐림, 비, 눈, etc.)
+4. Feels like temperature
+5. Humidity (%)
+6. Wind speed (m/s)
+7. 5-day forecast (day + weather icon + high/low temp)
+
+### Functionality
+- City switching: Seoul(서울), Busan(부산), Jeju(제주) — tabs or selector UI
+- Weather icons: use emoji or draw with Compose (no external image resources)
+
+## Mock Data (use exactly as provided)
+
+```kotlin
+data class WeatherData(
+    val city: String,
+    val currentTemp: Int,
+    val feelsLike: Int,
+    val condition: String,
+    val humidity: Int,
+    val windSpeed: Double,
+    val forecast: List<ForecastDay>
+)
+
+data class ForecastDay(
+    val day: String,
+    val condition: String,
+    val high: Int,
+    val low: Int
+)
+
+val mockWeatherList = listOf(
+    WeatherData(
+        city = "서울",
+        currentTemp = 23,
+        feelsLike = 21,
+        condition = "맑음",
+        humidity = 55,
+        windSpeed = 3.2,
+        forecast = listOf(
+            ForecastDay("월", "맑음", 25, 16),
+            ForecastDay("화", "구름많음", 22, 15),
+            ForecastDay("수", "비", 18, 13),
+            ForecastDay("목", "흐림", 20, 14),
+            ForecastDay("금", "맑음", 26, 17)
+        )
+    ),
+    WeatherData(
+        city = "부산",
+        currentTemp = 26,
+        feelsLike = 28,
+        condition = "구름많음",
+        humidity = 72,
+        windSpeed = 5.1,
+        forecast = listOf(
+            ForecastDay("월", "구름많음", 27, 20),
+            ForecastDay("화", "비", 24, 19),
+            ForecastDay("수", "비", 22, 18),
+            ForecastDay("목", "맑음", 25, 19),
+            ForecastDay("금", "맑음", 28, 21)
+        )
+    ),
+    WeatherData(
+        city = "제주",
+        currentTemp = 28,
+        feelsLike = 30,
+        condition = "맑음",
+        humidity = 68,
+        windSpeed = 6.8,
+        forecast = listOf(
+            ForecastDay("월", "맑음", 29, 22),
+            ForecastDay("화", "맑음", 30, 23),
+            ForecastDay("수", "구름많음", 27, 21),
+            ForecastDay("목", "비", 24, 20),
+            ForecastDay("금", "흐림", 25, 21)
+        )
+    )
+)
+```
+
+## UI Requirements
+
+### Free to decide (show your AI's design style)
+- Color theme and background
+- Layout composition
+- Weather icon style
+- Animations (optional)
+- Card/section design
+- Font sizes and hierarchy
+
+### Must follow
+- All information on one scrollable screen
+- City switching UI must be included
+- 5-day forecast shown as horizontal or vertical list
+- Consistent dark or light theme throughout
+
+## Required Project Structure
+
+```
+app/
+  build.gradle.kts
+  src/main/
+    AndroidManifest.xml
+    java/com/example/weathernow/
+      MainActivity.kt
+      WeatherViewModel.kt
+      WeatherData.kt
+      ui/
+        WeatherScreen.kt
+        components/  (reusable composables)
+    res/values/
+      strings.xml
+      themes.xml
+build.gradle.kts
+settings.gradle.kts
+gradle/wrapper/
+  gradle-wrapper.properties
+```
+
+## Done criteria
+- ./gradlew assembleDebug builds successfully
+- App runs on physical device via ADB
+- 3 cities switch correctly
+- 5-day forecast displays
+- No crashes
