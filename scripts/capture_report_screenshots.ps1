@@ -1,5 +1,6 @@
 param(
-    [string]$Root = "C:\proj\weather-ai-compare"
+    [string]$Root = "C:\proj\weather-ai-compare",
+    [string[]]$OnlyPhases = @("v1", "v2", "v3")
 )
 
 $ErrorActionPreference = "Stop"
@@ -29,7 +30,24 @@ $phases = @(
 )
 
 $ais = @("claude", "codex", "gemini")
-$packageName = "com.example.weathernow"
+
+function Get-ApplicationId {
+    param(
+        [string]$ProjectDir
+    )
+
+    $gradleFile = Join-Path $ProjectDir "app\build.gradle.kts"
+    if (-not (Test-Path $gradleFile)) {
+        return "com.example.weathernow"
+    }
+
+    $match = Select-String -Path $gradleFile -Pattern 'applicationId\s*=\s*"([^"]+)"' | Select-Object -First 1
+    if ($match -and $match.Matches.Count -gt 0) {
+        return $match.Matches[0].Groups[1].Value
+    }
+
+    return "com.example.weathernow"
+}
 
 function Capture-DeviceScreen {
     param(
@@ -52,11 +70,16 @@ function Capture-DeviceScreen {
 
 foreach ($phaseInfo in $phases) {
     $phase = $phaseInfo.Phase
+    if ($OnlyPhases -notcontains $phase) {
+        continue
+    }
+
     $workRoot = $phaseInfo.WorkRoot
 
     foreach ($ai in $ais) {
         $projectDir = Join-Path $workRoot "projects\weather-$ai"
         $apkPath = Join-Path $projectDir "app\build\outputs\apk\debug\app-debug.apk"
+        $packageName = Get-ApplicationId -ProjectDir $projectDir
 
         Write-Host "`n[$phase/$ai] build"
         Push-Location $projectDir
@@ -71,10 +94,11 @@ foreach ($phaseInfo in $phases) {
         }
 
         Write-Host "[$phase/$ai] install and capture"
+        Write-Host "[$phase/$ai] package $packageName"
         & $adb install -r $apkPath | Out-Host
         & $adb shell am force-stop $packageName | Out-Host
         & $adb shell pm clear $packageName | Out-Host
-        & $adb shell am start -n "$packageName/.MainActivity" | Out-Host
+        & $adb shell monkey -p $packageName -c android.intent.category.LAUNCHER 1 | Out-Host
         Start-Sleep -Seconds 3
 
         # Reset scroll position to top for scrollable Compose screens.
