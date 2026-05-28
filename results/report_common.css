@@ -141,6 +141,8 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
   line-height:1.75;
   color:#374151;
 }
+.source-link { color:#1D4ED8; text-decoration:none; font-weight:700; }
+.source-link:hover { text-decoration:underline; }
 .crit-list { margin-left:18px; color:#4B5563; }
 .crit-list li { margin-bottom:4px; }
 pre.diff { white-space:pre-wrap; word-break:break-word; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:8px; padding:12px; font-size:12px; color:#374151; overflow:auto; }

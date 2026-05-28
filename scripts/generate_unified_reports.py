@@ -90,6 +90,45 @@ V3_EVIDENCE = {
     },
 }
 
+PROMPT_INTERPRETATIONS = {
+    "v1": [
+        ("요약", "세 AI에게 동일한 조건으로 Android 날씨 앱을 처음부터 만들게 한 프롬프트입니다."),
+        ("핵심 요구", "Kotlin, Jetpack Compose, MVVM 구조를 사용하고 서울/부산/제주의 mock 날씨 데이터를 보여주는 앱을 만드는 것이 목표였습니다."),
+        ("평가 관점", "초기 앱 생성 능력, 기본 UI 구성, 한국어 표시, 빌드 성공 여부를 비교하기 위한 입력입니다."),
+    ],
+    "v2": [
+        ("요약", "v1 앱을 새로 만들지 않고 기존 코드 위에서 기능을 확장하라고 지시한 프롬프트입니다."),
+        ("핵심 요구", "시간별 예보, 강수확률, 자외선 지수, 대기질, 새로고침, 마지막 업데이트, 로딩 상태, 즐겨찾기를 추가해야 했습니다."),
+        ("평가 관점", "기존 코드 이해력, 요구사항 보존, 기능 추가 안정성, 작은 화면에서의 UI 완성도를 비교하기 위한 입력입니다."),
+    ],
+    "v3": [
+        ("요약", "v1/v2 기능을 유지한 상태에서 각 AI가 스스로 스마트 기능 하나를 정해 구현하라는 자율 개선 프롬프트입니다."),
+        ("핵심 요구", "정해진 기능 목록보다 창의적이고 사용자가 체감할 수 있는 AI/Smart 기능 1개를 추가하는 것이 핵심입니다."),
+        ("평가 관점", "단순 리팩터링이 아니라 실제 화면이나 상호작용에서 새로운 가치가 보이는지를 비교하기 위한 입력입니다."),
+    ],
+}
+
+PLAN_USAGE_NOTES = {
+    "claude": {
+        "plan": "Claude Pro / Claude Code",
+        "basis": "공식 문서상 Claude Code 사용량은 Claude 제품군의 사용 한도와 함께 계산되며, Pro 사용자에게 고정 월간 토큰 총량이 공개되어 있지는 않습니다.",
+        "interpretation": "따라서 이 실험의 토큰 수를 Pro 한도 대비 퍼센트로 환산할 수는 없고, 같은 계정의 사용량 미터나 남은 사용량 화면으로만 확인해야 합니다.",
+        "source": "https://support.claude.com/en/articles/14552983-models-usage-and-limits-in-claude-code",
+    },
+    "codex": {
+        "plan": "ChatGPT Pro / Codex",
+        "basis": "Codex는 ChatGPT 플랜에 포함되지만 사용 한도는 작업 크기와 복잡도에 따라 달라지는 5시간 단위 local message/cloud task 한도와 크레딧 체계로 설명됩니다.",
+        "interpretation": "토큰 사용량은 작업 규모를 비교하는 데는 유용하지만, Pro 플랜 한도 대비 정확한 퍼센트는 공개 토큰 총량이 아니라 계정별 Codex 사용량/크레딧에서 확인해야 합니다.",
+        "source": "https://chatgpt.com/codex/pricing",
+    },
+    "gemini": {
+        "plan": "Google AI Pro / Gemini CLI",
+        "basis": "Gemini CLI는 무료/Pro quota와 pay-as-you-go 모델을 안내하지만, 개인 Pro 플랜에 대해 고정 월간 토큰 총량을 단일 수치로 공개하지 않습니다.",
+        "interpretation": "따라서 이 실험의 토큰 수를 Pro 한도 대비 퍼센트로 산정하기보다, CLI/계정의 quota 상태와 요청 제한 도달 여부를 함께 기록하는 편이 정확합니다.",
+        "source": "https://google-gemini.github.io/gemini-cli/docs/quota-and-pricing.html",
+    },
+}
+
 CSS = """
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -234,6 +273,8 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
   line-height:1.75;
   color:#374151;
 }
+.source-link { color:#1D4ED8; text-decoration:none; font-weight:700; }
+.source-link:hover { text-decoration:underline; }
 .crit-list { margin-left:18px; color:#4B5563; }
 .crit-list li { margin-bottom:4px; }
 pre.diff { white-space:pre-wrap; word-break:break-word; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:8px; padding:12px; font-size:12px; color:#374151; overflow:auto; }
@@ -407,6 +448,41 @@ def token_cards(data: dict):
             f'<div class="kv-list">{rows}</div>{note_html}</div>'
         )
     return '<div class="token-cards">' + "".join(cards) + "</div>"
+
+
+def prompt_interpretation(phase: str):
+    rows = []
+    for title, text in PROMPT_INTERPRETATIONS[phase]:
+        rows.append([esc(title), esc(text)])
+    return table([("구분", None), ("한글 해석", None)], rows)
+
+
+def plan_usage_section(data: dict):
+    rows = []
+    for ai in AIS:
+        result = data["results"][ai]
+        tokens = token_total(result.get("tokens", {}))
+        note = PLAN_USAGE_NOTES[ai]
+        rows.append([
+            f'<span class="dot {ai}"></span> {AI_LABELS[ai]}',
+            fmt(tokens),
+            esc(note["plan"]),
+            "정확한 퍼센트 산정 불가",
+            esc(note["interpretation"]),
+        ])
+    return table([("AI", None), ("이번 실행 토큰", None), ("비교 플랜", None), ("한도 대비", None), ("해석", None)], rows)
+
+
+def plan_sources():
+    rows = []
+    for ai in AIS:
+        note = PLAN_USAGE_NOTES[ai]
+        rows.append([
+            f'<span class="dot {ai}"></span> {AI_LABELS[ai]}',
+            esc(note["basis"]),
+            f'<a class="source-link" href="{esc(note["source"])}">{esc(note["source"])}</a>',
+        ])
+    return table([("AI", None), ("공식 기준 요약", None), ("출처", None)], rows)
 
 
 def screenshots(phase: str):
@@ -601,6 +677,8 @@ def render(phase: str):
     <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
     <p class="prompt-meta">{esc(phase_info["prompt_file"])} · {esc(phase_info["prompt"])}</p>
     <pre class="prompt-pre">{esc(prompt_text)}</pre>
+    <div class="note-box">아래 표는 원문 프롬프트를 보고서 독자가 빠르게 이해할 수 있도록 한글로 풀어쓴 해석입니다.</div>
+    {prompt_interpretation(phase)}
   </section>
   <section class="card" id="summary">
     <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
@@ -611,6 +689,9 @@ def render(phase: str):
   <section class="card" id="tokens">
     <div class="sh"><span class="sh-num">{4 + section_offset:02d}</span><h2>토큰 사용량</h2></div>
     {token_cards(data)}
+    <div class="note-box">Pro 플랜은 서비스별로 고정 월간 토큰 총량이 공개된 구조가 아니므로, 아래 표는 “이번 실행 토큰 규모”와 “공식 플랜 한도 대비 해석 가능 여부”를 구분해 정리했습니다.</div>
+    {plan_usage_section(data)}
+    {plan_sources()}
   </section>
   <section class="card" id="screens">
     <div class="sh"><span class="sh-num">{5 + section_offset:02d}</span><h2>실행 화면</h2></div>
