@@ -100,7 +100,7 @@ def parse_claude_tokens():
         "grandTotal": fresh + cache_create + cache_read + output,
         "auxModelTotal": aux_total,
         "costUSD": final.get("total_cost_usd"),
-        "note": "Claude JSON usage 파싱. auxModelTotal은 Haiku 보조 모델 사용량으로 grandTotal에는 별도 표기",
+        "note": "Claude CLI 사용량 기준. 캐시 생성/재사용 토큰을 분리했고, 보조 모델 사용량은 별도 항목으로 표시했습니다.",
     }
 
 
@@ -128,7 +128,7 @@ def parse_codex_tokens():
         "output": out,
         "reasoningOutput": reasoning,
         "grandTotal": inp + out,
-        "note": "Codex JSONL turn.completed usage 파싱. input_tokens 안에 cached_input_tokens가 포함됨",
+        "note": "Codex CLI 사용량 기준. 입력 토큰에는 캐시 입력 토큰이 포함되어 있어 별도 항목으로 함께 표시했습니다.",
     }
 
 
@@ -167,7 +167,7 @@ def parse_gemini_tokens():
             obj = json.loads(candidate)
     models = obj.get("stats", {}).get("models", {})
     grand = 0
-    result = {"captured": True, "models": {}, "grandTotal": 0, "note": "Gemini JSON output stats.models.*.tokens 파싱"}
+    result = {"captured": True, "models": {}, "grandTotal": 0, "note": "Gemini CLI 통계 기준. 보조 모델과 본 작업 모델 사용량을 합산했습니다."}
     for name, data in models.items():
         tok = data.get("tokens", {})
         total = int(tok.get("total", 0) or 0)
@@ -227,27 +227,27 @@ def token_total(tokens):
 def token_items(ai, t):
     if ai == "claude":
         return [
-            ("Fresh input", fmt(t.get("freshInput")), False),
-            ("Cache creation", fmt(t.get("cacheCreation")), False),
-            ("Cache read", fmt(t.get("cacheRead")), False),
-            ("Output", fmt(t.get("output")), False),
-            ("Grand total", fmt(t.get("grandTotal")), True),
-            ("Aux model", fmt(t.get("auxModelTotal")), False),
-            ("Cost USD", fmt(t.get("costUSD")), False),
+            ("신규 입력 토큰", fmt(t.get("freshInput")), False),
+            ("캐시 생성 토큰", fmt(t.get("cacheCreation")), False),
+            ("캐시 재사용 토큰", fmt(t.get("cacheRead")), False),
+            ("출력 토큰", fmt(t.get("output")), False),
+            ("총 사용 토큰", fmt(t.get("grandTotal")), True),
+            ("보조 모델 토큰", fmt(t.get("auxModelTotal")), False),
+            ("예상 비용", f"${fmt(t.get('costUSD'))}", False),
         ]
     if ai == "codex":
         return [
-            ("Input", fmt(t.get("input")), False),
-            ("Cached input", fmt(t.get("cachedInput")), False),
-            ("Output", fmt(t.get("output")), False),
-            ("Reasoning output", fmt(t.get("reasoningOutput")), False),
-            ("Grand total", fmt(t.get("grandTotal")), True),
+            ("입력 토큰", fmt(t.get("input")), False),
+            ("캐시 입력 토큰", fmt(t.get("cachedInput")), False),
+            ("출력 토큰", fmt(t.get("output")), False),
+            ("추론 출력 토큰", fmt(t.get("reasoningOutput")), False),
+            ("총 사용 토큰", fmt(t.get("grandTotal")), True),
         ]
     models = t.get("models", {})
     rows = []
     for name, m in models.items():
-        rows.append((name, fmt(m.get("total")), False))
-    rows.append(("Grand total", fmt(t.get("grandTotal")), True))
+        rows.append((f"{name} 사용 토큰", fmt(m.get("total")), False))
+    rows.append(("총 사용 토큰", fmt(t.get("grandTotal")), True))
     return rows
 
 
@@ -417,7 +417,7 @@ def main():
   </section>
   <section class="card" id="tokens">
     <div class="sh"><span class="sh-num">02</span><h2>토큰 사용량</h2></div>
-    <div class="token-grid">{token_cards}</div>
+    <div class="token-cards">{token_cards}</div>
   </section>
   <section class="card" id="requirements">
     <div class="sh"><span class="sh-num">03</span><h2>동일 프롬프트 요구사항 체크</h2></div>

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-28T15:21:50",
+  "generatedAt": "2026-05-28T15:30:12",
   "project": "WeatherNow Android App - AI v2 improvement comparison",
   "baselineTag": "weather-v1",
   "resultTag": "weather-v2",
@@ -28,7 +28,7 @@
         "grandTotal": 1043992,
         "auxModelTotal": 1303,
         "costUSD": 0.8169152000000002,
-        "note": "Claude JSON usage 파싱. auxModelTotal은 Haiku 보조 모델 사용량으로 grandTotal에는 별도 표기"
+        "note": "Claude CLI 사용량 기준. 캐시 생성/재사용 토큰을 분리했고, 보조 모델 사용량은 별도 항목으로 표시했습니다."
       },
       "code": {
         "ktFiles": 5,
@@ -81,7 +81,7 @@
         "output": 11382,
         "reasoningOutput": 1063,
         "grandTotal": 1615940,
-        "note": "Codex JSONL turn.completed usage 파싱. input_tokens 안에 cached_input_tokens가 포함됨"
+        "note": "Codex CLI 사용량 기준. 입력 토큰에는 캐시 입력 토큰이 포함되어 있어 별도 항목으로 함께 표시했습니다."
       },
       "code": {
         "ktFiles": 6,
@@ -151,7 +151,7 @@
           }
         },
         "grandTotal": 642641,
-        "note": "Gemini JSON output stats.models.*.tokens 파싱"
+        "note": "Gemini CLI 통계 기준. 보조 모델과 본 작업 모델 사용량을 합산했습니다."
       },
       "code": {
         "ktFiles": 5,
