@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(r"C:\proj\weather-ai-compare")
 AIS = ["claude", "codex", "gemini"]
 AI_LABELS = {"claude": "Claude", "codex": "Codex", "gemini": "Gemini"}
+ASSET_VERSION = "20260528-02"
 SCREEN_LABELS = {
     "01-top": "상단 현재 날씨",
     "02-middle": "중간 기능 영역",
@@ -176,7 +177,7 @@ body {
 }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 24px 100px; }
 .wrap.wide { max-width: 1180px; }
-.index-wrap { max-width: 1180px; margin: 0 auto; padding: 34px 24px 90px; }
+.index-wrap { max-width: 1180px; margin: 0 auto; padding: 42px 32px 96px; }
 .rh {
   background: #fff;
   border: 1px solid #DCDCDC;
@@ -257,7 +258,7 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
   background:#fff;
   border:1px solid #DCDCDC;
   border-radius:12px;
-  padding:32px 38px;
+  padding:34px 40px;
   margin-bottom:18px;
   box-shadow:0 2px 8px rgba(0,0,0,.04);
 }
@@ -279,10 +280,10 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
   font-weight:800;
 }
 .report-link:hover { border-color:#111827; }
-.takeaway-list { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-.takeaway { border:1px solid #E5E7EB; border-radius:10px; padding:14px 15px; background:#FAFAFA; }
-.takeaway-k { font-size:12px; font-weight:850; color:#374151; margin-bottom:5px; }
-.takeaway-v { font-size:13.5px; line-height:1.6; color:#4B5563; }
+.index-hero .takeaway-list { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.index-hero .takeaway { border:1px solid #E5E7EB; border-radius:10px; padding:15px 16px; background:#FAFAFA; border-left:3px solid #2563EB; }
+.index-hero .takeaway-k { font-size:12px; font-weight:850; color:#1F2937; margin-bottom:5px; }
+.index-hero .takeaway-v { font-size:13.5px; line-height:1.6; color:#374151; }
 .verdict-row { display:grid; grid-template-columns:1.15fr .85fr; gap:18px; margin-bottom:18px; }
 .verdict-main { border:1px solid #DCDCDC; border-radius:12px; background:#fff; padding:26px 30px; }
 .verdict-title { font-size:21px; font-weight:950; letter-spacing:-.2px; margin-bottom:8px; }
@@ -785,7 +786,7 @@ def render(phase: str):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>{esc(phase_info["title"])}</title>
-<link rel="stylesheet" href="report_common.css">
+<link rel="stylesheet" href="report_common.css?v={ASSET_VERSION}">
 </head>
 <body id="top">
 <div class="wrap">
@@ -864,7 +865,7 @@ def render_index():
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>WeatherNow AI 비교 보고서</title>
-<link rel="stylesheet" href="report_common.css">
+<link rel="stylesheet" href="report_common.css?v={ASSET_VERSION}">
 </head>
 <body>
 <div class="index-wrap">
