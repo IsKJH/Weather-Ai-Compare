@@ -51,6 +51,39 @@ PHASES = {
     },
 }
 
+EXECUTIVE_TAKEAWAYS = [
+    ("전체 결론", "v1은 초기 생성 성향, v2는 요구사항 이행력, v3는 자율 개선의 체감도를 비교하는 실험으로 보는 것이 가장 명확합니다."),
+    ("가장 보기 쉬운 변화", "Gemini는 v3에서 인사이트 카드와 동적 배경이 추가되어 스크린샷만으로도 변화가 잘 드러납니다."),
+    ("주의할 해석", "Claude와 Codex의 v3는 보고된 기능명은 있으나 정적 화면 기준으로는 v2와 차이가 약해, 점수보다 실제 캡처와 diff 근거를 함께 봐야 합니다."),
+]
+
+PHASE_SUMMARIES = {
+    "v1": {
+        "label": "V1",
+        "title": "초기 생성",
+        "file": "report.html",
+        "summary": "동일한 앱 생성 프롬프트에서 각 AI가 어떤 기본 구조와 UI를 만드는지 비교했습니다.",
+        "headline": "초기 설계 성향 비교",
+        "winner": "초기 구현 자체보다 각 AI의 UI/구조 선택 차이를 보는 단계",
+    },
+    "v2": {
+        "label": "V2",
+        "title": "기능 개선",
+        "file": "report_v2.html",
+        "summary": "v1 앱을 유지한 채 시간별 예보, 상세 정보, 새로고침, 즐겨찾기 등을 추가했습니다.",
+        "headline": "요구사항 이행력 비교",
+        "winner": "세 앱 모두 요구 기능은 충족, 코드 구조와 화면 완성도에서 차이 발생",
+    },
+    "v3": {
+        "label": "V3",
+        "title": "자율 혁신",
+        "file": "report_v3.html",
+        "summary": "각 AI가 스스로 스마트 기능을 정해 추가한 결과를 비교했습니다.",
+        "headline": "체감 가능한 개선 비교",
+        "winner": "Gemini가 화면에서 가장 명확한 v3 변화를 보여줌",
+    },
+}
+
 PHASE_INSIGHTS = {
     "v1": [
         ("비교 초점", "동일한 최초 프롬프트에서 각 AI가 어떤 기본 앱 구조와 UI 방향을 선택했는지 확인하는 단계입니다."),
@@ -142,6 +175,7 @@ body {
   word-break: keep-all;
 }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 24px 100px; }
+.wrap.wide { max-width: 1180px; }
 .rh {
   background: #fff;
   border: 1px solid #DCDCDC;
@@ -218,6 +252,59 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
 .th-codex { border-top:3px solid #0D8A68; }
 .th-gemini { border-top:3px solid #1A56DB; }
 .metric-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0 4px; }
+.hero-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:18px; align-items:stretch; margin-bottom:18px; }
+.hero-panel {
+  background:#fff;
+  border:1px solid #DCDCDC;
+  border-radius:12px;
+  padding:34px 38px;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.hero-panel.dark {
+  background:#111827;
+  color:#F9FAFB;
+  border-color:#111827;
+}
+.hero-kicker { font-size:12px; font-weight:850; letter-spacing:1.7px; color:#9CA3AF; margin-bottom:12px; text-transform:uppercase; }
+.hero-title { font-size:34px; font-weight:950; line-height:1.18; letter-spacing:-.5px; margin-bottom:14px; }
+.hero-copy { color:#4B5563; font-size:15px; line-height:1.85; }
+.hero-panel.dark .hero-copy { color:#D1D5DB; }
+.report-links { display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; }
+.report-link {
+  display:inline-flex;
+  align-items:center;
+  text-decoration:none;
+  color:#111827;
+  border:1px solid #D1D5DB;
+  background:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:800;
+}
+.report-link:hover { border-color:#111827; }
+.hero-panel.dark .report-link { color:#fff; background:#1F2937; border-color:#374151; }
+.takeaway-list { display:flex; flex-direction:column; gap:12px; }
+.takeaway { border-left:3px solid #60A5FA; padding-left:13px; }
+.takeaway-k { font-size:12px; font-weight:850; color:#93C5FD; margin-bottom:3px; }
+.takeaway-v { font-size:13.5px; line-height:1.65; color:#E5E7EB; }
+.phase-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.phase-card {
+  border:1px solid #E2E2E2;
+  border-radius:12px;
+  background:#fff;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.phase-shot { aspect-ratio:9/16; background:#111; overflow:hidden; border-bottom:1px solid #E5E7EB; }
+.phase-shot img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+.phase-body { padding:18px; flex:1; display:flex; flex-direction:column; gap:10px; }
+.phase-label { font-size:12px; color:#6B7280; font-weight:900; letter-spacing:1px; }
+.phase-title { font-size:19px; font-weight:900; color:#111; line-height:1.25; }
+.phase-summary { color:#4B5563; font-size:13.5px; line-height:1.65; flex:1; }
+.phase-result { background:#F9FAFB; border:1px solid #E5E7EB; border-radius:8px; padding:10px 12px; font-size:13px; line-height:1.55; color:#374151; }
+.phase-link { text-decoration:none; color:#1D4ED8; font-size:13.5px; font-weight:850; }
 .metric {
   border:1px solid #E2E2E2;
   border-radius:10px;
@@ -285,7 +372,8 @@ pre.diff { white-space:pre-wrap; word-break:break-word; background:#F9FAFB; bord
   .wrap { padding:24px 14px 80px; }
   .rh, .card { padding:26px 20px; }
   .rh-title { font-size:23px; }
-  .metric-grid, .ss-grid, .screen-list, .callout-grid { grid-template-columns:1fr; }
+  .metric-grid, .ss-grid, .screen-list, .callout-grid, .hero-grid, .phase-grid { grid-template-columns:1fr; }
+  .hero-title { font-size:27px; }
   td.col-label { white-space:normal; }
   .tc-head, .kv-row { align-items:flex-start; }
   .tc-model { margin-left:0; display:block; }
@@ -485,6 +573,50 @@ def plan_sources():
     return table([("AI", None), ("공식 기준 요약", None), ("출처", None)], rows)
 
 
+def index_summary_rows():
+    data_by_phase = {phase: read_json(info["json"]) for phase, info in PHASES.items()}
+    rows = []
+    for phase in ["v1", "v2", "v3"]:
+        data = data_by_phase[phase]
+        results = data["results"]
+        elapsed = {ai: results[ai].get("elapsedSec") for ai in AIS if results[ai].get("elapsedSec") is not None}
+        totals = {ai: token_total(results[ai].get("tokens", {})) for ai in AIS}
+        fastest = min(elapsed, key=elapsed.get) if elapsed else None
+        lowest = min({k: v for k, v in totals.items() if v is not None}, key=lambda k: totals[k])
+        rows.append([
+            PHASE_SUMMARIES[phase]["label"],
+            esc(PHASE_SUMMARIES[phase]["headline"]),
+            f"{AI_LABELS[fastest]} · {fmt(elapsed[fastest])}초" if fastest else "-",
+            f"{AI_LABELS[lowest]} · {fmt(totals[lowest])}" if lowest else "-",
+            esc(PHASE_SUMMARIES[phase]["winner"]),
+        ])
+    return table([("단계", None), ("비교 관점", None), ("가장 빠른 실행", None), ("최저 토큰", None), ("핵심 해석", None)], rows, highlights={2})
+
+
+def phase_cards():
+    cards = []
+    cover = {
+        "v1": "../screenshots/v1/gemini/01-top.png",
+        "v2": "../screenshots/v2/codex/01-top.png",
+        "v3": "../screenshots/v3/gemini/01-top.png",
+    }
+    for phase in ["v1", "v2", "v3"]:
+        info = PHASE_SUMMARIES[phase]
+        cards.append(f"""
+        <article class="phase-card">
+          <div class="phase-shot"><img src="{cover[phase]}" alt="{esc(info["label"])} 대표 화면"></div>
+          <div class="phase-body">
+            <div class="phase-label">{esc(info["label"])} · {esc(info["title"])}</div>
+            <h3 class="phase-title">{esc(info["headline"])}</h3>
+            <p class="phase-summary">{esc(info["summary"])}</p>
+            <div class="phase-result">{esc(info["winner"])}</div>
+            <a class="phase-link" href="{esc(info["file"])}">상세 보고서 보기</a>
+          </div>
+        </article>
+""")
+    return '<div class="phase-grid">' + "".join(cards) + "</div>"
+
+
 def screenshots(phase: str):
     groups = []
     for ai in AIS:
@@ -665,7 +797,7 @@ def render(phase: str):
     </div>
   </header>
   <nav class="toc">
-    <a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a>{toc_criteria}{toc_evidence}<a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
+    <a href="index.html">전체 요약</a><a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a>{toc_criteria}{toc_evidence}<a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
   </nav>
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
@@ -714,8 +846,74 @@ def render(phase: str):
     print(ROOT / "results" / phase_info["html"])
 
 
+def render_index():
+    takeaways = "".join(
+        f'<div class="takeaway"><div class="takeaway-k">{esc(title)}</div><div class="takeaway-v">{esc(text)}</div></div>'
+        for title, text in EXECUTIVE_TAKEAWAYS
+    )
+    generated = datetime.now().isoformat(timespec="seconds")
+    body = f"""<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WeatherNow AI 비교 보고서</title>
+<link rel="stylesheet" href="report_common.css">
+</head>
+<body>
+<div class="wrap wide">
+  <section class="hero-grid">
+    <div class="hero-panel">
+      <div class="hero-kicker">AI CODING TOOL COMPARISON</div>
+      <h1 class="hero-title">WeatherNow 앱 개발 비교 보고서</h1>
+      <p class="hero-copy">Claude, Codex, Gemini에게 같은 Android 날씨 앱 과제를 단계별로 수행시킨 뒤 결과를 비교했습니다. 이 페이지는 GitHub Pages에서 바로 볼 수 있는 요약 대시보드이고, 각 단계별 상세 근거는 개별 보고서에 정리했습니다.</p>
+      <div class="report-links">
+        <a class="report-link" href="report.html">V1 초기 생성</a>
+        <a class="report-link" href="report_v2.html">V2 기능 개선</a>
+        <a class="report-link" href="report_v3.html">V3 자율 혁신</a>
+      </div>
+    </div>
+    <div class="hero-panel dark">
+      <div class="hero-kicker">Executive Summary</div>
+      <div class="takeaway-list">{takeaways}</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="sh"><span class="sh-num">01</span><h2>한눈에 보는 결론</h2></div>
+    {index_summary_rows()}
+  </section>
+
+  <section class="card">
+    <div class="sh"><span class="sh-num">02</span><h2>단계별 보고서</h2></div>
+    {phase_cards()}
+  </section>
+
+  <section class="card">
+    <div class="sh"><span class="sh-num">03</span><h2>읽는 순서</h2></div>
+    <div class="callout-grid">
+      <div class="callout"><div class="callout-k">1. 전체 흐름</div><div class="callout-v">먼저 이 페이지의 요약표로 v1, v2, v3의 비교 목적을 파악합니다.</div></div>
+      <div class="callout"><div class="callout-k">2. 화면 비교</div><div class="callout-v">각 보고서의 실행 화면 섹션에서 상단, 중간, 하단 캡처를 비교합니다.</div></div>
+      <div class="callout"><div class="callout-k">3. 근거 확인</div><div class="callout-v">토큰, 프롬프트 해석, 코드 요약을 함께 보면서 결과를 해석합니다.</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="sh"><span class="sh-num">04</span><h2>GitHub Pages 메모</h2></div>
+    <p class="lead">이 페이지는 <code>results/index.html</code> 기준으로 생성되었습니다. GitHub Pages를 저장소 루트에서 배포하면 이미지 경로가 그대로 동작합니다.</p>
+    <p class="lead">생성 시각: {esc(generated)}</p>
+  </section>
+</div>
+</body>
+</html>
+"""
+    (ROOT / "results" / "index.html").write_text(body, encoding="utf-8")
+    print(ROOT / "results" / "index.html")
+
+
 def main():
     (ROOT / "results" / "report_common.css").write_text(CSS.strip() + "\n", encoding="utf-8")
+    render_index()
     for phase in ["v1", "v2", "v3"]:
         render(phase)
 
