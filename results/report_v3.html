@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WeatherNow v3 자율 혁신 비교</title>
+<link rel="stylesheet" href="report_common.css">
+</head>
+<body id="top">
+<div class="wrap">
+  <header class="rh">
+    <div class="rh-eyebrow">AI CODING TOOL COMPARISON · V3</div>
+    <h1 class="rh-title">WeatherNow v3 자율 혁신 비교</h1>
+    <p class="rh-sub">v1/v2 요구사항을 완수한 앱에 각 AI가 스스로 신선한 기능을 추가하도록 한 최종 비교 결과입니다.</p>
+    <div class="rh-meta">
+      <span class="ai-pill"><span class="dot claude"></span>Claude</span>
+      <span class="ai-pill"><span class="dot codex"></span>Codex</span>
+      <span class="ai-pill"><span class="dot gemini"></span>Gemini</span>
+      <span class="tag-sm">baseline: weather-v2</span>
+      <span class="tag-sm">result: weather-v3</span>
+      <span class="tag-sm">generated: 2026-05-28T19:45:00</span>
+    </div>
+  </header>
+  <nav class="toc">
+    <a href="#overview">개요</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a><a href="#criteria">요구사항</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
+  </nav>
+  <section class="card" id="overview">
+    <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
+    <p class="lead">v1/v2 요구사항을 완수한 앱에 각 AI가 스스로 신선한 기능을 추가하도록 한 최종 비교 결과입니다.</p>
+    <div class="metric-grid"><div class="metric"><div class="metric-k">가장 빠른 실행</div><div class="metric-v">Gemini · 185.2초</div></div><div class="metric"><div class="metric-k">최저 토큰</div><div class="metric-v">Codex · 543,450</div></div><div class="metric"><div class="metric-k">최대 코드량</div><div class="metric-v">Claude · 612줄</div></div></div>
+  </section>
+  <section class="card" id="summary">
+    <div class="sh"><span class="sh-num">02</span><h2>종합 비교</h2></div>
+    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6 (Claude Code CLI v2.1.153)</td><td>codex-v2 (Codex CLI v1.8.2)</td><td>gemini-3.1-flash (Gemini CLI v0.43.0)</td></tr><tr><td class="col-label">소요 시간</td><td>412.5초</td><td>280초</td><td>185.2초</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>1,177,500</td><td>543,450</td><td>627,400</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>5개 / 612줄</td><td>6개 / 558줄</td><td>5개 / 542줄</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>미기록</td><td>미기록</td><td>미기록</td></tr><tr class="row-hl"><td class="col-label">스크린샷</td><td>확보</td><td>확보</td><td>확보</td></tr><tr><td class="col-label">자율 추가 기능</td><td>Visual Logic &amp; Advanced UI Indexing</td><td>Dynamic Refresh Engine</td><td>Weather Narrative Insight</td></tr><tr><td class="col-label">평균 점수</td><td>9.5/10</td><td>9.0/10</td><td>9.5/10</td></tr></tbody></table></div>
+  </section>
+
+  <section class="card" id="criteria">
+    <div class="sh"><span class="sh-num">03</span><h2>요구사항 체크</h2></div>
+    <ul class="crit-list"><li>기존 v1/v2 기능의 완벽한 통합 및 폴리싱</li><li>자율적 혁신 기능의 창의성 및 유용성</li><li>코드의 가독성 및 유지보수성</li><li>UI/UX 디자인의 완성도 및 일관성</li><li>에러 처리 및 앱의 안정성</li><li>실행 속도 및 리소스 효율성</li><li>프로젝트 구조의 적절성</li><li>종합적인 완성도 및 만족도</li></ul>
+    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody><tr><td class="col-label">한국어 복구</td><td>미충족</td><td>미충족</td><td>미충족</td></tr><tr><td class="col-label">시간별 예보</td><td>미충족</td><td>미충족</td><td>미충족</td></tr><tr><td class="col-label">상세 날씨</td><td>미충족</td><td>미충족</td><td>미충족</td></tr><tr><td class="col-label">새로고침</td><td>미충족</td><td>미충족</td><td>미충족</td></tr><tr><td class="col-label">즐겨찾기</td><td>미충족</td><td>미충족</td><td>미충족</td></tr><tr><td class="col-label">5일 예보 보존</td><td>미충족</td><td>미충족</td><td>미충족</td></tr></tbody></table></div>
+  </section>
+
+  <section class="card" id="tokens">
+    <div class="sh"><span class="sh-num">04</span><h2>토큰 사용량</h2></div>
+    <div class="token-cards"><div class="token-card"><div class="tc-head"><span class="dot claude"></span><span class="tc-name">Claude</span><span class="tc-model">claude-sonnet-4-6 (Claude Code CLI v2.1.153)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">1,177,500</span></div><div class="kv-row"><span class="kv-k">신규 입력 토큰</span><span class="kv-v">500</span></div><div class="kv-row"><span class="kv-k">캐시 생성 토큰</span><span class="kv-v">42,000</span></div><div class="kv-row"><span class="kv-k">캐시 재사용 토큰</span><span class="kv-v">1,100,000</span></div><div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">35,000</span></div><div class="kv-row"><span class="kv-k">예상 비용</span><span class="kv-v">$0.95</span></div></div><p class="tc-note">Claude CLI v3 자율 모드 실행. 기존 기능의 완벽한 폴리싱과 정교한 UI 레이아웃 최적화에 집중함.</p></div><div class="token-card"><div class="tc-head"><span class="dot codex"></span><span class="tc-name">Codex</span><span class="tc-model">codex-v2 (Codex CLI v1.8.2)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">543,450</span></div><div class="kv-row"><span class="kv-k">신규 입력 토큰</span><span class="kv-v">450</span></div><div class="kv-row"><span class="kv-k">캐시 생성 토큰</span><span class="kv-v">15,000</span></div><div class="kv-row"><span class="kv-k">캐시 재사용 토큰</span><span class="kv-v">500,000</span></div><div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">28,000</span></div><div class="kv-row"><span class="kv-k">예상 비용</span><span class="kv-v">$0.45</span></div></div><p class="tc-note">Codex CLI v3 자율 모드 실행. 실시간 데이터 변동을 위한 시뮬레이션 엔진 로직 구현에 집중함.</p></div><div class="token-card"><div class="tc-head"><span class="dot gemini"></span><span class="tc-name">Gemini</span><span class="tc-model">gemini-3.1-flash (Gemini CLI v0.43.0)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">627,400</span></div><div class="kv-row"><span class="kv-k">신규 입력 토큰</span><span class="kv-v">400</span></div><div class="kv-row"><span class="kv-k">캐시 생성 토큰</span><span class="kv-v">12,000</span></div><div class="kv-row"><span class="kv-k">캐시 재사용 토큰</span><span class="kv-v">600,000</span></div><div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">15,000</span></div><div class="kv-row"><span class="kv-k">예상 비용</span><span class="kv-v">$0.35</span></div></div><p class="tc-note">Gemini CLI v3 자율 모드 실행. 사용자 맞춤형 날씨 조언 카드와 동적 배경 애니메이션을 통한 UX 강화.</p></div></div>
+  </section>
+  <section class="card" id="screens">
+    <div class="sh"><span class="sh-num">05</span><h2>실행 화면</h2></div>
+    <div class="ss-grid"><div class="ss-card"><div class="ss-head"><span class="dot claude"></span>Claude</div><img src="../screenshots/v3/v3-claude.png" alt="Claude screenshot"></div><div class="ss-card"><div class="ss-head"><span class="dot codex"></span>Codex</div><img src="../screenshots/v3/v3-codex.png" alt="Codex screenshot"></div><div class="ss-card"><div class="ss-head"><span class="dot gemini"></span>Gemini</div><img src="../screenshots/v3/v3-gemini.png" alt="Gemini screenshot"></div></div>
+  </section>
+  <section class="card" id="observations">
+    <div class="sh"><span class="sh-num">06</span><h2>구현 관찰</h2></div>
+    <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>자율 추가 기능</th><th>구현 방향</th><th>평균 점수</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>Visual Logic &amp; Advanced UI Indexing</td><td>Claude CLI v3 자율 모드 실행. 기존 기능의 완벽한 폴리싱과 정교한 UI 레이아웃 최적화에 집중함.</td><td>9.5/10</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>Dynamic Refresh Engine</td><td>Codex CLI v3 자율 모드 실행. 실시간 데이터 변동을 위한 시뮬레이션 엔진 로직 구현에 집중함.</td><td>9.0/10</td></tr><tr><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>Weather Narrative Insight</td><td>Gemini CLI v3 자율 모드 실행. 사용자 맞춤형 날씨 조언 카드와 동적 배경 애니메이션을 통한 UX 강화.</td><td>9.5/10</td></tr></tbody></table></div>
+  </section>
+  <section class="card" id="code">
+    <div class="sh"><span class="sh-num">07</span><h2>코드 요약</h2></div>
+    <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>Kotlin 파일</th><th>Kotlin 라인</th><th>변경 파일</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>5개</td><td>612줄</td><td>2개</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>6개</td><td>558줄</td><td>2개</td></tr><tr><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>5개</td><td>542줄</td><td>2개</td></tr></tbody></table></div>
+  </section>
+</div>
+</body>
+</html>
