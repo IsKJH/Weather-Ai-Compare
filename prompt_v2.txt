@@ -1,0 +1,86 @@
+﻿You are improving the existing WeatherNow Android app in this directory.
+
+Do not recreate the project from scratch.
+Read the existing code first, then improve it in place.
+
+Experiment context:
+This project is part of an AI comparison experiment. Claude, Codex, and Gemini each created a v1 Android weather app from the same original prompt. Now each AI must improve its own existing v1 project using this same v2 prompt. The goal is to compare how well each AI understands, preserves, and extends an existing codebase.
+
+Goal:
+Turn the current simple mock weather app into a more useful, production-like weather dashboard while keeping it lightweight and mock-data only.
+
+Fixed constraints:
+- Keep Kotlin.
+- Keep Jetpack Compose.
+- Keep MVVM with ViewModel + UiState.
+- Keep package name: com.example.weathernow.
+- Do not add external libraries.
+- Do not use a real weather API.
+- Use mock data only.
+- Keep a single Activity.
+- Ensure ./gradlew assembleDebug succeeds.
+
+Required improvements:
+1. Fix any broken Korean text or garbled strings in the app.
+2. Preserve all v1 features:
+   - city switching for Seoul, Busan, Jeju
+   - current temperature
+   - weather condition
+   - feels-like temperature
+   - humidity
+   - wind speed
+   - 5-day forecast
+3. Add hourly forecast using mock data:
+   - at least 6 hourly items
+   - time, condition icon, temperature
+4. Add extra weather details:
+   - precipitation probability
+   - UV index
+   - air quality
+5. Add a refresh action:
+   - show last updated time
+   - simulate refresh using mock data
+   - show a brief loading state
+6. Add favorite city behavior:
+   - user can mark one city as favorite
+   - favorite state is kept in ViewModel state
+   - no persistence required
+7. Improve UI/UX:
+   - clearer visual hierarchy
+   - better spacing
+   - readable Korean labels
+   - one consistent light or dark theme
+   - no overlapping text
+   - still usable on a small Android screen
+8. Keep code maintainable:
+   - avoid one huge composable if possible
+   - create reusable composables where appropriate
+   - avoid unnecessary rewrites
+
+Important implementation guidance:
+- Start by inspecting the existing files in this directory.
+- Preserve the current project structure unless there is a clear reason to adjust it.
+- Prefer small, safe, maintainable changes over a full rewrite.
+- If the current project has garbled Korean due to encoding issues, replace it with proper Korean strings:
+  - Seoul: 서울
+  - Busan: 부산
+  - Jeju: 제주
+  - Sunny: 맑음
+  - Cloudy: 구름많음
+  - Rain: 비
+  - Feels like: 체감온도
+  - Humidity: 습도
+  - Wind: 풍속
+  - 5-day forecast: 5일 예보
+  - Hourly forecast: 시간별 예보
+  - Precipitation: 강수확률
+  - UV index: 자외선 지수
+  - Air quality: 대기질
+  - Last updated: 마지막 업데이트
+  - Favorite: 즐겨찾기
+- Use emoji or Compose-drawn icons only. Do not add external image resources.
+
+After implementation:
+- Run ./gradlew assembleDebug.
+- Briefly summarize what changed.
+- Mention whether the build passed.
