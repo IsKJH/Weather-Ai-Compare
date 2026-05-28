@@ -51,6 +51,45 @@ PHASES = {
     },
 }
 
+PHASE_INSIGHTS = {
+    "v1": [
+        ("비교 초점", "동일한 최초 프롬프트에서 각 AI가 어떤 기본 앱 구조와 UI 방향을 선택했는지 확인하는 단계입니다."),
+        ("읽는 법", "기능 완성도보다 초기 설계 성향, 한국어 처리, 화면 구성, 빌드 안정성을 중심으로 보는 것이 적절합니다."),
+        ("한계", "v1은 처음부터 생성한 결과라 기존 코드 이해력이나 유지보수 능력을 평가하기에는 부족합니다."),
+    ],
+    "v2": [
+        ("비교 초점", "v1 결과물을 새로 만들지 않고 유지한 채, 지정된 기능 요구사항을 얼마나 안정적으로 추가했는지 보는 단계입니다."),
+        ("읽는 법", "시간별 예보, 상세 날씨, 새로고침, 즐겨찾기, 한국어 복구처럼 명시된 요구사항 충족 여부를 우선 비교합니다."),
+        ("한계", "세 앱 모두 요구 기능을 갖췄기 때문에, 스크린샷만으로는 구현 품질이나 코드 구조 차이가 충분히 드러나지 않습니다."),
+    ],
+    "v3": [
+        ("비교 초점", "v2 기능을 유지하면서 각 AI가 자율적으로 추가한 스마트 기능이 실제 사용자에게 보이는지 확인하는 단계입니다."),
+        ("핵심 해석", "Gemini는 인사이트 카드와 온도 기반 배경 변화가 화면에서 바로 확인됩니다. Claude와 Codex는 보고된 기능명은 있으나 정적 스크린샷 기준 체감 변화가 약합니다."),
+        ("주의점", "v3의 점수는 최초 정리 자료 기준이며, 최종 해석에서는 실제 diff와 캡처 화면에서 확인되는 근거를 함께 봐야 합니다."),
+    ],
+}
+
+V3_EVIDENCE = {
+    "claude": {
+        "visible": "낮음",
+        "delta": "v2와 상단/중간/하단 화면 구성이 거의 동일하게 보입니다.",
+        "evidence": "현재 v2 대비 소스 diff에서 Claude 앱의 UI/로직 변경 근거가 뚜렷하게 잡히지 않습니다.",
+        "interpretation": "보고서상의 Visual Logic 기능은 사용자 체감 기능으로 설명하기 어렵습니다.",
+    },
+    "codex": {
+        "visible": "낮음",
+        "delta": "v2와 정적 화면은 거의 동일합니다.",
+        "evidence": "Dynamic Refresh Engine은 새로고침 후 mock 값 변동처럼 상호작용을 해야 드러나는 성격입니다.",
+        "interpretation": "스크린샷만으로는 v3 차별점을 설득하기 어렵고, 별도 동작 캡처나 전후 값 비교가 필요합니다.",
+    },
+    "gemini": {
+        "visible": "높음",
+        "delta": "상단 인사이트 카드가 추가되고, 도시/날씨/온도에 따라 안내 문구와 배경 색상이 바뀝니다.",
+        "evidence": "WeatherViewModel에 smartInsight 생성 로직이 추가됐고 WeatherScreen에서 인사이트 카드와 동적 배경을 표시합니다.",
+        "interpretation": "v3 프롬프트의 '스마트 기능 1개' 요구를 화면에서 가장 명확하게 보여줍니다.",
+    },
+}
+
 CSS = """
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -172,6 +211,15 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
 .screen-shot-title { padding:9px 12px; border-bottom:1px solid #E5E7EB; font-size:12.5px; font-weight:800; color:#4B5563; }
 .screen-shot img { width:100%; display:block; background:#111; }
 .note-box { background:#FFFBEB; border-left:4px solid #F59E0B; padding:12px 16px; border-radius:0 8px 8px 0; font-size:13.5px; line-height:1.7; color:#78350F; margin:12px 0; }
+.callout-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
+.callout {
+  border:1px solid #E5E7EB;
+  border-radius:10px;
+  background:#FAFAFA;
+  padding:15px 16px;
+}
+.callout-k { font-size:12px; font-weight:850; color:#6B7280; margin-bottom:6px; }
+.callout-v { font-size:13.5px; color:#374151; line-height:1.65; }
 .prompt-meta { color:#6B7280; font-size:13px; font-weight:700; margin-bottom:10px; }
 .prompt-pre {
   white-space:pre-wrap;
@@ -196,7 +244,7 @@ pre.diff { white-space:pre-wrap; word-break:break-word; background:#F9FAFB; bord
   .wrap { padding:24px 14px 80px; }
   .rh, .card { padding:26px 20px; }
   .rh-title { font-size:23px; }
-  .metric-grid, .ss-grid, .screen-list { grid-template-columns:1fr; }
+  .metric-grid, .ss-grid, .screen-list, .callout-grid { grid-template-columns:1fr; }
   td.col-label { white-space:normal; }
   .tc-head, .kv-row { align-items:flex-start; }
   .tc-model { margin-left:0; display:block; }
@@ -321,6 +369,7 @@ def phase_rows(phase: str, data: dict):
     if phase == "v3":
         rows.extend([
             ["자율 추가 기능", *[esc(results[ai].get("smartFeature")) for ai in AIS]],
+            ["실제 체감 변화", *[esc(V3_EVIDENCE[ai]["visible"]) for ai in AIS]],
             ["평균 점수", *[f"{sum(results[ai].get('scores', [])) / len(results[ai].get('scores', [])):.1f}/10" if results[ai].get("scores") else "-" for ai in AIS]],
         ])
     return rows
@@ -377,6 +426,36 @@ def screenshots(phase: str):
     return '<div class="screen-set">' + "".join(groups) + "</div>"
 
 
+def insight_section(phase: str):
+    items = PHASE_INSIGHTS.get(phase, [])
+    cards = "".join(
+        f'<div class="callout"><div class="callout-k">{esc(title)}</div><div class="callout-v">{esc(text)}</div></div>'
+        for title, text in items
+    )
+    return f'<div class="callout-grid">{cards}</div>'
+
+
+def v3_evidence_section(num: int):
+    rows = []
+    for ai in AIS:
+        item = V3_EVIDENCE[ai]
+        rows.append([
+            f'<span class="dot {ai}"></span> {AI_LABELS[ai]}',
+            esc(item["visible"]),
+            esc(item["delta"]),
+            esc(item["evidence"]),
+            esc(item["interpretation"]),
+        ])
+    headers = [("AI", None), ("체감 변화", None), ("화면상 차이", None), ("근거", None), ("해석", None)]
+    return f"""
+  <section class="card" id="evidence">
+    <div class="sh"><span class="sh-num">{num:02d}</span><h2>v2 대비 체감 변화</h2></div>
+    <p class="lead">v3는 자율 기능 추가 단계였지만, 최종 판단은 보고된 기능명보다 실제 코드 diff와 캡처 화면에서 확인되는 변화에 맞췄습니다.</p>
+    {table(headers, rows, highlights={2})}
+  </section>
+"""
+
+
 def observations(phase: str, data: dict):
     rows = []
     for ai in AIS:
@@ -393,10 +472,11 @@ def observations(phase: str, data: dict):
             ])
         else:
             scores = result.get("scores") or []
+            evidence = V3_EVIDENCE[ai]
             rows.append([
                 f'<span class="dot {ai}"></span> {AI_LABELS[ai]}',
                 esc(result.get("smartFeature")),
-                esc((result.get("tokens") or {}).get("note")),
+                esc(evidence["interpretation"]),
                 esc(f"{sum(scores) / len(scores):.1f}/10" if scores else "-"),
             ])
     if phase in {"v1", "v2"}:
@@ -408,6 +488,19 @@ def observations(phase: str, data: dict):
 
 def code_summary(phase: str, data: dict):
     rows = []
+    if phase == "v3":
+        for ai in AIS:
+            code = data["results"][ai].get("code", {})
+            recorded = len(code.get("changedFiles", []))
+            rows.append([
+                f'<span class="dot {ai}"></span> {AI_LABELS[ai]}',
+                f"{fmt(code.get('ktFiles'))}개",
+                f"{fmt(code.get('ktLines'))}줄",
+                f"기록상 {recorded}개",
+                esc(V3_EVIDENCE[ai]["evidence"]),
+            ])
+        return table([("AI", None), ("Kotlin 파일", None), ("Kotlin 라인", None), ("변경 파일", None), ("현재 확인 근거", None)], rows, highlights={2})
+
     for ai in AIS:
         code = data["results"][ai].get("code", {})
         changed = code.get("changedFileCountFromV1")
@@ -437,6 +530,7 @@ def criteria_section(phase: str, data: dict, num: int):
     req_rows = []
     if phase == "v3":
         title = "평가 기준"
+        items += '<li>아래 점수는 최초 정리 자료의 점수이며, 실제 체감 변화는 별도 근거 표에서 보정해 해석합니다.</li>'
         for idx, label in enumerate(criteria):
             req_rows.append([label, *[f"{data['results'][ai].get('scores', [])[idx]}/10" if idx < len(data["results"][ai].get("scores", [])) else "-" for ai in AIS]])
     else:
@@ -467,8 +561,10 @@ def render(phase: str):
     prompt_text = (ROOT / phase_info["prompt_file"]).read_text(encoding="utf-8-sig", errors="replace").strip()
     has_criteria = bool(data.get("criteria"))
     criteria_html = criteria_section(phase, data, 4) if has_criteria else ""
-    section_offset = 1 if criteria_html else 0
+    evidence_html = v3_evidence_section(5) if phase == "v3" else ""
+    section_offset = (1 if criteria_html else 0) + (1 if evidence_html else 0)
     toc_criteria = '<a href="#criteria">요구사항</a>' if criteria_html else ""
+    toc_evidence = '<a href="#evidence">체감 변화</a>' if evidence_html else ""
     body = f"""<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -493,11 +589,12 @@ def render(phase: str):
     </div>
   </header>
   <nav class="toc">
-    <a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a>{toc_criteria}<a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
+    <a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a>{toc_criteria}{toc_evidence}<a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
   </nav>
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
     <p class="lead">{esc(phase_info["summary"])}</p>
+    {insight_section(phase)}
     <div class="metric-grid">{top_metrics(data)}</div>
   </section>
   <section class="card" id="prompt">
@@ -510,6 +607,7 @@ def render(phase: str):
     {ai_table(phase_rows(phase, data), highlights={2, 4, 5})}
   </section>
 {criteria_html}
+{evidence_html}
   <section class="card" id="tokens">
     <div class="sh"><span class="sh-num">{4 + section_offset:02d}</span><h2>토큰 사용량</h2></div>
     {token_cards(data)}

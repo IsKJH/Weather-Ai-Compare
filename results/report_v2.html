@@ -22,11 +22,12 @@
     </div>
   </header>
   <nav class="toc">
-    <a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a><a href="#criteria">요구사항</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
+    <a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#criteria">요구사항</a><a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
   </nav>
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
     <p class="lead">v1 결과물을 기준으로 동일한 개선 프롬프트를 적용해 기능 추가, 코드 이해력, 안정성을 비교한 결과입니다.</p>
+    <div class="callout-grid"><div class="callout"><div class="callout-k">비교 초점</div><div class="callout-v">v1 결과물을 새로 만들지 않고 유지한 채, 지정된 기능 요구사항을 얼마나 안정적으로 추가했는지 보는 단계입니다.</div></div><div class="callout"><div class="callout-k">읽는 법</div><div class="callout-v">시간별 예보, 상세 날씨, 새로고침, 즐겨찾기, 한국어 복구처럼 명시된 요구사항 충족 여부를 우선 비교합니다.</div></div><div class="callout"><div class="callout-k">한계</div><div class="callout-v">세 앱 모두 요구 기능을 갖췄기 때문에, 스크린샷만으로는 구현 품질이나 코드 구조 차이가 충분히 드러나지 않습니다.</div></div></div>
     <div class="metric-grid"><div class="metric"><div class="metric-k">가장 빠른 실행</div><div class="metric-v">Gemini · 149.4초</div></div><div class="metric"><div class="metric-k">최저 토큰</div><div class="metric-v">Gemini · 642,641</div></div><div class="metric"><div class="metric-k">최대 코드량</div><div class="metric-v">Codex · 736줄</div></div></div>
   </section>
   <section class="card" id="prompt">
@@ -129,6 +130,7 @@ After implementation:
     <ul class="crit-list"><li>기존 프로젝트를 새로 만들지 않고 개선</li><li>한국어 깨짐 수정</li><li>시간별 예보 추가</li><li>강수확률/자외선/대기질 추가</li><li>새로고침/마지막 업데이트/loading 상태 추가</li><li>즐겨찾기 상태 추가</li><li>빌드 및 실제 기기 스크린샷 성공</li><li>토큰 사용량과 소요 시간 비교</li></ul>
     <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody><tr><td class="col-label">한국어 복구</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">시간별 예보</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">상세 날씨</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">새로고침</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">즐겨찾기</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">5일 예보 보존</td><td>충족</td><td>충족</td><td>충족</td></tr></tbody></table></div>
   </section>
+
 
   <section class="card" id="tokens">
     <div class="sh"><span class="sh-num">05</span><h2>토큰 사용량</h2></div>

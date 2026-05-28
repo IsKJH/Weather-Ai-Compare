@@ -27,6 +27,7 @@
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
     <p class="lead">동일한 Android 날씨 앱 요구사항을 세 AI CLI에 전달해 처음부터 앱을 생성하게 한 결과입니다.</p>
+    <div class="callout-grid"><div class="callout"><div class="callout-k">비교 초점</div><div class="callout-v">동일한 최초 프롬프트에서 각 AI가 어떤 기본 앱 구조와 UI 방향을 선택했는지 확인하는 단계입니다.</div></div><div class="callout"><div class="callout-k">읽는 법</div><div class="callout-v">기능 완성도보다 초기 설계 성향, 한국어 처리, 화면 구성, 빌드 안정성을 중심으로 보는 것이 적절합니다.</div></div><div class="callout"><div class="callout-k">한계</div><div class="callout-v">v1은 처음부터 생성한 결과라 기존 코드 이해력이나 유지보수 능력을 평가하기에는 부족합니다.</div></div></div>
     <div class="metric-grid"><div class="metric"><div class="metric-k">가장 빠른 실행</div><div class="metric-v">Gemini · 318초</div></div><div class="metric"><div class="metric-k">최저 토큰</div><div class="metric-v">Codex · 165,761</div></div><div class="metric"><div class="metric-k">최대 코드량</div><div class="metric-v">Codex · 451줄</div></div></div>
   </section>
   <section class="card" id="prompt">
@@ -186,6 +187,7 @@ gradle/wrapper/
     <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
     <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6 (Claude Code CLI v2.1.152)</td><td>gpt-5.5 (OpenAI Codex CLI v0.134.0)</td><td>gemini-3-flash-preview + gemini-3.1-flash-lite (Gemini CLI v0.43.0)</td></tr><tr><td class="col-label">소요 시간</td><td>537초</td><td>-</td><td>318초</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>918,278</td><td>165,761</td><td>672,522</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>5개 / 395줄</td><td>6개 / 451줄</td><td>5개 / 304줄</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>성공</td><td>성공</td><td>성공</td></tr><tr class="row-hl"><td class="col-label">스크린샷</td><td>촬영 완료</td><td>촬영 완료</td><td>촬영 완료</td></tr><tr><td class="col-label">UI 테마</td><td>라이트 — 하늘색 그라데이션</td><td>다크 — 네이비 계열</td><td>라이트 — 인디고/보라 그라데이션</td></tr><tr><td class="col-label">한국어 표시</td><td>정상</td><td>깨짐 (stdin 파이프 시 한국어 인코딩 손실)</td><td>정상</td></tr></tbody></table></div>
   </section>
+
 
   <section class="card" id="tokens">
     <div class="sh"><span class="sh-num">04</span><h2>토큰 사용량</h2></div>
