@@ -22,38 +22,128 @@
     </div>
   </header>
   <nav class="toc">
-    <a href="#overview">개요</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a><a href="#criteria">요구사항</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
+    <a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a><a href="#criteria">요구사항</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
   </nav>
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
     <p class="lead">v1 결과물을 기준으로 동일한 개선 프롬프트를 적용해 기능 추가, 코드 이해력, 안정성을 비교한 결과입니다.</p>
     <div class="metric-grid"><div class="metric"><div class="metric-k">가장 빠른 실행</div><div class="metric-v">Gemini · 149.4초</div></div><div class="metric"><div class="metric-k">최저 토큰</div><div class="metric-v">Gemini · 642,641</div></div><div class="metric"><div class="metric-k">최대 코드량</div><div class="metric-v">Codex · 736줄</div></div></div>
   </section>
+  <section class="card" id="prompt">
+    <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
+    <p class="prompt-meta">prompt_v2.txt · 기존 앱 기능 개선</p>
+    <pre class="prompt-pre">You are improving the existing WeatherNow Android app in this directory.
+
+Do not recreate the project from scratch.
+Read the existing code first, then improve it in place.
+
+Experiment context:
+This project is part of an AI comparison experiment. Claude, Codex, and Gemini each created a v1 Android weather app from the same original prompt. Now each AI must improve its own existing v1 project using this same v2 prompt. The goal is to compare how well each AI understands, preserves, and extends an existing codebase.
+
+Goal:
+Turn the current simple mock weather app into a more useful, production-like weather dashboard while keeping it lightweight and mock-data only.
+
+Fixed constraints:
+- Keep Kotlin.
+- Keep Jetpack Compose.
+- Keep MVVM with ViewModel + UiState.
+- Keep package name: com.example.weathernow.
+- Do not add external libraries.
+- Do not use a real weather API.
+- Use mock data only.
+- Keep a single Activity.
+- Ensure ./gradlew assembleDebug succeeds.
+
+Required improvements:
+1. Fix any broken Korean text or garbled strings in the app.
+2. Preserve all v1 features:
+   - city switching for Seoul, Busan, Jeju
+   - current temperature
+   - weather condition
+   - feels-like temperature
+   - humidity
+   - wind speed
+   - 5-day forecast
+3. Add hourly forecast using mock data:
+   - at least 6 hourly items
+   - time, condition icon, temperature
+4. Add extra weather details:
+   - precipitation probability
+   - UV index
+   - air quality
+5. Add a refresh action:
+   - show last updated time
+   - simulate refresh using mock data
+   - show a brief loading state
+6. Add favorite city behavior:
+   - user can mark one city as favorite
+   - favorite state is kept in ViewModel state
+   - no persistence required
+7. Improve UI/UX:
+   - clearer visual hierarchy
+   - better spacing
+   - readable Korean labels
+   - one consistent light or dark theme
+   - no overlapping text
+   - still usable on a small Android screen
+8. Keep code maintainable:
+   - avoid one huge composable if possible
+   - create reusable composables where appropriate
+   - avoid unnecessary rewrites
+
+Important implementation guidance:
+- Start by inspecting the existing files in this directory.
+- Preserve the current project structure unless there is a clear reason to adjust it.
+- Prefer small, safe, maintainable changes over a full rewrite.
+- If the current project has garbled Korean due to encoding issues, replace it with proper Korean strings:
+  - Seoul: 서울
+  - Busan: 부산
+  - Jeju: 제주
+  - Sunny: 맑음
+  - Cloudy: 구름많음
+  - Rain: 비
+  - Feels like: 체감온도
+  - Humidity: 습도
+  - Wind: 풍속
+  - 5-day forecast: 5일 예보
+  - Hourly forecast: 시간별 예보
+  - Precipitation: 강수확률
+  - UV index: 자외선 지수
+  - Air quality: 대기질
+  - Last updated: 마지막 업데이트
+  - Favorite: 즐겨찾기
+- Use emoji or Compose-drawn icons only. Do not add external image resources.
+
+After implementation:
+- Run ./gradlew assembleDebug.
+- Briefly summarize what changed.
+- Mention whether the build passed.</pre>
+  </section>
   <section class="card" id="summary">
-    <div class="sh"><span class="sh-num">02</span><h2>종합 비교</h2></div>
-    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6 (Claude Code CLI v2.1.153)</td><td>gpt-5.5 (OpenAI Codex CLI v0.134.0)</td><td>gemini-3.1-flash-lite + gemini-3-flash (Gemini CLI v0.43.0)</td></tr><tr><td class="col-label">소요 시간</td><td>360.6초</td><td>315초</td><td>149.4초</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>1,043,992</td><td>1,615,940</td><td>642,641</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>5개 / 580줄</td><td>6개 / 736줄</td><td>5개 / 518줄</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>성공</td><td>성공</td><td>성공</td></tr><tr class="row-hl"><td class="col-label">스크린샷</td><td>성공</td><td>성공</td><td>성공</td></tr><tr><td class="col-label">요구사항 충족</td><td>6/6</td><td>6/6</td><td>6/6</td></tr><tr><td class="col-label">v1 대비 변경 파일</td><td>3개</td><td>6개</td><td>4개</td></tr><tr><td class="col-label">UI 테마</td><td>밝은 블루 그라디언트, v1 감성 유지</td><td>다크 네이비 대시보드</td><td>블루 그라디언트, 모바일 앱 액션 중심</td></tr></tbody></table></div>
+    <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
+    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6 (Claude Code CLI v2.1.153)</td><td>gpt-5.5 (OpenAI Codex CLI v0.134.0)</td><td>gemini-3.1-flash-lite + gemini-3-flash (Gemini CLI v0.43.0)</td></tr><tr><td class="col-label">소요 시간</td><td>360.6초</td><td>315초</td><td>149.4초</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>1,043,992</td><td>1,615,940</td><td>642,641</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>5개 / 580줄</td><td>6개 / 736줄</td><td>5개 / 518줄</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>성공</td><td>성공</td><td>성공</td></tr><tr class="row-hl"><td class="col-label">스크린샷</td><td>촬영 완료</td><td>촬영 완료</td><td>촬영 완료</td></tr><tr><td class="col-label">요구사항 충족</td><td>6/6</td><td>6/6</td><td>6/6</td></tr><tr><td class="col-label">v1 대비 변경 파일</td><td>3개</td><td>6개</td><td>4개</td></tr><tr><td class="col-label">UI 테마</td><td>밝은 블루 그라디언트, v1 감성 유지</td><td>다크 네이비 대시보드</td><td>블루 그라디언트, 모바일 앱 액션 중심</td></tr></tbody></table></div>
   </section>
 
   <section class="card" id="criteria">
-    <div class="sh"><span class="sh-num">03</span><h2>요구사항 체크</h2></div>
+    <div class="sh"><span class="sh-num">04</span><h2>요구사항 체크</h2></div>
     <ul class="crit-list"><li>기존 프로젝트를 새로 만들지 않고 개선</li><li>한국어 깨짐 수정</li><li>시간별 예보 추가</li><li>강수확률/자외선/대기질 추가</li><li>새로고침/마지막 업데이트/loading 상태 추가</li><li>즐겨찾기 상태 추가</li><li>빌드 및 실제 기기 스크린샷 성공</li><li>토큰 사용량과 소요 시간 비교</li></ul>
     <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody><tr><td class="col-label">한국어 복구</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">시간별 예보</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">상세 날씨</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">새로고침</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">즐겨찾기</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">5일 예보 보존</td><td>충족</td><td>충족</td><td>충족</td></tr></tbody></table></div>
   </section>
 
   <section class="card" id="tokens">
-    <div class="sh"><span class="sh-num">04</span><h2>토큰 사용량</h2></div>
+    <div class="sh"><span class="sh-num">05</span><h2>토큰 사용량</h2></div>
     <div class="token-cards"><div class="token-card"><div class="tc-head"><span class="dot claude"></span><span class="tc-name">Claude</span><span class="tc-model">claude-sonnet-4-6 (Claude Code CLI v2.1.153)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">1,043,992</span></div><div class="kv-row"><span class="kv-k">신규 입력 토큰</span><span class="kv-v">24</span></div><div class="kv-row"><span class="kv-k">캐시 생성 토큰</span><span class="kv-v">39,214</span></div><div class="kv-row"><span class="kv-k">캐시 재사용 토큰</span><span class="kv-v">979,789</span></div><div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">24,965</span></div><div class="kv-row"><span class="kv-k">보조 모델 토큰</span><span class="kv-v">1,303</span></div><div class="kv-row"><span class="kv-k">예상 비용</span><span class="kv-v">$0.8169</span></div></div><p class="tc-note">Claude CLI 사용량 기준. 캐시 생성/재사용 토큰을 분리했고, 보조 모델 사용량은 별도 항목으로 표시했습니다.</p></div><div class="token-card"><div class="tc-head"><span class="dot codex"></span><span class="tc-name">Codex</span><span class="tc-model">gpt-5.5 (OpenAI Codex CLI v0.134.0)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">1,615,940</span></div><div class="kv-row"><span class="kv-k">입력 토큰</span><span class="kv-v">1,604,558</span></div><div class="kv-row"><span class="kv-k">캐시 입력 토큰</span><span class="kv-v">1,406,720</span></div><div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">11,382</span></div><div class="kv-row"><span class="kv-k">추론 출력 토큰</span><span class="kv-v">1,063</span></div></div><p class="tc-note">Codex CLI 사용량 기준. 입력 토큰에는 캐시 입력 토큰이 포함되어 있어 별도 항목으로 함께 표시했습니다.</p></div><div class="token-card"><div class="tc-head"><span class="dot gemini"></span><span class="tc-name">Gemini</span><span class="tc-model">gemini-3.1-flash-lite + gemini-3-flash (Gemini CLI v0.43.0)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">642,641</span></div><div class="kv-row"><span class="kv-k">gemini-3.1-flash-lite 사용 토큰</span><span class="kv-v">4,419</span></div><div class="kv-row"><span class="kv-k">gemini-3-flash-preview 사용 토큰</span><span class="kv-v">638,222</span></div></div><p class="tc-note">Gemini CLI 통계 기준. 보조 모델과 본 작업 모델 사용량을 합산했습니다.</p></div></div>
   </section>
   <section class="card" id="screens">
-    <div class="sh"><span class="sh-num">05</span><h2>실행 화면</h2></div>
+    <div class="sh"><span class="sh-num">06</span><h2>실행 화면</h2></div>
     <div class="ss-grid"><div class="ss-card"><div class="ss-head"><span class="dot claude"></span>Claude</div><img src="../screenshots/v2/v2-claude.png" alt="Claude screenshot"></div><div class="ss-card"><div class="ss-head"><span class="dot codex"></span>Codex</div><img src="../screenshots/v2/v2-codex.png" alt="Codex screenshot"></div><div class="ss-card"><div class="ss-head"><span class="dot gemini"></span>Gemini</div><img src="../screenshots/v2/v2-gemini.png" alt="Gemini screenshot"></div></div>
   </section>
   <section class="card" id="observations">
-    <div class="sh"><span class="sh-num">06</span><h2>구현 관찰</h2></div>
+    <div class="sh"><span class="sh-num">07</span><h2>구현 관찰</h2></div>
     <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>UI 테마</th><th>주요 기능</th><th>관찰</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>밝은 블루 그라디언트, v1 감성 유지</td><td>시간별 예보, 상세 날씨 카드, 새로고침/마지막 업데이트, 즐겨찾기</td><td>v1의 시각 정체성을 가장 많이 유지. 하단 시간별 예보가 내비게이션 바와 일부 겹침</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>다크 네이비 대시보드</td><td>시간별 예보, 상세 날씨, 새로고침, 즐겨찾기</td><td>정보 구조와 컴포넌트 분리가 가장 명확. v1 대비 디자인 변화 폭은 큼</td></tr><tr><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>블루 그라디언트, 모바일 앱 액션 중심</td><td>시간별 예보, 상세 날씨 카드, 새로고침 아이콘, 즐겨찾기 하트</td><td>상단 액션 배치가 직관적. 하단 시간별 예보가 내비게이션 바와 일부 겹침</td></tr></tbody></table></div>
   </section>
   <section class="card" id="code">
-    <div class="sh"><span class="sh-num">07</span><h2>코드 요약</h2></div>
+    <div class="sh"><span class="sh-num">08</span><h2>코드 요약</h2></div>
     <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>Kotlin 파일</th><th>Kotlin 라인</th><th>변경 파일</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>5개</td><td>580줄</td><td>3개</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>6개</td><td>736줄</td><td>6개</td></tr><tr><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>5개</td><td>518줄</td><td>4개</td></tr></tbody></table></div><div class="code-card"><div class="cc-head"><span class="dot claude"></span><span class="cc-name">Claude diff</span></div><pre class="diff">.../com/example/weathernow/data/WeatherData.kt     |  48 +++-
  .../com/example/weathernow/ui/WeatherScreen.kt     | 263 +++++++++++++++------
  .../weathernow/viewmodel/WeatherViewModel.kt       |  40 +++-

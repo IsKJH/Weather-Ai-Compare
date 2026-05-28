@@ -22,32 +22,185 @@
     </div>
   </header>
   <nav class="toc">
-    <a href="#overview">개요</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
+    <a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
   </nav>
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
     <p class="lead">동일한 Android 날씨 앱 요구사항을 세 AI CLI에 전달해 처음부터 앱을 생성하게 한 결과입니다.</p>
     <div class="metric-grid"><div class="metric"><div class="metric-k">가장 빠른 실행</div><div class="metric-v">Gemini · 318초</div></div><div class="metric"><div class="metric-k">최저 토큰</div><div class="metric-v">Codex · 165,761</div></div><div class="metric"><div class="metric-k">최대 코드량</div><div class="metric-v">Codex · 451줄</div></div></div>
   </section>
+  <section class="card" id="prompt">
+    <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
+    <p class="prompt-meta">prompt.txt · 새 Android 날씨 앱 생성</p>
+    <pre class="prompt-pre">Build a complete Android weather app project in the current directory based on the following specification. Create ALL necessary files including build.gradle, settings.gradle, AndroidManifest.xml, and all Kotlin source files.
+
+---
+
+# Weather App Specification
+
+## Tech Stack (Fixed — do not change)
+- Language: Kotlin
+- UI: Jetpack Compose
+- Architecture: MVVM (ViewModel + UiState)
+- minSdk: 26
+- targetSdk: 35
+- No external libraries (standard Compose + ViewModel only)
+- No real API — Mock data only
+- App name: WeatherNow
+- Package name: com.example.weathernow
+
+## Required Features
+
+### Screens
+- Single main screen (single Activity + Compose)
+
+### Information to display
+1. City name
+2. Current temperature (°C)
+3. Weather condition (맑음, 흐림, 비, 눈, etc.)
+4. Feels like temperature
+5. Humidity (%)
+6. Wind speed (m/s)
+7. 5-day forecast (day + weather icon + high/low temp)
+
+### Functionality
+- City switching: Seoul(서울), Busan(부산), Jeju(제주) — tabs or selector UI
+- Weather icons: use emoji or draw with Compose (no external image resources)
+
+## Mock Data (use exactly as provided)
+
+```kotlin
+data class WeatherData(
+    val city: String,
+    val currentTemp: Int,
+    val feelsLike: Int,
+    val condition: String,
+    val humidity: Int,
+    val windSpeed: Double,
+    val forecast: List&lt;ForecastDay&gt;
+)
+
+data class ForecastDay(
+    val day: String,
+    val condition: String,
+    val high: Int,
+    val low: Int
+)
+
+val mockWeatherList = listOf(
+    WeatherData(
+        city = &quot;서울&quot;,
+        currentTemp = 23,
+        feelsLike = 21,
+        condition = &quot;맑음&quot;,
+        humidity = 55,
+        windSpeed = 3.2,
+        forecast = listOf(
+            ForecastDay(&quot;월&quot;, &quot;맑음&quot;, 25, 16),
+            ForecastDay(&quot;화&quot;, &quot;구름많음&quot;, 22, 15),
+            ForecastDay(&quot;수&quot;, &quot;비&quot;, 18, 13),
+            ForecastDay(&quot;목&quot;, &quot;흐림&quot;, 20, 14),
+            ForecastDay(&quot;금&quot;, &quot;맑음&quot;, 26, 17)
+        )
+    ),
+    WeatherData(
+        city = &quot;부산&quot;,
+        currentTemp = 26,
+        feelsLike = 28,
+        condition = &quot;구름많음&quot;,
+        humidity = 72,
+        windSpeed = 5.1,
+        forecast = listOf(
+            ForecastDay(&quot;월&quot;, &quot;구름많음&quot;, 27, 20),
+            ForecastDay(&quot;화&quot;, &quot;비&quot;, 24, 19),
+            ForecastDay(&quot;수&quot;, &quot;비&quot;, 22, 18),
+            ForecastDay(&quot;목&quot;, &quot;맑음&quot;, 25, 19),
+            ForecastDay(&quot;금&quot;, &quot;맑음&quot;, 28, 21)
+        )
+    ),
+    WeatherData(
+        city = &quot;제주&quot;,
+        currentTemp = 28,
+        feelsLike = 30,
+        condition = &quot;맑음&quot;,
+        humidity = 68,
+        windSpeed = 6.8,
+        forecast = listOf(
+            ForecastDay(&quot;월&quot;, &quot;맑음&quot;, 29, 22),
+            ForecastDay(&quot;화&quot;, &quot;맑음&quot;, 30, 23),
+            ForecastDay(&quot;수&quot;, &quot;구름많음&quot;, 27, 21),
+            ForecastDay(&quot;목&quot;, &quot;비&quot;, 24, 20),
+            ForecastDay(&quot;금&quot;, &quot;흐림&quot;, 25, 21)
+        )
+    )
+)
+```
+
+## UI Requirements
+
+### Free to decide (show your AI&#x27;s design style)
+- Color theme and background
+- Layout composition
+- Weather icon style
+- Animations (optional)
+- Card/section design
+- Font sizes and hierarchy
+
+### Must follow
+- All information on one scrollable screen
+- City switching UI must be included
+- 5-day forecast shown as horizontal or vertical list
+- Consistent dark or light theme throughout
+
+## Required Project Structure
+
+```
+app/
+  build.gradle.kts
+  src/main/
+    AndroidManifest.xml
+    java/com/example/weathernow/
+      MainActivity.kt
+      WeatherViewModel.kt
+      WeatherData.kt
+      ui/
+        WeatherScreen.kt
+        components/  (reusable composables)
+    res/values/
+      strings.xml
+      themes.xml
+build.gradle.kts
+settings.gradle.kts
+gradle/wrapper/
+  gradle-wrapper.properties
+```
+
+## Done criteria
+- ./gradlew assembleDebug builds successfully
+- App runs on physical device via ADB
+- 3 cities switch correctly
+- 5-day forecast displays
+- No crashes</pre>
+  </section>
   <section class="card" id="summary">
-    <div class="sh"><span class="sh-num">02</span><h2>종합 비교</h2></div>
-    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6 (Claude Code CLI v2.1.152)</td><td>gpt-5.5 (OpenAI Codex CLI v0.134.0)</td><td>gemini-3-flash-preview + gemini-3.1-flash-lite (Gemini CLI v0.43.0)</td></tr><tr><td class="col-label">소요 시간</td><td>537초</td><td>-</td><td>318초</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>918,278</td><td>165,761</td><td>672,522</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>5개 / 395줄</td><td>6개 / 451줄</td><td>5개 / 304줄</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>성공</td><td>성공</td><td>성공</td></tr><tr class="row-hl"><td class="col-label">스크린샷</td><td>확보</td><td>확보</td><td>확보</td></tr><tr><td class="col-label">UI 테마</td><td>라이트 — 하늘색 그라데이션</td><td>다크 — 네이비 계열</td><td>라이트 — 인디고/보라 그라데이션</td></tr><tr><td class="col-label">한국어 표시</td><td>정상</td><td>깨짐 (stdin 파이프 시 한국어 인코딩 손실)</td><td>정상</td></tr></tbody></table></div>
+    <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
+    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6 (Claude Code CLI v2.1.152)</td><td>gpt-5.5 (OpenAI Codex CLI v0.134.0)</td><td>gemini-3-flash-preview + gemini-3.1-flash-lite (Gemini CLI v0.43.0)</td></tr><tr><td class="col-label">소요 시간</td><td>537초</td><td>-</td><td>318초</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>918,278</td><td>165,761</td><td>672,522</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>5개 / 395줄</td><td>6개 / 451줄</td><td>5개 / 304줄</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>성공</td><td>성공</td><td>성공</td></tr><tr class="row-hl"><td class="col-label">스크린샷</td><td>촬영 완료</td><td>촬영 완료</td><td>촬영 완료</td></tr><tr><td class="col-label">UI 테마</td><td>라이트 — 하늘색 그라데이션</td><td>다크 — 네이비 계열</td><td>라이트 — 인디고/보라 그라데이션</td></tr><tr><td class="col-label">한국어 표시</td><td>정상</td><td>깨짐 (stdin 파이프 시 한국어 인코딩 손실)</td><td>정상</td></tr></tbody></table></div>
   </section>
 
   <section class="card" id="tokens">
-    <div class="sh"><span class="sh-num">03</span><h2>토큰 사용량</h2></div>
+    <div class="sh"><span class="sh-num">04</span><h2>토큰 사용량</h2></div>
     <div class="token-cards"><div class="token-card"><div class="tc-head"><span class="dot claude"></span><span class="tc-name">Claude</span><span class="tc-model">claude-sonnet-4-6 (Claude Code CLI v2.1.152)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">918,278</span></div><div class="kv-row"><span class="kv-k">신규 입력 토큰</span><span class="kv-v">40</span></div><div class="kv-row"><span class="kv-k">캐시 생성 토큰</span><span class="kv-v">12,305</span></div><div class="kv-row"><span class="kv-k">캐시 재사용 토큰</span><span class="kv-v">865,307</span></div><div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">40,626</span></div></div><p class="tc-note">Claude는 프롬프트 캐싱을 사용. cacheRead 토큰은 일반 입력 대비 약 10배 저렴하게 과금됨</p></div><div class="token-card"><div class="tc-head"><span class="dot codex"></span><span class="tc-name">Codex</span><span class="tc-model">gpt-5.5 (OpenAI Codex CLI v0.134.0)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">165,761</span></div></div><p class="tc-note">Codex CLI는 입력/출력 분리 없이 총 사용 토큰만 표시</p></div><div class="token-card"><div class="tc-head"><span class="dot gemini"></span><span class="tc-name">Gemini</span><span class="tc-model">gemini-3-flash-preview + gemini-3.1-flash-lite (Gemini CLI v0.43.0)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">672,522</span></div><div class="kv-row"><span class="kv-k">메인 모델 토큰</span><span class="kv-v">670,160</span></div><div class="kv-row"><span class="kv-k">라우터 모델 토큰</span><span class="kv-v">2,362</span></div></div><p class="tc-note">기존 프로젝트에서 재측정. 출력 토큰(3,521)은 실제 초기 생성 시보다 적을 수 있음. 2개 모델 동시 사용 (라우터 + 메인)</p></div></div>
   </section>
   <section class="card" id="screens">
-    <div class="sh"><span class="sh-num">04</span><h2>실행 화면</h2></div>
+    <div class="sh"><span class="sh-num">05</span><h2>실행 화면</h2></div>
     <div class="ss-grid"><div class="ss-card"><div class="ss-head"><span class="dot claude"></span>Claude</div><img src="../screenshots/v1/v1-claude.png" alt="Claude screenshot"></div><div class="ss-card"><div class="ss-head"><span class="dot codex"></span>Codex</div><img src="../screenshots/v1/v1-codex.png" alt="Codex screenshot"></div><div class="ss-card"><div class="ss-head"><span class="dot gemini"></span>Gemini</div><img src="../screenshots/v1/v1-gemini.png" alt="Gemini screenshot"></div></div>
   </section>
   <section class="card" id="observations">
-    <div class="sh"><span class="sh-num">05</span><h2>구현 관찰</h2></div>
+    <div class="sh"><span class="sh-num">06</span><h2>구현 관찰</h2></div>
     <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>UI 테마</th><th>주요 기능</th><th>관찰</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>라이트 — 하늘색 그라데이션</td><td>동적 배경 (날씨별 색상 변경), 카드 3개 (체감/습도/풍속), 5일 예보 리스트</td><td>gradlew 파일 미생성 (수동 보완 필요)</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>다크 — 네이비 계열</td><td>WeatherNow 헤더 표시, Feels like 표시, 5일 예보</td><td>생성 완료 후 자동으로 gradlew assembleDebug 실행하여 APK 생성</td></tr><tr><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>라이트 — 인디고/보라 그라데이션</td><td>심플한 레이아웃, 카드형 상세 정보, 5일 예보</td><td>빌드 확인은 했으나 mipmap 리소스 누락으로 수동 보완 필요</td></tr></tbody></table></div>
   </section>
   <section class="card" id="code">
-    <div class="sh"><span class="sh-num">06</span><h2>코드 요약</h2></div>
+    <div class="sh"><span class="sh-num">07</span><h2>코드 요약</h2></div>
     <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>Kotlin 파일</th><th>Kotlin 라인</th><th>변경 파일</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>5개</td><td>395줄</td><td>-</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>6개</td><td>451줄</td><td>-</td></tr><tr><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>5개</td><td>304줄</td><td>-</td></tr></tbody></table></div>
   </section>
 </div>

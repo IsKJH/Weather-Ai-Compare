@@ -111,6 +111,20 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
 .ss-head { display:flex; align-items:center; gap:9px; padding:10px 16px; border-bottom:1px solid #E8E8E8; font-size:13.5px; font-weight:800; color:#333; }
 .ss-card img { width:100%; display:block; background:#111; }
 .note-box { background:#FFFBEB; border-left:4px solid #F59E0B; padding:12px 16px; border-radius:0 8px 8px 0; font-size:13.5px; line-height:1.7; color:#78350F; margin:12px 0; }
+.prompt-meta { color:#6B7280; font-size:13px; font-weight:700; margin-bottom:10px; }
+.prompt-pre {
+  white-space:pre-wrap;
+  word-break:keep-all;
+  overflow:auto;
+  max-height:360px;
+  background:#F9FAFB;
+  border:1px solid #E5E7EB;
+  border-radius:8px;
+  padding:14px 16px;
+  font-size:13.5px;
+  line-height:1.75;
+  color:#374151;
+}
 .crit-list { margin-left:18px; color:#4B5563; }
 .crit-list li { margin-bottom:4px; }
 pre.diff { white-space:pre-wrap; word-break:break-word; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:8px; padding:12px; font-size:12px; color:#374151; overflow:auto; }

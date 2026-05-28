@@ -15,6 +15,7 @@ PHASES = {
         "eyebrow": "AI CODING TOOL COMPARISON · V1",
         "summary": "동일한 Android 날씨 앱 요구사항을 세 AI CLI에 전달해 처음부터 앱을 생성하게 한 결과입니다.",
         "prompt": "새 Android 날씨 앱 생성",
+        "prompt_file": "prompt.txt",
         "baseline": "없음",
         "result": "weather-v1",
         "screens": {"claude": "../screenshots/v1/v1-claude.png", "codex": "../screenshots/v1/v1-codex.png", "gemini": "../screenshots/v1/v1-gemini.png"},
@@ -26,6 +27,7 @@ PHASES = {
         "eyebrow": "AI CODING TOOL COMPARISON · V2",
         "summary": "v1 결과물을 기준으로 동일한 개선 프롬프트를 적용해 기능 추가, 코드 이해력, 안정성을 비교한 결과입니다.",
         "prompt": "기존 앱 기능 개선",
+        "prompt_file": "prompt_v2.txt",
         "baseline": "weather-v1",
         "result": "weather-v2",
         "screens": {"claude": "../screenshots/v2/v2-claude.png", "codex": "../screenshots/v2/v2-codex.png", "gemini": "../screenshots/v2/v2-gemini.png"},
@@ -37,6 +39,7 @@ PHASES = {
         "eyebrow": "AI CODING TOOL COMPARISON · V3",
         "summary": "v1/v2 요구사항을 완수한 앱에 각 AI가 스스로 신선한 기능을 추가하도록 한 최종 비교 결과입니다.",
         "prompt": "자율적 혁신 기능 추가",
+        "prompt_file": "prompt_v3.txt",
         "baseline": "weather-v2",
         "result": "weather-v3",
         "screens": {"claude": "../screenshots/v3/v3-claude.png", "codex": "../screenshots/v3/v3-codex.png", "gemini": "../screenshots/v3/v3-gemini.png"},
@@ -157,6 +160,20 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
 .ss-head { display:flex; align-items:center; gap:9px; padding:10px 16px; border-bottom:1px solid #E8E8E8; font-size:13.5px; font-weight:800; color:#333; }
 .ss-card img { width:100%; display:block; background:#111; }
 .note-box { background:#FFFBEB; border-left:4px solid #F59E0B; padding:12px 16px; border-radius:0 8px 8px 0; font-size:13.5px; line-height:1.7; color:#78350F; margin:12px 0; }
+.prompt-meta { color:#6B7280; font-size:13px; font-weight:700; margin-bottom:10px; }
+.prompt-pre {
+  white-space:pre-wrap;
+  word-break:keep-all;
+  overflow:auto;
+  max-height:360px;
+  background:#F9FAFB;
+  border:1px solid #E5E7EB;
+  border-radius:8px;
+  padding:14px 16px;
+  font-size:13.5px;
+  line-height:1.75;
+  color:#374151;
+}
 .crit-list { margin-left:18px; color:#4B5563; }
 .crit-list li { margin-bottom:4px; }
 pre.diff { white-space:pre-wrap; word-break:break-word; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:8px; padding:12px; font-size:12px; color:#374151; overflow:auto; }
@@ -263,13 +280,9 @@ def normalize_build(result: dict) -> str:
 
 def normalize_screenshot(phase: str, result: dict) -> str:
     build = result.get("build") or {}
-    if phase == "v1":
-        return "확보"
-    if build.get("screenshotSuccess") is True:
-        return "성공"
     if build.get("screenshotSuccess") is False:
-        return "실패"
-    return "확보"
+        return "촬영 실패"
+    return "촬영 완료"
 
 
 def phase_rows(phase: str, data: dict):
@@ -397,25 +410,31 @@ def code_summary(phase: str, data: dict):
     return base
 
 
-def criteria_section(phase: str, data: dict):
+def criteria_section(phase: str, data: dict, num: int):
     criteria = data.get("criteria") or []
     if not criteria:
         return ""
     items = "".join(f"<li>{esc(item)}</li>" for item in criteria)
     req_rows = []
-    req_map = [
-        ("한국어 복구", "koreanFixed"),
-        ("시간별 예보", "hourlyForecast"),
-        ("상세 날씨", "extraDetails"),
-        ("새로고침", "refresh"),
-        ("즐겨찾기", "favorite"),
-        ("5일 예보 보존", "fiveDayForecastPreserved"),
-    ]
-    for label, key in req_map:
-        req_rows.append([label, *["충족" if data["results"][ai].get("requirements", {}).get(key) else "미충족" for ai in AIS]])
+    if phase == "v3":
+        title = "평가 기준"
+        for idx, label in enumerate(criteria):
+            req_rows.append([label, *[f"{data['results'][ai].get('scores', [])[idx]}/10" if idx < len(data["results"][ai].get("scores", [])) else "-" for ai in AIS]])
+    else:
+        title = "요구사항 체크"
+        req_map = [
+            ("한국어 복구", "koreanFixed"),
+            ("시간별 예보", "hourlyForecast"),
+            ("상세 날씨", "extraDetails"),
+            ("새로고침", "refresh"),
+            ("즐겨찾기", "favorite"),
+            ("5일 예보 보존", "fiveDayForecastPreserved"),
+        ]
+        for label, key in req_map:
+            req_rows.append([label, *["충족" if data["results"][ai].get("requirements", {}).get(key) else "미충족" for ai in AIS]])
     return f"""
   <section class="card" id="criteria">
-    <div class="sh"><span class="sh-num">03</span><h2>요구사항 체크</h2></div>
+    <div class="sh"><span class="sh-num">{num:02d}</span><h2>{title}</h2></div>
     <ul class="crit-list">{items}</ul>
     {ai_table(req_rows)}
   </section>
@@ -426,7 +445,9 @@ def render(phase: str):
     phase_info = PHASES[phase]
     data = read_json(phase_info["json"])
     generated = data.get("generatedAt") or datetime.now().isoformat(timespec="seconds")
-    criteria_html = criteria_section(phase, data)
+    prompt_text = (ROOT / phase_info["prompt_file"]).read_text(encoding="utf-8-sig", errors="replace").strip()
+    has_criteria = bool(data.get("criteria"))
+    criteria_html = criteria_section(phase, data, 4) if has_criteria else ""
     section_offset = 1 if criteria_html else 0
     toc_criteria = '<a href="#criteria">요구사항</a>' if criteria_html else ""
     body = f"""<!DOCTYPE html>
@@ -453,32 +474,37 @@ def render(phase: str):
     </div>
   </header>
   <nav class="toc">
-    <a href="#overview">개요</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a>{toc_criteria}<a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
+    <a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a>{toc_criteria}<a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
   </nav>
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
     <p class="lead">{esc(phase_info["summary"])}</p>
     <div class="metric-grid">{top_metrics(data)}</div>
   </section>
+  <section class="card" id="prompt">
+    <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
+    <p class="prompt-meta">{esc(phase_info["prompt_file"])} · {esc(phase_info["prompt"])}</p>
+    <pre class="prompt-pre">{esc(prompt_text)}</pre>
+  </section>
   <section class="card" id="summary">
-    <div class="sh"><span class="sh-num">02</span><h2>종합 비교</h2></div>
+    <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
     {ai_table(phase_rows(phase, data), highlights={2, 4, 5})}
   </section>
 {criteria_html}
   <section class="card" id="tokens">
-    <div class="sh"><span class="sh-num">{3 + section_offset:02d}</span><h2>토큰 사용량</h2></div>
+    <div class="sh"><span class="sh-num">{4 + section_offset:02d}</span><h2>토큰 사용량</h2></div>
     {token_cards(data)}
   </section>
   <section class="card" id="screens">
-    <div class="sh"><span class="sh-num">{4 + section_offset:02d}</span><h2>실행 화면</h2></div>
+    <div class="sh"><span class="sh-num">{5 + section_offset:02d}</span><h2>실행 화면</h2></div>
     {screenshots(phase_info)}
   </section>
   <section class="card" id="observations">
-    <div class="sh"><span class="sh-num">{5 + section_offset:02d}</span><h2>구현 관찰</h2></div>
+    <div class="sh"><span class="sh-num">{6 + section_offset:02d}</span><h2>구현 관찰</h2></div>
     {observations(phase, data)}
   </section>
   <section class="card" id="code">
-    <div class="sh"><span class="sh-num">{6 + section_offset:02d}</span><h2>코드 요약</h2></div>
+    <div class="sh"><span class="sh-num">{7 + section_offset:02d}</span><h2>코드 요약</h2></div>
     {code_summary(phase, data)}
   </section>
 </div>

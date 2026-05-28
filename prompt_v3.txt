@@ -1,0 +1,6 @@
+﻿You are in a weather app project directory. This is the v3 autonomous phase of an AI comparison project.
+
+Your task:
+1. Ensure all features from v1 and v2 (city switching, current weather, 5-day forecast, hourly forecast, weather details, refresh, favorites) are perfectly implemented and polished.
+2. Autonomously decide on and implement ONE innovative 'AI-powered' or 'Smart' feature of your choice that makes this weather app unique. Show your creativity and coding excellence.
+3. Do not ask for confirmation, just execute the changes and ensure the project builds with ./gradlew assembleDebug.
