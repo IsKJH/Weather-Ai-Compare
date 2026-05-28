@@ -7,6 +7,11 @@ from pathlib import Path
 ROOT = Path(r"C:\proj\weather-ai-compare")
 AIS = ["claude", "codex", "gemini"]
 AI_LABELS = {"claude": "Claude", "codex": "Codex", "gemini": "Gemini"}
+SCREEN_LABELS = {
+    "01-top": "상단 현재 날씨",
+    "02-middle": "중간 기능 영역",
+    "03-bottom": "하단 예보/상세",
+}
 PHASES = {
     "v1": {
         "json": "report.json",
@@ -159,6 +164,13 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
 .ss-card { border:1px solid #E2E2E2; border-radius:10px; overflow:hidden; background:#FAFAFA; box-shadow:0 2px 6px rgba(0,0,0,.05); }
 .ss-head { display:flex; align-items:center; gap:9px; padding:10px 16px; border-bottom:1px solid #E8E8E8; font-size:13.5px; font-weight:800; color:#333; }
 .ss-card img { width:100%; display:block; background:#111; }
+.screen-set { display:flex; flex-direction:column; gap:22px; }
+.screen-ai { border:1px solid #E2E2E2; border-radius:12px; overflow:hidden; background:#fff; }
+.screen-ai-head { display:flex; align-items:center; gap:9px; padding:12px 16px; background:#FAFAFA; border-bottom:1px solid #E8E8E8; font-weight:850; }
+.screen-list { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:14px; }
+.screen-shot { border:1px solid #E5E7EB; border-radius:10px; overflow:hidden; background:#F9FAFB; }
+.screen-shot-title { padding:9px 12px; border-bottom:1px solid #E5E7EB; font-size:12.5px; font-weight:800; color:#4B5563; }
+.screen-shot img { width:100%; display:block; background:#111; }
 .note-box { background:#FFFBEB; border-left:4px solid #F59E0B; padding:12px 16px; border-radius:0 8px 8px 0; font-size:13.5px; line-height:1.7; color:#78350F; margin:12px 0; }
 .prompt-meta { color:#6B7280; font-size:13px; font-weight:700; margin-bottom:10px; }
 .prompt-pre {
@@ -184,7 +196,7 @@ pre.diff { white-space:pre-wrap; word-break:break-word; background:#F9FAFB; bord
   .wrap { padding:24px 14px 80px; }
   .rh, .card { padding:26px 20px; }
   .rh-title { font-size:23px; }
-  .metric-grid, .ss-grid { grid-template-columns:1fr; }
+  .metric-grid, .ss-grid, .screen-list { grid-template-columns:1fr; }
   td.col-label { white-space:normal; }
   .tc-head, .kv-row { align-items:flex-start; }
   .tc-model { margin-left:0; display:block; }
@@ -348,14 +360,21 @@ def token_cards(data: dict):
     return '<div class="token-cards">' + "".join(cards) + "</div>"
 
 
-def screenshots(phase_info: dict):
-    cards = []
+def screenshots(phase: str):
+    groups = []
     for ai in AIS:
-        cards.append(
-            f'<div class="ss-card"><div class="ss-head"><span class="dot {ai}"></span>{AI_LABELS[ai]}</div>'
-            f'<img src="{phase_info["screens"][ai]}" alt="{AI_LABELS[ai]} screenshot"></div>'
+        shots = []
+        for name, label in SCREEN_LABELS.items():
+            src = f"../screenshots/{phase}/{ai}/{name}.png"
+            shots.append(
+                f'<div class="screen-shot"><div class="screen-shot-title">{esc(label)}</div>'
+                f'<img src="{src}" alt="{AI_LABELS[ai]} {label}"></div>'
+            )
+        groups.append(
+            f'<div class="screen-ai"><div class="screen-ai-head"><span class="dot {ai}"></span>{AI_LABELS[ai]}</div>'
+            f'<div class="screen-list">{"".join(shots)}</div></div>'
         )
-    return '<div class="ss-grid">' + "".join(cards) + "</div>"
+    return '<div class="screen-set">' + "".join(groups) + "</div>"
 
 
 def observations(phase: str, data: dict):
@@ -497,7 +516,8 @@ def render(phase: str):
   </section>
   <section class="card" id="screens">
     <div class="sh"><span class="sh-num">{5 + section_offset:02d}</span><h2>실행 화면</h2></div>
-    {screenshots(phase_info)}
+    <p class="lead">각 앱을 실제 기기에 설치한 뒤 상단, 중간, 하단 스크롤 위치를 동일한 방식으로 캡처했습니다.</p>
+    {screenshots(phase)}
   </section>
   <section class="card" id="observations">
     <div class="sh"><span class="sh-num">{6 + section_offset:02d}</span><h2>구현 관찰</h2></div>
