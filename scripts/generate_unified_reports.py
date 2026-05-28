@@ -52,9 +52,9 @@ PHASES = {
 }
 
 EXECUTIVE_TAKEAWAYS = [
-    ("전체 결론", "v1은 초기 생성 성향, v2는 요구사항 이행력, v3는 자율 개선의 체감도를 비교하는 실험으로 보는 것이 가장 명확합니다."),
-    ("가장 보기 쉬운 변화", "Gemini는 v3에서 인사이트 카드와 동적 배경이 추가되어 스크린샷만으로도 변화가 잘 드러납니다."),
-    ("주의할 해석", "Claude와 Codex의 v3는 보고된 기능명은 있으나 정적 화면 기준으로는 v2와 차이가 약해, 점수보다 실제 캡처와 diff 근거를 함께 봐야 합니다."),
+    ("실험의 결론", "v1은 초기 생성 성향, v2는 요구사항 이행력, v3는 자율 개선의 체감도를 비교하는 실험입니다."),
+    ("가장 명확한 변화", "Gemini는 v3에서 인사이트 카드와 동적 배경을 추가해 화면만 봐도 변화가 드러납니다."),
+    ("주의할 부분", "Claude와 Codex의 v3는 기능명에 비해 화면상 변화가 약해, 점수보다 캡처와 diff 근거를 함께 봐야 합니다."),
 ]
 
 PHASE_SUMMARIES = {
@@ -64,7 +64,7 @@ PHASE_SUMMARIES = {
         "file": "report.html",
         "summary": "동일한 앱 생성 프롬프트에서 각 AI가 어떤 기본 구조와 UI를 만드는지 비교했습니다.",
         "headline": "초기 설계 성향 비교",
-        "winner": "초기 구현 자체보다 각 AI의 UI/구조 선택 차이를 보는 단계",
+        "winner": "초기 앱 구조와 UI 방향 차이가 핵심",
     },
     "v2": {
         "label": "V2",
@@ -72,7 +72,7 @@ PHASE_SUMMARIES = {
         "file": "report_v2.html",
         "summary": "v1 앱을 유지한 채 시간별 예보, 상세 정보, 새로고침, 즐겨찾기 등을 추가했습니다.",
         "headline": "요구사항 이행력 비교",
-        "winner": "세 앱 모두 요구 기능은 충족, 코드 구조와 화면 완성도에서 차이 발생",
+        "winner": "세 앱 모두 요구 기능 충족, 구조와 화면 완성도에서 차이",
     },
     "v3": {
         "label": "V3",
@@ -80,7 +80,7 @@ PHASE_SUMMARIES = {
         "file": "report_v3.html",
         "summary": "각 AI가 스스로 스마트 기능을 정해 추가한 결과를 비교했습니다.",
         "headline": "체감 가능한 개선 비교",
-        "winner": "Gemini가 화면에서 가장 명확한 v3 변화를 보여줌",
+        "winner": "Gemini의 변화가 가장 명확하게 보임",
     },
 }
 
@@ -176,6 +176,7 @@ body {
 }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 24px 100px; }
 .wrap.wide { max-width: 1180px; }
+.index-wrap { max-width: 1180px; margin: 0 auto; padding: 34px 24px 90px; }
 .rh {
   background: #fff;
   border: 1px solid #DCDCDC;
@@ -252,24 +253,19 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
 .th-codex { border-top:3px solid #0D8A68; }
 .th-gemini { border-top:3px solid #1A56DB; }
 .metric-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0 4px; }
-.hero-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:18px; align-items:stretch; margin-bottom:18px; }
-.hero-panel {
+.index-hero {
   background:#fff;
   border:1px solid #DCDCDC;
   border-radius:12px;
-  padding:34px 38px;
+  padding:32px 38px;
+  margin-bottom:18px;
   box-shadow:0 2px 8px rgba(0,0,0,.04);
 }
-.hero-panel.dark {
-  background:#111827;
-  color:#F9FAFB;
-  border-color:#111827;
-}
-.hero-kicker { font-size:12px; font-weight:850; letter-spacing:1.7px; color:#9CA3AF; margin-bottom:12px; text-transform:uppercase; }
-.hero-title { font-size:34px; font-weight:950; line-height:1.18; letter-spacing:-.5px; margin-bottom:14px; }
-.hero-copy { color:#4B5563; font-size:15px; line-height:1.85; }
-.hero-panel.dark .hero-copy { color:#D1D5DB; }
-.report-links { display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; }
+.index-topline { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; margin-bottom:22px; }
+.hero-kicker { font-size:12px; font-weight:850; letter-spacing:1.7px; color:#9CA3AF; margin-bottom:10px; text-transform:uppercase; }
+.hero-title { font-size:32px; font-weight:950; line-height:1.2; letter-spacing:-.4px; margin-bottom:10px; max-width:720px; }
+.hero-copy { color:#4B5563; font-size:15px; line-height:1.75; max-width:760px; }
+.report-links { display:flex; flex-wrap:wrap; gap:8px; min-width:310px; justify-content:flex-end; }
 .report-link {
   display:inline-flex;
   align-items:center;
@@ -283,11 +279,17 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
   font-weight:800;
 }
 .report-link:hover { border-color:#111827; }
-.hero-panel.dark .report-link { color:#fff; background:#1F2937; border-color:#374151; }
-.takeaway-list { display:flex; flex-direction:column; gap:12px; }
-.takeaway { border-left:3px solid #60A5FA; padding-left:13px; }
-.takeaway-k { font-size:12px; font-weight:850; color:#93C5FD; margin-bottom:3px; }
-.takeaway-v { font-size:13.5px; line-height:1.65; color:#E5E7EB; }
+.takeaway-list { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.takeaway { border:1px solid #E5E7EB; border-radius:10px; padding:14px 15px; background:#FAFAFA; }
+.takeaway-k { font-size:12px; font-weight:850; color:#374151; margin-bottom:5px; }
+.takeaway-v { font-size:13.5px; line-height:1.6; color:#4B5563; }
+.verdict-row { display:grid; grid-template-columns:1.15fr .85fr; gap:18px; margin-bottom:18px; }
+.verdict-main { border:1px solid #DCDCDC; border-radius:12px; background:#fff; padding:26px 30px; }
+.verdict-title { font-size:21px; font-weight:950; letter-spacing:-.2px; margin-bottom:8px; }
+.verdict-copy { color:#4B5563; line-height:1.75; font-size:14.5px; }
+.verdict-aside { border:1px solid #DCDCDC; border-radius:12px; background:#111827; color:#fff; padding:22px 24px; }
+.aside-k { color:#9CA3AF; font-size:12px; font-weight:850; letter-spacing:1px; margin-bottom:8px; }
+.aside-v { font-size:24px; line-height:1.25; font-weight:950; letter-spacing:-.2px; }
 .phase-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
 .phase-card {
   border:1px solid #E2E2E2;
@@ -370,10 +372,14 @@ pre.diff { white-space:pre-wrap; word-break:break-word; background:#F9FAFB; bord
 .cc-name { font-weight:800; font-size:14px; }
 @media (max-width: 760px) {
   .wrap { padding:24px 14px 80px; }
+  .index-wrap { padding:20px 14px 70px; }
   .rh, .card { padding:26px 20px; }
+  .index-hero, .verdict-main, .verdict-aside { padding:24px 20px; }
+  .index-topline { flex-direction:column; }
+  .report-links { min-width:0; justify-content:flex-start; }
   .rh-title { font-size:23px; }
-  .metric-grid, .ss-grid, .screen-list, .callout-grid, .hero-grid, .phase-grid { grid-template-columns:1fr; }
-  .hero-title { font-size:27px; }
+  .metric-grid, .ss-grid, .screen-list, .callout-grid, .hero-grid, .phase-grid, .takeaway-list, .verdict-row { grid-template-columns:1fr; }
+  .hero-title { font-size:26px; }
   td.col-label { white-space:normal; }
   .tc-head, .kv-row { align-items:flex-start; }
   .tc-model { margin-left:0; display:block; }
@@ -861,21 +867,31 @@ def render_index():
 <link rel="stylesheet" href="report_common.css">
 </head>
 <body>
-<div class="wrap wide">
-  <section class="hero-grid">
-    <div class="hero-panel">
-      <div class="hero-kicker">AI CODING TOOL COMPARISON</div>
-      <h1 class="hero-title">WeatherNow 앱 개발 비교 보고서</h1>
-      <p class="hero-copy">Claude, Codex, Gemini에게 같은 Android 날씨 앱 과제를 단계별로 수행시킨 뒤 결과를 비교했습니다. 이 페이지는 GitHub Pages에서 바로 볼 수 있는 요약 대시보드이고, 각 단계별 상세 근거는 개별 보고서에 정리했습니다.</p>
+<div class="index-wrap">
+  <section class="index-hero">
+    <div class="index-topline">
+      <div>
+        <div class="hero-kicker">WeatherNow AI 비교 실험</div>
+        <h1 class="hero-title">같은 날씨 앱 과제를 세 AI에게 맡기면 무엇이 달라질까</h1>
+        <p class="hero-copy">Claude, Codex, Gemini가 만든 Android 앱을 v1 초기 생성, v2 기능 개선, v3 자율 혁신 단계로 비교했습니다. 이 페이지는 팀 공유용 요약이며, 세부 근거는 각 단계 보고서에 남겼습니다.</p>
+      </div>
       <div class="report-links">
         <a class="report-link" href="report.html">V1 초기 생성</a>
         <a class="report-link" href="report_v2.html">V2 기능 개선</a>
         <a class="report-link" href="report_v3.html">V3 자율 혁신</a>
       </div>
     </div>
-    <div class="hero-panel dark">
-      <div class="hero-kicker">Executive Summary</div>
-      <div class="takeaway-list">{takeaways}</div>
+    <div class="takeaway-list">{takeaways}</div>
+  </section>
+
+  <section class="verdict-row">
+    <div class="verdict-main">
+      <h2 class="verdict-title">결론부터 보면, v3에서 실제로 눈에 띄는 변화는 Gemini가 가장 큽니다.</h2>
+      <p class="verdict-copy">v2까지는 세 AI 모두 요구 기능을 대체로 충족했습니다. 하지만 “스스로 신선한 기능을 추가하라”는 v3에서는 Gemini가 인사이트 카드와 온도 기반 배경 변화를 화면에 명확히 드러냈고, Claude와 Codex는 정적 스크린샷 기준으로 v2와 차이가 약했습니다.</p>
+    </div>
+    <div class="verdict-aside">
+      <div class="aside-k">가장 설득력 있는 시각 변화</div>
+      <div class="aside-v">Gemini v3<br>Weather Narrative Insight</div>
     </div>
   </section>
 
