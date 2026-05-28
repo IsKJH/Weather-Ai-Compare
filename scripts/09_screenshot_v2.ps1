@@ -2,6 +2,18 @@
 $adb = "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe"
 $screenshotDir = Join-Path $root "screenshots\v2"
 $projects = @("claude", "codex", "gemini")
+$androidStudioJbr = "C:\Users\mojis\AppData\Local\Programs\Android Studio\jbr"
+$androidSdk = "$env:LOCALAPPDATA\Android\Sdk"
+
+if (-not $env:JAVA_HOME -and (Test-Path $androidStudioJbr)) {
+    $env:JAVA_HOME = $androidStudioJbr
+    $env:Path = "$env:JAVA_HOME\bin;$env:Path"
+}
+
+if (-not $env:ANDROID_HOME -and (Test-Path $androidSdk)) {
+    $env:ANDROID_HOME = $androidSdk
+    $env:ANDROID_SDK_ROOT = $androidSdk
+}
 
 New-Item -ItemType Directory -Force -Path $screenshotDir | Out-Null
 

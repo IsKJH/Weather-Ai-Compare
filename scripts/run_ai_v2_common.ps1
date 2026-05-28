@@ -15,11 +15,11 @@ $start = Get-Date
 Write-Host "[$AiName v2] start: $start"
 
 if ($AiName -eq "claude") {
-    claude -p $prompt 2>&1 | Tee-Object -FilePath $logFile
+    claude --dangerously-skip-permissions -p $prompt 2>&1 | Tee-Object -FilePath $logFile
 } elseif ($AiName -eq "codex") {
     codex exec --dangerously-bypass-approvals-and-sandbox $prompt 2>&1 | Tee-Object -FilePath $logFile
 } elseif ($AiName -eq "gemini") {
-    gemini -p $prompt --yolo 2>&1 | Tee-Object -FilePath $logFile
+    gemini -p $prompt --yolo --skip-trust 2>&1 | Tee-Object -FilePath $logFile
 } else {
     throw "Unsupported AI name: $AiName"
 }

@@ -11,15 +11,24 @@ def read_json(path: Path):
     if not path.exists():
         return None
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        return json.loads(read_full_text(path))
     except Exception as exc:
         return {"error": f"failed to read {path.name}: {exc}"}
+
+
+def read_full_text(path: Path):
+    raw = path.read_bytes()
+    if raw.startswith(b"\xff\xfe") or raw.startswith(b"\xfe\xff"):
+        return raw.decode("utf-16", errors="replace")
+    if raw[:200].count(b"\x00") > 20:
+        return raw.decode("utf-16-le", errors="replace")
+    return raw.decode("utf-8-sig", errors="replace")
 
 
 def read_text(path: Path, limit=6000):
     if not path.exists():
         return ""
-    text = path.read_text(encoding="utf-8", errors="replace")
+    text = read_full_text(path)
     return text[-limit:]
 
 

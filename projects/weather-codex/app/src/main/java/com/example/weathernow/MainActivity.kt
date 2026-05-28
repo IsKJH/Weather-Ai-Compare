@@ -16,7 +16,9 @@ class MainActivity : ComponentActivity() {
             WeatherNowTheme {
                 WeatherScreen(
                     uiState = viewModel.uiState,
-                    onCitySelected = viewModel::selectCity
+                    onCitySelected = viewModel::selectCity,
+                    onRefresh = viewModel::refresh,
+                    onToggleFavorite = viewModel::toggleFavorite
                 )
             }
         }

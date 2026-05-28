@@ -1,0 +1,139 @@
+{
+  "generatedAt": "2026-05-28T14:42:25",
+  "project": "WeatherNow Android App - AI v2 improvement comparison",
+  "baselineTag": "weather-v1",
+  "promptFile": "prompt_v2.txt",
+  "results": {
+    "claude": {
+      "meta": {
+        "ai": "claude",
+        "phase": "v2",
+        "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-claude",
+        "startTime": "2026-05-28T14:22:05.7351187+09:00",
+        "endTime": "2026-05-28T14:27:46.7059939+09:00",
+        "elapsedSec": 341,
+        "inputTokens": "N/A",
+        "outputTokens": "N/A",
+        "totalTokens": "N/A",
+        "ktFileCount": 5,
+        "ktLineCount": 603,
+        "changedFileCountFromV1": 3,
+        "changedFilesFromV1": [
+          "projects/weather-claude/app/src/main/java/com/example/weathernow/data/WeatherData.kt",
+          "projects/weather-claude/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt",
+          "projects/weather-claude/app/src/main/java/com/example/weathernow/viewmodel/WeatherViewModel.kt"
+        ],
+        "buildSuccess": true,
+        "buildCheckedAt": "2026-05-28T14:39:43.3239270+09:00",
+        "buildOutputTail": "> Task :app:generateDebugResValues UP-TO-DATE\n> Task :app:mapDebugSourceSetPaths UP-TO-DATE\n> Task :app:generateDebugResources UP-TO-DATE\n> Task :app:mergeDebugResources UP-TO-DATE\n> Task :app:packageDebugResources UP-TO-DATE\n> Task :app:parseDebugLocalResources UP-TO-DATE\n> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :app:extractDeepLinksDebug UP-TO-DATE\n> Task :app:processDebugMainManifest UP-TO-DATE\n> Task :app:processDebugManifest UP-TO-DATE\n> Task :app:processDebugManifestForPackage UP-TO-DATE\n> Task :app:processDebugResources UP-TO-DATE\n> Task :app:compileDebugKotlin UP-TO-DATE\n> Task :app:javaPreCompileDebug UP-TO-DATE\n> Task :app:compileDebugJavaWithJavac NO-SOURCE\n> Task :app:mergeDebugShaders UP-TO-DATE\n> Task :app:compileDebugShaders NO-SOURCE\n> Task :app:generateDebugAssets UP-TO-DATE\n> Task :app:mergeDebugAssets UP-TO-DATE\n> Task :app:compressDebugAssets UP-TO-DATE\n> Task :app:processDebugJavaRes UP-TO-DATE\n> Task :app:mergeDebugJavaResource UP-TO-DATE\n> Task :app:checkDebugDuplicateClasses UP-TO-DATE\n> Task :app:desugarDebugFileDependencies UP-TO-DATE\n> Task :app:mergeExtDexDebug UP-TO-DATE\n> Task :app:mergeLibDexDebug UP-TO-DATE\n> Task :app:dexBuilderDebug UP-TO-DATE\n> Task :app:mergeProjectDexDebug UP-TO-DATE\n> Task :app:mergeDebugJniLibFolders UP-TO-DATE\n> Task :app:mergeDebugNativeLibs UP-TO-DATE\n> Task :app:stripDebugDebugSymbols UP-TO-DATE\n> Task :app:validateSigningDebug UP-TO-DATE\n> Task :app:writeDebugAppMetadata UP-TO-DATE\n> Task :app:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :app:packageDebug UP-TO-DATE\n> Task :app:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :app:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 1s\n34 actionable tasks: 34 up-to-date",
+        "screenshotSuccess": true,
+        "screenshotPath": "C:\\proj\\weather-ai-compare\\screenshots\\v2\\claude.png"
+      },
+      "diffStatFromV1": ".../com/example/weathernow/data/WeatherData.kt     |  54 ++++-\n .../com/example/weathernow/ui/WeatherScreen.kt     | 239 ++++++++++++++++-----\n .../weathernow/viewmodel/WeatherViewModel.kt       |  45 +++-\n 3 files changed, 273 insertions(+), 65 deletions(-)",
+      "changedFilesFromV1": [
+        "M\tprojects/weather-claude/app/src/main/java/com/example/weathernow/data/WeatherData.kt",
+        "M\tprojects/weather-claude/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt",
+        "M\tprojects/weather-claude/app/src/main/java/com/example/weathernow/viewmodel/WeatherViewModel.kt"
+      ],
+      "logSignals": {
+        "mentionsBuild": true,
+        "mentionsKoreanFix": true,
+        "mentionsHourlyForecast": true,
+        "mentionsFavorite": true,
+        "mentionsRefresh": true,
+        "logTail": "Build passed. Here's a summary of what changed:\r\n\r\n**Data layer (`WeatherData.kt`):**\r\n- Added `HourlyForecast` data class (time, condition, temp)\r\n- Added `precipitationProbability`, `uvIndex`, `airQuality` fields to `WeatherData`\r\n- Added 7 hourly forecast entries per city with realistic mock data\r\n- Updated forecast to use \"구름많음\" (proper Korean for \"Cloudy\") instead of \"구름\"\r\n\r\n**ViewModel (`WeatherViewModel.kt`):**\r\n- Added `isLoading`, `lastUpdated`, `favoriteIndex` to `WeatherUiState`\r\n- Added `toggleFavorite()` — flips the selected city as favorite in ViewModel state (no persistence)\r\n- Added `refresh()` — uses `viewModelScope` + `delay(1200ms)` to simulate a loading state, then updates `lastUpdated` to current time\r\n\r\n**UI (`WeatherScreen.kt`):**\r\n- `CityTabRow` — shows a ★ indicator on the tab of the favorited city\r\n- `RefreshRow` — displays \"마지막 업데이트: HH:mm\" and a tappable \"🔄 새로고침\" button\r\n- `HourlyForecastCard` — horizontally scrollable row of 7 hourly items (time + emoji + temp)\r\n- Second row of `DetailCard`s for 강수확률, 자외선 지수, 대기질\r\n- Favorite ★/☆ button next to the city name in the main header\r\n- Loading overlay (`CircularProgressIndicator`) shown during refresh\r\n- `conditionEmoji` and `conditionGradient` updated to handle \"구름많음\"\r\n\r\n**Build:** `assembleDebug` passed successfully.\r\n"
+      },
+      "screenshot": "../screenshots/v2/claude.png"
+    },
+    "codex": {
+      "meta": {
+        "ai": "codex",
+        "phase": "v2",
+        "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-codex",
+        "startTime": "2026-05-28T14:14:34.9449666+09:00",
+        "endTime": "2026-05-28T14:19:07.6690202+09:00",
+        "elapsedSec": 272.7,
+        "inputTokens": "N/A",
+        "outputTokens": "N/A",
+        "totalTokens": "N/A",
+        "ktFileCount": 6,
+        "ktLineCount": 709,
+        "changedFileCountFromV1": 6,
+        "changedFilesFromV1": [
+          "projects/weather-codex/app/src/main/java/com/example/weathernow/MainActivity.kt",
+          "projects/weather-codex/app/src/main/java/com/example/weathernow/WeatherData.kt",
+          "projects/weather-codex/app/src/main/java/com/example/weathernow/WeatherViewModel.kt",
+          "projects/weather-codex/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt",
+          "projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/ForecastRow.kt",
+          "projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/MetricTile.kt"
+        ],
+        "buildSuccess": true,
+        "buildCheckedAt": "2026-05-28T14:39:55.7354585+09:00",
+        "buildOutputTail": "> Task :app:parseDebugLocalResources UP-TO-DATE\n> Task :app:generateDebugRFile UP-TO-DATE\n> Task :app:compileDebugKotlin UP-TO-DATE\n> Task :app:javaPreCompileDebug UP-TO-DATE\n> Task :app:compileDebugJavaWithJavac NO-SOURCE\n> Task :app:generateDebugAssets UP-TO-DATE\n> Task :app:mergeDebugAssets UP-TO-DATE\n> Task :app:compressDebugAssets UP-TO-DATE\n> Task :app:generateDebugGlobalSynthetics UP-TO-DATE\n> Task :app:processDebugJavaRes UP-TO-DATE\n> Task :app:mergeDebugJavaResource UP-TO-DATE\n> Task :app:checkDebugDuplicateClasses UP-TO-DATE\n> Task :app:desugarDebugFileDependencies UP-TO-DATE\n> Task :app:mergeExtDexDebug UP-TO-DATE\n> Task :app:mergeLibDexDebug UP-TO-DATE\n> Task :app:checkDebugAarMetadata UP-TO-DATE\n> Task :app:mapDebugSourceSetPaths UP-TO-DATE\n> Task :app:compileDebugNavigationResources UP-TO-DATE\n> Task :app:mergeDebugResources UP-TO-DATE\n> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :app:extractDeepLinksDebug UP-TO-DATE\n> Task :app:processDebugMainManifest UP-TO-DATE\n> Task :app:processDebugManifest UP-TO-DATE\n> Task :app:processDebugManifestForPackage UP-TO-DATE\n> Task :app:processDebugResources UP-TO-DATE\n> Task :app:dexBuilderDebug UP-TO-DATE\n> Task :app:mergeProjectDexDebug UP-TO-DATE\n> Task :app:mergeDebugJniLibFolders UP-TO-DATE\n> Task :app:mergeDebugNativeLibs UP-TO-DATE\n> Task :app:stripDebugDebugSymbols UP-TO-DATE\n> Task :app:validateSigningDebug UP-TO-DATE\n> Task :app:writeDebugAppMetadata UP-TO-DATE\n> Task :app:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :app:packageDebug UP-TO-DATE\n> Task :app:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :app:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 2s\n36 actionable tasks: 36 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.4.1/userguide/configuration_cache_enabling.html",
+        "screenshotSuccess": true,
+        "screenshotPath": "C:\\proj\\weather-ai-compare\\screenshots\\v2\\codex.png"
+      },
+      "diffStatFromV1": ".../java/com/example/weathernow/MainActivity.kt    |   4 +-\n .../java/com/example/weathernow/WeatherData.kt     |  85 ++++--\n .../com/example/weathernow/WeatherViewModel.kt     |  60 +++-\n .../com/example/weathernow/ui/WeatherScreen.kt     | 310 +++++++++++++++------\n .../weathernow/ui/components/ForecastRow.kt        |  12 +-\n .../example/weathernow/ui/components/MetricTile.kt |   5 +-\n 6 files changed, 367 insertions(+), 109 deletions(-)",
+      "changedFilesFromV1": [
+        "M\tprojects/weather-codex/app/src/main/java/com/example/weathernow/MainActivity.kt",
+        "M\tprojects/weather-codex/app/src/main/java/com/example/weathernow/WeatherData.kt",
+        "M\tprojects/weather-codex/app/src/main/java/com/example/weathernow/WeatherViewModel.kt",
+        "M\tprojects/weather-codex/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt",
+        "M\tprojects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/ForecastRow.kt",
+        "M\tprojects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/MetricTile.kt"
+      ],
+      "logSignals": {
+        "mentionsBuild": true,
+        "mentionsKoreanFix": true,
+        "mentionsHourlyForecast": true,
+        "mentionsFavorite": true,
+        "mentionsRefresh": true,
+        "logTail": "    modifier = Modifier\r\n                 .fillMaxWidth()\r\n-                .height(64.dp),\r\n+                .height(64.dp)\r\n+                .padding(horizontal = 16.dp),\r\n             horizontalArrangement = Arrangement.SpaceBetween,\r\n             verticalAlignment = Alignment.CenterVertically\r\n         ) {\r\n@@ -39,17 +41,16 @@\r\n                 modifier = Modifier.weight(1f),\r\n                 verticalAlignment = Alignment.CenterVertically\r\n             ) {\r\n-                Spacer(modifier = Modifier.width(18.dp))\r\n                 Text(\r\n                     text = day.day,\r\n                     style = MaterialTheme.typography.titleMedium,\r\n                     fontWeight = FontWeight.SemiBold,\r\n                     color = MaterialTheme.colorScheme.onSurface\r\n                 )\r\n-                Spacer(modifier = Modifier.width(18.dp))\r\n+                Spacer(modifier = Modifier.width(14.dp))\r\n                 Text(\r\n                     text = day.condition,\r\n-                    style = MaterialTheme.typography.headlineSmall,\r\n+                    style = MaterialTheme.typography.titleMedium,\r\n                     color = MaterialTheme.colorScheme.primary\r\n                 )\r\n             }\r\n@@ -61,12 +62,11 @@\r\n                     color = MaterialTheme.colorScheme.onSurface\r\n                 )\r\n                 Text(\r\n-                    text = \"High / Low\",\r\n+                    text = \"최고 / 최저\",\r\n                     style = MaterialTheme.typography.bodySmall,\r\n                     color = MaterialTheme.colorScheme.onSurfaceVariant\r\n                 )\r\n             }\r\n-            Spacer(modifier = Modifier.width(18.dp))\r\n         }\r\n     }\r\n }\r\ndiff --git a/projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/MetricTile.kt b/projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/MetricTile.kt\r\nindex 2569987860e7e15e11e5981d194d2cc61d8f9b93..29ee9db3cbec6653564454f906abf2afd4116940\r\n--- a/projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/MetricTile.kt\r\n+++ b/projects/weather-codex/app/src/main/java/com/example/weathernow/ui/components/MetricTile.kt\r\n@@ -4,6 +4,7 @@\r\n import androidx.compose.foundation.layout.Column\r\n import androidx.compose.foundation.layout.fillMaxWidth\r\n import androidx.compose.foundation.layout.height\r\n+import androidx.compose.foundation.layout.padding\r\n import androidx.compose.foundation.shape.RoundedCornerShape\r\n import androidx.compose.material3.Card\r\n import androidx.compose.material3.CardDefaults\r\n@@ -26,7 +27,9 @@\r\n         )\r\n     ) {\r\n         Column(\r\n-            modifier = Modifier.fillMaxWidth(),\r\n+            modifier = Modifier\r\n+                .fillMaxWidth()\r\n+                .padding(horizontal = 14.dp, vertical = 12.dp),\r\n             verticalArrangement = Arrangement.Center\r\n         ) {\r\n             Text(\r\n\r\ntokens used\r\n128,899\r\nImplemented the v2 improvements in place.\r\n\r\nChanged:\r\n- Fixed corrupted Korean weather/city strings in [WeatherData.kt](C:/proj/weather-ai-compare/projects/weather-codex/app/src/main/java/com/example/weathernow/WeatherData.kt).\r\n- Added mock hourly forecast, precipitation probability, UV index, and air quality.\r\n- Extended `WeatherUiState` and `WeatherViewModel` with refresh loading, last updated time, deterministic mock refresh changes, and one favorite city.\r\n- Updated [WeatherScreen.kt](C:/proj/weather-ai-compare/projects/weather-codex/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt) with clearer Korean UI sections, refresh button, favorite toggle, hourly strip, details section, and preserved 5-day forecast.\r\n- Tightened reusable components in `MetricTile` and `ForecastRow` for spacing/readability.\r\n\r\nBuild:\r\n- `./gradlew assembleDebug` initially failed because `JAVA_HOME` was not set in the shell.\r\n- Reran with the local Android Studio JBR:\r\n  `JAVA_HOME=C:\\Users\\mojis\\AppData\\Local\\Programs\\Android Studio\\jbr`\r\n- `assembleDebug` passed successfully.\r\n"
+      },
+      "screenshot": "../screenshots/v2/codex.png"
+    },
+    "gemini": {
+      "meta": {
+        "ai": "gemini",
+        "phase": "v2",
+        "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-gemini",
+        "startTime": "2026-05-28T14:29:10.0200650+09:00",
+        "endTime": "2026-05-28T14:37:37.7434233+09:00",
+        "elapsedSec": 507.7,
+        "inputTokens": "N/A",
+        "outputTokens": "N/A",
+        "totalTokens": "N/A",
+        "ktFileCount": 5,
+        "ktLineCount": 522,
+        "changedFileCountFromV1": 4,
+        "changedFilesFromV1": [
+          "projects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherData.kt",
+          "projects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherViewModel.kt",
+          "projects/weather-gemini/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt",
+          "projects/weather-gemini/app/src/main/java/com/example/weathernow/ui/components/WeatherComponents.kt"
+        ],
+        "buildSuccess": true,
+        "buildCheckedAt": "2026-05-28T14:40:09.0184245+09:00",
+        "buildOutputTail": "> Task :app:parseDebugLocalResources UP-TO-DATE\n> Task :app:generateDebugRFile UP-TO-DATE\n> Task :app:compileDebugKotlin UP-TO-DATE\n> Task :app:javaPreCompileDebug UP-TO-DATE\n> Task :app:compileDebugJavaWithJavac NO-SOURCE\n> Task :app:generateDebugAssets UP-TO-DATE\n> Task :app:mergeDebugAssets UP-TO-DATE\n> Task :app:compressDebugAssets UP-TO-DATE\n> Task :app:generateDebugGlobalSynthetics UP-TO-DATE\n> Task :app:processDebugJavaRes UP-TO-DATE\n> Task :app:mergeDebugJavaResource UP-TO-DATE\n> Task :app:checkDebugDuplicateClasses UP-TO-DATE\n> Task :app:desugarDebugFileDependencies UP-TO-DATE\n> Task :app:mergeExtDexDebug UP-TO-DATE\n> Task :app:mergeLibDexDebug UP-TO-DATE\n> Task :app:checkDebugAarMetadata UP-TO-DATE\n> Task :app:mapDebugSourceSetPaths UP-TO-DATE\n> Task :app:compileDebugNavigationResources UP-TO-DATE\n> Task :app:mergeDebugResources UP-TO-DATE\n> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE\n> Task :app:extractDeepLinksDebug UP-TO-DATE\n> Task :app:processDebugMainManifest UP-TO-DATE\n> Task :app:processDebugManifest UP-TO-DATE\n> Task :app:processDebugManifestForPackage UP-TO-DATE\n> Task :app:processDebugResources UP-TO-DATE\n> Task :app:dexBuilderDebug UP-TO-DATE\n> Task :app:mergeProjectDexDebug UP-TO-DATE\n> Task :app:mergeDebugJniLibFolders UP-TO-DATE\n> Task :app:mergeDebugNativeLibs UP-TO-DATE\n> Task :app:stripDebugDebugSymbols UP-TO-DATE\n> Task :app:validateSigningDebug UP-TO-DATE\n> Task :app:writeDebugAppMetadata UP-TO-DATE\n> Task :app:writeDebugSigningConfigVersions UP-TO-DATE\n> Task :app:packageDebug UP-TO-DATE\n> Task :app:createDebugApkListingFileRedirect UP-TO-DATE\n> Task :app:assembleDebug UP-TO-DATE\n\nBUILD SUCCESSFUL in 2s\n36 actionable tasks: 36 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.4.1/userguide/configuration_cache_enabling.html",
+        "screenshotSuccess": true,
+        "screenshotPath": "C:\\proj\\weather-ai-compare\\screenshots\\v2\\gemini.png"
+      },
+      "diffStatFromV1": ".../java/com/example/weathernow/WeatherData.kt     |  48 ++++++\n .../com/example/weathernow/WeatherViewModel.kt     |  54 ++++++-\n .../com/example/weathernow/ui/WeatherScreen.kt     | 165 ++++++++++++++++-----\n .../weathernow/ui/components/WeatherComponents.kt  |  71 ++++++---\n 4 files changed, 278 insertions(+), 60 deletions(-)",
+      "changedFilesFromV1": [
+        "M\tprojects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherData.kt",
+        "M\tprojects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherViewModel.kt",
+        "M\tprojects/weather-gemini/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt",
+        "M\tprojects/weather-gemini/app/src/main/java/com/example/weathernow/ui/components/WeatherComponents.kt"
+      ],
+      "logSignals": {
+        "mentionsBuild": true,
+        "mentionsKoreanFix": true,
+        "mentionsHourlyForecast": true,
+        "mentionsFavorite": true,
+        "mentionsRefresh": true,
+        "logTail": ",\r\n      0, 0, 0, 0, 0, 0, 0, 0, 0,\r\n      0, 0, 0, 0, 0, 0, 0, 0, 0,\r\n      0, 0, 0, 0, 0\r\n    ],\r\n    _rejectDigits: false,\r\n    _rejectSubDigits: false,\r\n    _digitIsSub: false\r\n  },\r\n  abort: false\r\n}\r\nC:\\Users\\mojis\\AppData\\Roaming\\npm\\node_modules\\@google\\gemini-cli\\node_modules\\@lydell\\node-\r\npty\\conpty_console_list_agent.js:11\r\nvar consoleProcessList = getConsoleProcessList(shellPid);\r\n                         ^\r\n\r\nError: AttachConsole failed\r\n    at Object.<anonymous> (C:\\Users\\mojis\\AppData\\Roaming\\npm\\node_modules\\@google\\gemini-cli\r\n\\node_modules\\@lydell\\node-pty\\conpty_console_list_agent.js:11:26)\r\n    at Module._compile (node:internal/modules/cjs/loader:1854:14)\r\n    at Object..js (node:internal/modules/cjs/loader:1985:10)\r\n    at Module.load (node:internal/modules/cjs/loader:1577:32)\r\n    at Module._load (node:internal/modules/cjs/loader:1379:12)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\r\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\r\n    at node:internal/main/run_main_module:33:47\r\n\r\nNode.js v24.16.0\r\nC:\\Users\\mojis\\AppData\\Roaming\\npm\\node_modules\\@google\\gemini-cli\\node_modules\\@lydell\\node-\r\npty\\conpty_console_list_agent.js:11\r\nvar consoleProcessList = getConsoleProcessList(shellPid);\r\n                         ^\r\n\r\nError: AttachConsole failed\r\n    at Object.<anonymous> (C:\\Users\\mojis\\AppData\\Roaming\\npm\\node_modules\\@google\\gemini-cli\r\n\\node_modules\\@lydell\\node-pty\\conpty_console_list_agent.js:11:26)\r\n    at Module._compile (node:internal/modules/cjs/loader:1854:14)\r\n    at Object..js (node:internal/modules/cjs/loader:1985:10)\r\n    at Module.load (node:internal/modules/cjs/loader:1577:32)\r\n    at Module._load (node:internal/modules/cjs/loader:1379:12)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\r\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\r\n    at node:internal/main/run_main_module:33:47\r\n\r\nNode.js v24.16.0\r\nI have completed the requested improvements for the WeatherNow app.\r\n\r\n### Summary of Changes:\r\n1.  **Data Models & Mock Data:** Updated `WeatherData.kt` to include `HourlyForecast` and additional fields like `precipitationProbability`, `uvIndex`, `airQuality`, `lastUpdated`, and `isFavorite`. Enhanced mock data for Seoul, Busan, and Jeju.\r\n2.  **ViewModel Logic:** Enhanced `WeatherViewModel.kt` with:\r\n    *   **Refresh Action:** Simulates a 1-second loading state and updates the \"last updated\" time.\r\n    *   **Favorite Management:** Allows users to toggle a city as a favorite (limited to one city as per requirements).\r\n    *   **Loading State:** Exposed as a `StateFlow` to show a progress indicator during refresh.\r\n3.  **UI/UX Improvements:**\r\n    *   **Visual Hierarchy:** Reorganized the layout with clearer typography and better spacing.\r\n    *   **Hourly Forecast:** Added a horizontally scrollable row showing time, weather icon, and temperature for the next 6 hours.\r\n    *   **Extra Details:** Added a grid of informative cards for feels-like temperature, humidity, wind speed, precipitation probability, UV index, and air quality.\r\n    *   **Refresh & Favorite:** Integrated a refresh button in the header and a favorite star icon next to the city name.\r\n    *   **Korean Labels:** Ensured all labels use proper Korean text (서울, 부산, 제주, 맑음, 구름많음, 비, 체감온도, 습도, 풍속, 5일 예보, 시간별 예보, 강수확률, 자외선 지수, 대기질, 마지막 업데이트, 즐겨찾기).\r\n    *   **Theme:** Implemented a consistent dark-blue gradient theme that is readable and modern.\r\n4.  **Code Maintenance:** Created reusable composables like `HourlyForecastItem` and refined `InfoCard` and `ForecastItem` for better modularity.\r\n\r\n### Build Verification:\r\n-   **Build Command:** `./gradlew assembleDebug`\r\n-   **Status:** **BUILD SUCCESSFUL** (The build passed successfully after configuring `JAVA_HOME` and `ANDROID_HOME`).\r\n\r\nThe app is now a more comprehensive, production-like dashboard while remaining lightweight and utilizing mock data as requested.\r\n"
+      },
+      "screenshot": "../screenshots/v2/gemini.png"
+    }
+  }
+}

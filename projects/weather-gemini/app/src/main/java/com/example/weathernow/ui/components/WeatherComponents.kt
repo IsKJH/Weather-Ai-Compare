@@ -13,9 +13,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weathernow.ForecastDay
+import com.example.weathernow.HourlyForecast
 
 @Composable
-fun WeatherIcon(condition: String, modifier: Modifier = Modifier) {
+fun WeatherIcon(condition: String, modifier: Modifier = Modifier, size: Int = 48) {
     val emoji = when (condition) {
         "맑음" -> "☀️"
         "구름많음" -> "☁️"
@@ -24,20 +25,45 @@ fun WeatherIcon(condition: String, modifier: Modifier = Modifier) {
         "눈" -> "❄️"
         else -> "❓"
     }
-    Text(text = emoji, fontSize = 48.sp, modifier = modifier)
+    Text(text = emoji, fontSize = size.sp, modifier = modifier)
 }
 
 @Composable
 fun InfoCard(label: String, value: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .background(Color.White.copy(alpha = 0.2f), RoundedCornerShape(12.dp))
-            .padding(16.dp),
+            .background(Color.White.copy(alpha = 0.15f), RoundedCornerShape(12.dp))
+            .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = label, style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.8f))
+        Text(
+            text = label, 
+            style = MaterialTheme.typography.labelSmall, 
+            color = Color.White.copy(alpha = 0.7f),
+            fontWeight = FontWeight.Medium
+        )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = value, style = MaterialTheme.typography.titleMedium, color = Color.White, fontWeight = FontWeight.Bold)
+        Text(
+            text = value, 
+            style = MaterialTheme.typography.titleMedium, 
+            color = Color.White, 
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun HourlyForecastItem(hourly: HourlyForecast) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = hourly.time, color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp)
+        Spacer(modifier = Modifier.height(8.dp))
+        WeatherIcon(condition = hourly.condition, size = 28)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "${hourly.temp}°", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
     }
 }
 
@@ -46,27 +72,36 @@ fun ForecastItem(forecast: ForecastDay) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = forecast.day, color = Color.White, modifier = Modifier.width(40.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            val emoji = when (forecast.condition) {
-                "맑음" -> "☀️"
-                "구름많음" -> "☁️"
-                "비" -> "🌧️"
-                else -> "❓"
-            }
-            Text(text = emoji, fontSize = 24.sp)
+        Text(
+            text = forecast.day, 
+            color = Color.White, 
+            modifier = Modifier.width(40.dp),
+            fontWeight = FontWeight.Medium
+        )
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            WeatherIcon(condition = forecast.condition, size = 20)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = forecast.condition, color = Color.White, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = forecast.condition, 
+                color = Color.White.copy(alpha = 0.9f), 
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
         Text(
             text = "${forecast.high}° / ${forecast.low}°",
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.width(60.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End
         )
     }
 }
