@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WeatherNow 인간 vs AI 비교</title>
+<link rel="stylesheet" href="report_common.css?v=20260528-02">
+<style>
+.dot.human { background:#7C3AED; }
+.th-human  { border-top:3px solid #7C3AED; }
+.human-pill { background:#F5F3FF; border-color:#DDD6FE; color:#5B21B6; }
+
+.phase-status {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:12px; font-weight:800; letter-spacing:.5px;
+  padding:4px 10px; border-radius:20px;
+}
+.phase-status.done   { background:#D1FAE5; color:#065F46; }
+.phase-status.todo   { background:#F3F4F6; color:#9CA3AF; }
+
+.time-cmp { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; margin:16px 0; }
+.time-box {
+  border:1px solid #E2E2E2;
+  border-radius:10px;
+  padding:16px 18px;
+  background:#FAFAFA;
+  position:relative;
+}
+.time-box.highlight { background:#F5F3FF; border-color:#C4B5FD; }
+.time-ai  { font-size:11px; font-weight:800; letter-spacing:.5px; color:#9CA3AF; margin-bottom:4px; }
+.time-val { font-size:22px; font-weight:900; color:#111; letter-spacing:-.5px; line-height:1.1; }
+.time-sub { font-size:12px; color:#9CA3AF; margin-top:3px; }
+.time-badge {
+  position:absolute; top:10px; right:10px;
+  font-size:10px; font-weight:900; letter-spacing:.5px;
+  background:#111; color:#fff;
+  padding:2px 7px; border-radius:10px;
+}
+
+.diff-bar-wrap { margin:20px 0 8px; }
+.diff-bar-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.diff-bar-label { font-size:13.5px; font-weight:700; color:#555; width:130px; flex-shrink:0; }
+.diff-bar-track { flex:1; height:10px; background:#F0F0F0; border-radius:5px; overflow:hidden; }
+.diff-bar-fill  { height:100%; border-radius:5px; }
+.diff-bar-fill.human  { background:#7C3AED; }
+.diff-bar-fill.claude { background:#C2622A; }
+.diff-bar-fill.gemini { background:#1A56DB; }
+.diff-bar-fill.codex  { background:#0D8A68; }
+.diff-bar-num  { font-size:14px; font-weight:900; color:#111; width:80px; text-align:right; flex-shrink:0; }
+
+.arch-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+.arch-card { border:1px solid #E2E2E2; border-radius:10px; overflow:hidden; }
+.arch-head { padding:10px 16px; background:#FAFAFA; border-bottom:1px solid #EBEBEB; font-weight:800; font-size:14px; display:flex; align-items:center; gap:8px; }
+.arch-body { padding:14px 16px; font-size:13.5px; color:#374151; line-height:1.7; }
+.arch-body ul { margin-left:16px; }
+.arch-body li { margin-bottom:3px; }
+
+.pending-card {
+  border:1px dashed #D1D5DB;
+  border-radius:10px;
+  padding:28px 24px;
+  background:#FAFAFA;
+  text-align:center;
+  color:#9CA3AF;
+}
+.pending-card .pc-icon { font-size:28px; margin-bottom:8px; }
+.pending-card .pc-title { font-size:15px; font-weight:800; color:#6B7280; margin-bottom:6px; }
+.pending-card .pc-desc  { font-size:13px; line-height:1.6; }
+
+.insight-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
+.insight { border:1px solid #E5E7EB; border-radius:10px; padding:15px 16px; background:#FAFAFA; }
+.insight.purple { border-left:3px solid #7C3AED; }
+.insight.orange { border-left:3px solid #C2622A; }
+.insight.blue   { border-left:3px solid #1A56DB; }
+.insight-k { font-size:12px; font-weight:850; color:#1F2937; margin-bottom:5px; }
+.insight-v { font-size:13.5px; line-height:1.6; color:#374151; }
+
+.file-tree {
+  background:#1A1A1A; color:#E2E8F0;
+  border-radius:8px; padding:14px 18px;
+  font-family:'Consolas','Menlo',monospace;
+  font-size:13px; line-height:1.8;
+  margin:12px 0;
+}
+.file-tree .dir  { color:#93C5FD; }
+.file-tree .file { color:#A7F3D0; }
+.file-tree .note { color:#6B7280; font-size:12px; }
+
+@media (max-width:760px) {
+  .time-cmp { grid-template-columns:1fr 1fr; }
+  .arch-grid { grid-template-columns:1fr; }
+  .insight-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body id="top">
+<div class="wrap">
+
+  <header class="rh">
+    <div class="rh-eyebrow">HUMAN vs AI · 손 코딩 vs AI 생성 비교</div>
+    <h1 class="rh-title">WeatherNow 손 코딩 vs AI 생성 — 시간 비교 실험</h1>
+    <p class="rh-sub">동일한 날씨 앱 명세를 AI CLI(Kotlin/Compose)로 만든 결과와 직접 Flutter로 손 코딩한 결과를 속도·코드량·구조 기준으로 비교합니다.</p>
+    <div class="rh-meta">
+      <span class="ai-pill human-pill"><span class="dot human"></span>Human · Flutter</span>
+      <span class="ai-pill"><span class="dot claude"></span>Claude · Kotlin</span>
+      <span class="ai-pill"><span class="dot codex"></span>Codex · Kotlin</span>
+      <span class="ai-pill"><span class="dot gemini"></span>Gemini · Kotlin</span>
+      <span class="tag-sm">실험 시작: 2026-05-29</span>
+      <span class="tag-sm">언어 차이 있음 (Flutter vs Android)</span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <a href="index.html">전체 요약</a>
+    <a href="#overview">실험 개요</a>
+    <a href="#phase1">Phase 1 결과</a>
+    <a href="#structure">코드 구조</a>
+    <a href="#phase2">Phase 2</a>
+    <a href="#phase3">Phase 3</a>
+    <a href="#conclusion">종합</a>
+  </nav>
+
+  <!-- ── 실험 개요 ── -->
+  <section class="card" id="overview">
+    <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
+    <p class="lead">같은 날씨 앱 명세를 AI는 Android Kotlin/Compose MVVM으로, 직접 구현은 Flutter/Dart Clean Architecture로 진행합니다. 언어와 아키텍처는 다르지만, 구현 기능과 화면 명세는 동일합니다.</p>
+    <div class="callout-grid">
+      <div class="callout">
+        <div class="callout-k">비교 초점</div>
+        <div class="callout-v">각 Phase를 완성하는 데 실제로 걸리는 시간 — AI 생성 시간과 손 코딩 시간을 Phase별로 누적 비교합니다.</div>
+      </div>
+      <div class="callout">
+        <div class="callout-k">언어 차이 참고</div>
+        <div class="callout-v">Flutter는 프로젝트 세팅(pubspec, build_runner)이 Android보다 약간 더 걸립니다. 단순 숫자 비교 시 이 점을 감안해야 합니다.</div>
+      </div>
+      <div class="callout">
+        <div class="callout-k">Phase 구성</div>
+        <div class="callout-v">V1(기본 날씨) → V2(시간별 예보·즐겨찾기·새로고침) → V3(자유 스마트 기능 1개) 3단계로 진행합니다.</div>
+      </div>
+    </div>
+    <div class="metric-grid" style="margin-top:18px;">
+      <div class="metric">
+        <div class="metric-k">진행 상태</div>
+        <div class="metric-v">Phase 1 완료</div>
+      </div>
+      <div class="metric">
+        <div class="metric-k">누적 구현 시간</div>
+        <div class="metric-v">1시간 06분 24초</div>
+      </div>
+      <div class="metric">
+        <div class="metric-k">작성 코드</div>
+        <div class="metric-v">9파일 · 450줄</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Phase 1 결과 ── -->
+  <section class="card" id="phase1">
+    <div class="sh">
+      <span class="sh-num">02</span>
+      <h2>Phase 1 — 기본 날씨 앱</h2>
+      <span class="phase-status done" style="margin-left:auto;">완료</span>
+    </div>
+    <p class="lead">도시 전환(서울·부산·제주), 현재 날씨, 5일 예보를 구현하는 V1 명세 기준입니다.</p>
+
+    <h3 style="font-size:14px;font-weight:850;color:#555;margin:20px 0 10px;">소요 시간 비교</h3>
+    <div class="time-cmp">
+      <div class="time-box highlight">
+        <div class="time-ai"><span class="dot human" style="display:inline-block;margin-right:5px;"></span>Human · Flutter</div>
+        <div class="time-val">1:06:24</div>
+        <div class="time-sub">3,984초 · Clean Arch</div>
+      </div>
+      <div class="time-box">
+        <div class="time-ai"><span class="dot claude" style="display:inline-block;margin-right:5px;"></span>Claude · Kotlin</div>
+        <div class="time-val">537초</div>
+        <div class="time-sub">8분 57초 · MVVM</div>
+      </div>
+      <div class="time-box">
+        <div class="time-ai"><span class="dot gemini" style="display:inline-block;margin-right:5px;"></span>Gemini · Kotlin</div>
+        <div class="time-val">318초</div>
+        <div class="time-sub">5분 18초 · MVVM</div>
+        <div class="time-badge">최단</div>
+      </div>
+      <div class="time-box">
+        <div class="time-ai"><span class="dot codex" style="display:inline-block;margin-right:5px;"></span>Codex · Kotlin</div>
+        <div class="time-val">—</div>
+        <div class="time-sub">측정 불가</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:850;color:#555;margin:20px 0 10px;">구현 시간 배율 (Gemini 기준)</h3>
+    <div class="diff-bar-wrap">
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot human" style="display:inline-block;margin-right:5px;"></span>Human</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill human" style="width:100%"></div></div>
+        <span class="diff-bar-num">×12.5배</span>
+      </div>
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot claude" style="display:inline-block;margin-right:5px;"></span>Claude</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill claude" style="width:13.5%"></div></div>
+        <span class="diff-bar-num">×1.7배</span>
+      </div>
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot gemini" style="display:inline-block;margin-right:5px;"></span>Gemini</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill gemini" style="width:8%"></div></div>
+        <span class="diff-bar-num">×1.0 기준</span>
+      </div>
+    </div>
+    <div class="note-box">언어 차이 고려: Flutter는 Android보다 초기 세팅(pubspec.yaml, build_runner 설정, Riverpod 세팅)에 약 10~15분이 추가됩니다. 순수 화면 구현만 따지면 실제 차이는 약 ×10 수준으로 추정됩니다.</div>
+
+    <h3 style="font-size:14px;font-weight:850;color:#555;margin:20px 0 10px;">코드량 비교</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th class="th-human">Human · Flutter</th>
+            <th class="th-claude">Claude · Kotlin</th>
+            <th class="th-gemini">Gemini · Kotlin</th>
+            <th class="th-codex">Codex · Kotlin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-label">언어 / UI</td>
+            <td>Dart / Flutter</td>
+            <td>Kotlin / Compose</td>
+            <td>Kotlin / Compose</td>
+            <td>Kotlin / Compose</td>
+          </tr>
+          <tr>
+            <td class="col-label">아키텍처</td>
+            <td>Clean Architecture</td>
+            <td>MVVM</td>
+            <td>MVVM</td>
+            <td>MVVM</td>
+          </tr>
+          <tr>
+            <td class="col-label">상태관리</td>
+            <td>Riverpod</td>
+            <td>StateFlow</td>
+            <td>StateFlow</td>
+            <td>StateFlow</td>
+          </tr>
+          <tr>
+            <td class="col-label">파일 수</td>
+            <td>9개</td>
+            <td>5개</td>
+            <td>5개</td>
+            <td>6개</td>
+          </tr>
+          <tr>
+            <td class="col-label">총 코드 줄 수</td>
+            <td>450줄</td>
+            <td>395줄</td>
+            <td>304줄</td>
+            <td>451줄</td>
+          </tr>
+          <tr>
+            <td class="col-label">메인 UI 파일</td>
+            <td>weather_screen.dart<br><span style="color:#9CA3AF;font-size:12px;">296줄</span></td>
+            <td>WeatherScreen.kt<br><span style="color:#9CA3AF;font-size:12px;">340줄</span></td>
+            <td>WeatherScreen.kt<br><span style="color:#9CA3AF;font-size:12px;">-</span></td>
+            <td>WeatherScreen.kt<br><span style="color:#9CA3AF;font-size:12px;">-</span></td>
+          </tr>
+          <tr class="row-hl">
+            <td class="col-label">소요 시간</td>
+            <td><strong>3,984초</strong></td>
+            <td>537초</td>
+            <td><strong>318초 ✓ 최단</strong></td>
+            <td>측정 불가</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 코드 구조 비교 ── -->
+  <section class="card" id="structure">
+    <div class="sh"><span class="sh-num">03</span><h2>코드 구조 비교</h2></div>
+
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="arch-head"><span class="dot human"></span>Human · Flutter Clean Architecture</div>
+        <div class="arch-body">
+          <div class="file-tree">
+<span class="dir">lib/</span>
+  <span class="dir">core/utils/</span>
+    <span class="file">weather_icon.dart</span>          <span class="note">16줄</span>
+  <span class="dir">features/</span>
+    <span class="dir">data/</span>
+      <span class="dir">datasources/</span>
+        <span class="file">weather_local_datasource.dart</span> <span class="note">54줄</span>
+      <span class="dir">repositories/</span>
+        <span class="file">weather_repositories_impl.dart</span> <span class="note">14줄</span>
+    <span class="dir">domain/</span>
+      <span class="dir">entities/</span>
+        <span class="file">weather.dart</span>               <span class="note">21줄</span>
+        <span class="file">forecast_day.dart</span>          <span class="note">12줄</span>
+      <span class="dir">repositories/</span>
+        <span class="file">weather_repository.dart</span>    <span class="note">5줄</span>
+    <span class="dir">presentation/</span>
+      <span class="file">weather_provider.dart</span>       <span class="note">11줄</span>
+      <span class="file">weather_screen.dart</span>        <span class="note">296줄</span>
+  <span class="file">main.dart</span>                         <span class="note">21줄</span></div>
+          <ul>
+            <li>도메인 레이어: 엔티티 + 리포지토리 인터페이스 분리</li>
+            <li>데이터 레이어: datasource + 구현체 분리</li>
+            <li>Riverpod Provider로 의존성 주입</li>
+            <li>Freezed 사용 (불변 데이터 클래스)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-head"><span class="dot claude"></span>AI (Claude 예시) · Android MVVM</div>
+        <div class="arch-body">
+          <div class="file-tree">
+<span class="dir">java/com/example/weathernow/</span>
+  <span class="file">MainActivity.kt</span>
+  <span class="file">WeatherData.kt</span>
+  <span class="file">WeatherViewModel.kt</span>
+  <span class="dir">ui/</span>
+    <span class="file">WeatherScreen.kt</span>         <span class="note">340줄</span>
+    <span class="dir">components/</span>
+      <span class="file">...composables</span></div>
+          <ul>
+            <li>MVVM: ViewModel + UiState + Composable 직결</li>
+            <li>StateFlow로 단방향 데이터 흐름</li>
+            <li>별도 의존성 없음 (표준 Compose만)</li>
+            <li>구조는 단순, 코드가 적고 빠르게 생성 가능</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight purple">
+        <div class="insight-k">Human 선택: Clean Architecture</div>
+        <div class="insight-v">도메인/데이터/프레젠테이션 레이어 분리. 규모가 커질 때 유지보수 유리하지만 초기 보일러플레이트가 많아 Phase 1 구현 시간이 늘어났습니다.</div>
+      </div>
+      <div class="insight orange">
+        <div class="insight-k">AI 선택: MVVM</div>
+        <div class="insight-v">명세에서 MVVM을 명시적으로 요구했기 때문에 AI는 보일러플레이트 없이 핵심 기능만 빠르게 구현했습니다. 파일이 적고 코드량도 적습니다.</div>
+      </div>
+      <div class="insight blue">
+        <div class="insight-k">시간 차이의 주요 원인</div>
+        <div class="insight-v">① 프레임워크 전환(Flutter 세팅) ② 아키텍처 레이어 설계 시간 ③ 타이핑 속도 vs AI 출력 속도. AI는 3가지 모두 없거나 매우 짧습니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Phase 2 (대기 중) ── -->
+  <section class="card" id="phase2">
+    <div class="sh">
+      <span class="sh-num">04</span>
+      <h2>Phase 2 — 기능 확장</h2>
+      <span class="phase-status todo" style="margin-left:auto;">진행 예정</span>
+    </div>
+    <p class="lead">시간별 예보, 강수확률·UV·대기질, 새로고침, 즐겨찾기를 추가하는 V2 명세 기준입니다.</p>
+    <div class="pending-card">
+      <div class="pc-icon">⏱</div>
+      <div class="pc-title">Phase 2 구현 완료 후 업데이트 예정</div>
+      <div class="pc-desc">Flutter Phase 2를 완성하면 AI V2 시간(Gemini 149.4초)과 비교해 추가합니다.</div>
+    </div>
+  </section>
+
+  <!-- ── Phase 3 (대기 중) ── -->
+  <section class="card" id="phase3">
+    <div class="sh">
+      <span class="sh-num">05</span>
+      <h2>Phase 3 — 자유 기능 추가</h2>
+      <span class="phase-status todo" style="margin-left:auto;">진행 예정</span>
+    </div>
+    <p class="lead">본인이 선택한 스마트 기능 1개를 자유롭게 추가하는 V3 명세 기준입니다.</p>
+    <div class="pending-card">
+      <div class="pc-icon">⏱</div>
+      <div class="pc-title">Phase 3 구현 완료 후 업데이트 예정</div>
+      <div class="pc-desc">Flutter Phase 3를 완성하면 AI V3 시간(Gemini 185.2초)과 비교해 추가합니다.</div>
+    </div>
+  </section>
+
+  <!-- ── 종합 (누적 업데이트) ── -->
+  <section class="card" id="conclusion">
+    <div class="sh"><span class="sh-num">06</span><h2>종합 비교 — Phase 1 기준</h2></div>
+
+    <div class="verdict-row">
+      <div class="verdict-main">
+        <h2 class="verdict-title">Phase 1 기준, 가장 빠른 AI(Gemini) 대비 손 코딩은 약 12.5배 느렸습니다.</h2>
+        <p class="verdict-copy">Gemini가 5분 18초 만에 완성한 V1 앱을 Flutter로 손 코딩하는 데 1시간 6분 24초가 걸렸습니다. 언어/아키텍처 차이(Flutter Clean Arch vs Kotlin MVVM)를 감안해도 속도 차이는 압도적입니다. 반면 코드 줄 수는 450줄로 Codex(451줄)와 거의 같아, AI가 더 짧게 작성하는 것은 아닙니다. AI의 속도 우위는 타이핑이 아니라 설계 결정의 즉각성에서 나옵니다.</p>
+      </div>
+      <div class="verdict-aside">
+        <div class="aside-k">Phase 1 속도 차이</div>
+        <div class="aside-v">AI 대비<br>×12.5 느림</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:16px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th class="th-human">Human · Flutter</th>
+            <th class="th-gemini">Gemini (최단 AI)</th>
+            <th>배율</th>
+            <th>상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-label">Phase 1</td>
+            <td><strong>3,984초 (1:06:24)</strong></td>
+            <td>318초</td>
+            <td>×12.5</td>
+            <td>✅ 완료</td>
+          </tr>
+          <tr>
+            <td class="col-label">Phase 2</td>
+            <td>—</td>
+            <td>149.4초</td>
+            <td>—</td>
+            <td>⏳ 진행 예정</td>
+          </tr>
+          <tr>
+            <td class="col-label">Phase 3</td>
+            <td>—</td>
+            <td>185.2초</td>
+            <td>—</td>
+            <td>⏳ 진행 예정</td>
+          </tr>
+          <tr class="row-hl">
+            <td class="col-label">합계</td>
+            <td>3,984초~</td>
+            <td>652.6초~</td>
+            <td>—</td>
+            <td>진행 중</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
