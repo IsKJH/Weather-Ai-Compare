@@ -92,25 +92,24 @@ body {
 .hero-badge.g { color: var(--gemini); border-color: rgba(26,79,219,.25); }
 
 /* ── STAT BAR ── */
-.stat-bar {
-  background: var(--surface); border-bottom: 1px solid var(--border);
-  display: flex; overflow-x: auto; scrollbar-width: none;
-  padding: 0 36px;
+.stat-bar { background: var(--surface); border-bottom: 1px solid var(--border); }
+.stat-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 36px;
+  display: grid; grid-template-columns: repeat(6,1fr);
 }
-.stat-bar::-webkit-scrollbar { display: none; }
 .stat-item {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 16px 28px 14px; border-right: 1px solid var(--border);
-  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center;
+  padding: 20px 8px 18px; border-right: 1px solid var(--border);
 }
-.stat-item:first-child { padding-left: 0; }
+.stat-item:last-child { border-right: none; }
 .stat-n {
-  font-family: var(--mono); font-size: 22px; font-weight: 700;
+  font-family: var(--mono); font-size: 24px; font-weight: 700;
   color: var(--ink); line-height: 1; letter-spacing: -.5px;
 }
 .stat-l {
   font-size: 11px; font-weight: 500; color: var(--muted);
-  margin-top: 3px; letter-spacing: .2px;
+  margin-top: 5px; letter-spacing: .1px;
 }
 
 /* ── WRAP ── */
@@ -225,15 +224,14 @@ body {
 .tbl thead th.gm { color: var(--gemini); }
 .tbl tbody td { padding: 12px 18px; border-bottom: 1px solid var(--border); vertical-align: middle; line-height: 1.6; }
 .tbl tbody tr:last-child td { border-bottom: none; }
-.tbl tbody tr:nth-child(even) td { background: var(--faint); }
-.tbl tbody tr:hover td { background: #EBEBEB; }
+.tbl tbody tr:hover td { background: var(--faint); }
 .tbl td.rk { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; width: 130px; }
-.tbl td.win { font-weight: 700; color: #166534; background: #F0FDF4 !important; }
+.tbl td.win { font-weight: 700; color: var(--ink); }
 .tbl .mono { font-family: var(--mono); font-size: 12.5px; }
-.badge { display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 3px; }
-.badge.ok   { background: #F0FDF4; color: #166534; }
-.badge.warn { background: var(--faint); color: var(--muted); border: 1px solid var(--border); }
-.badge.err  { background: #FEF2F2; color: #B91C1C; }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 3px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+.badge.ok   { color: var(--ink); }
+.badge.warn { color: var(--muted); }
+.badge.err  { color: var(--muted); }
 .note { font-size: 13px; color: var(--muted); border-left: 2px solid var(--border); padding-left: 12px; margin-top: 10px; line-height: 1.7; }
 
 /* ── SCORE BARS ── */
@@ -257,8 +255,8 @@ body {
 .score-fill.gm { background: var(--gemini); }
 .score-pct { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--ink); width: 44px; text-align: right; flex-shrink: 0; }
 .score-tags { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; }
-.score-tag { font-size: 11.5px; font-weight: 500; padding: 2px 8px; border-radius: 3px; color: var(--muted); background: var(--faint); border: 1px solid var(--border); }
-.score-tag.bad { background: #FEF2F2; color: #B91C1C; border-color: #FECACA; }
+.score-tag { font-size: 11.5px; font-weight: 500; padding: 2px 8px; border-radius: 3px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); }
+.score-tag.bad { color: var(--ink); font-weight: 600; }
 
 /* ── GUIDE PROMO ── */
 .guide-promo {
@@ -293,10 +291,9 @@ body {
 .ai-card-body { padding: 16px 18px; }
 .ai-summary { font-size: 14px; color: var(--ink); line-height: 1.7; margin-bottom: 10px; }
 .ai-tags { display: flex; gap: 5px; flex-wrap: wrap; }
-.ai-tag { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 3px; }
-.ai-tag.good { background: #F0FDF4; color: #166534; }
-.ai-tag.warn { background: var(--faint); color: var(--muted); border: 1px solid var(--border); }
-.ai-tag.bad  { background: #FEF2F2; color: #B91C1C; }
+.ai-tag { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 3px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+.ai-tag.good { color: var(--ink); border-color: var(--border); }
+.ai-tag.bad  { color: var(--ink); font-weight: 700; }
 
 /* ── READ GUIDE ── */
 .read-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
@@ -316,7 +313,7 @@ body {
 @media (max-width: 860px) {
   .hero { padding: 40px 20px 36px; }
   .nav { padding: 0 20px; }
-  .stat-bar { padding: 0 20px; }
+  .stat-inner { padding: 0 20px; grid-template-columns: repeat(3,1fr); }
   .wrap { padding: 36px 20px 80px; }
   .phase-grid, .ai-grid, .read-grid { grid-template-columns: 1fr; }
   .verdict, .human-banner { grid-template-columns: 1fr; }
@@ -355,29 +352,31 @@ body {
 </header>
 
 <div class="stat-bar">
-  <div class="stat-item">
-    <div class="stat-n">318초</div>
-    <div class="stat-l">Gemini 최단 V1</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-n">82점</div>
-    <div class="stat-l">Codex 코드 품질</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-n">3단계</div>
-    <div class="stat-l">실험 구성</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-n">×12.5</div>
-    <div class="stat-l">사람 vs AI 속도</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-n">918K</div>
-    <div class="stat-l">Claude 토큰</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-n">165K</div>
-    <div class="stat-l">Codex 토큰 (최저)</div>
+  <div class="stat-inner">
+    <div class="stat-item">
+      <div class="stat-n">318초</div>
+      <div class="stat-l">Gemini 최단</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">82점</div>
+      <div class="stat-l">Codex 코드 품질</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">3단계</div>
+      <div class="stat-l">실험 구성</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">×12.5</div>
+      <div class="stat-l">사람 vs AI 속도차</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">918K</div>
+      <div class="stat-l">Claude 토큰 사용</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">165K</div>
+      <div class="stat-l">Codex 토큰 최저</div>
+    </div>
   </div>
 </div>
 
