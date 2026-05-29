@@ -276,7 +276,7 @@ body {
 .gp-btn:hover { opacity: .8; }
 
 /* ── AI CARDS ── */
-.ai-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.ai-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
 .ai-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
 .ai-card-head {
   padding: 14px 18px 12px; display: flex; align-items: center;
@@ -296,7 +296,7 @@ body {
 .ai-tag.bad  { color: var(--ink); font-weight: 700; }
 
 /* ── GROWTH CHART ── */
-.growth-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.growth-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
 .growth-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
 .growth-head { display: flex; align-items: center; gap: 8px; padding: 13px 18px; border-bottom: 1px solid var(--border); }
 .growth-name { font-size: 14px; font-weight: 700; }
@@ -342,7 +342,7 @@ body {
   .nav { padding: 0 20px; }
   .stat-inner { padding: 0 20px; grid-template-columns: repeat(3,1fr); }
   .wrap { padding: 36px 20px 80px; }
-  .phase-grid, .ai-grid, .read-grid { grid-template-columns: 1fr; }
+  .phase-grid, .ai-grid, .growth-grid { grid-template-columns: 1fr; }
   .verdict, .human-banner { grid-template-columns: 1fr; }
   .verdict-badge { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 14px; flex-direction: row; align-items: baseline; gap: 10px; }
   .hb-nums { flex-direction: row; }
@@ -367,12 +367,13 @@ body {
 <header class="hero">
   <div class="hero-inner">
     <div class="hero-date">2026-05-28 · Android Kotlin · Jetpack Compose</div>
-    <h1 class="hero-h1">같은 앱을 세 AI에게 맡기면<br>무엇이 달라질까</h1>
-    <p class="hero-sub">Claude Code, OpenAI Codex, Gemini CLI에 동일한 날씨 앱 스펙을 주고 3단계로 비교했습니다. 직접 손 코딩한 시간과도 비교합니다.</p>
+    <h1 class="hero-h1">같은 앱을 네 AI에게 맡기면<br>무엇이 달라질까</h1>
+    <p class="hero-sub">Claude Code, OpenAI Codex, Gemini CLI, Cursor Agent에 동일한 날씨 앱 스펙을 주고 비교했습니다. 직접 손 코딩한 시간과도 비교합니다.</p>
     <div class="hero-badges">
       <span class="hero-badge c">Claude Code</span>
       <span class="hero-badge x">OpenAI Codex</span>
       <span class="hero-badge g">Gemini CLI</span>
+      <span class="hero-badge" style="color:#111827;border-color:rgba(17,24,39,.25);">Cursor Agent</span>
       <span class="hero-badge">목 데이터 기반</span>
     </div>
   </div>
@@ -682,6 +683,34 @@ body {
           <p class="growth-note">V1 가장 적은 코드로 시작. V3도 세 AI 중 가장 적은 코드 유지.</p>
         </div>
       </div>
+      <div class="growth-card">
+        <div class="growth-head">
+          <div class="ai-dot" style="background:#111827;"></div>
+          <span class="growth-name">Cursor</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:auto;">V1만 진행</span>
+        </div>
+        <div class="growth-body">
+          <div class="growth-row">
+            <span class="growth-label">V1</span>
+            <div class="growth-track"><div class="growth-fill" style="width:64%"></div></div>
+            <span class="growth-val">473줄</span>
+            <span class="growth-diff"></span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V2</span>
+            <div class="growth-track"></div>
+            <span class="growth-val" style="color:var(--muted);">미진행</span>
+            <span class="growth-diff"></span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V3</span>
+            <div class="growth-track"></div>
+            <span class="growth-val" style="color:var(--muted);">미진행</span>
+            <span class="growth-diff"></span>
+          </div>
+          <p class="growth-note">IDE 에이전트 방식으로 V1만 진행. 7개 파일로 네 AI 중 파일 수 최다.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -865,30 +894,20 @@ body {
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- 읽기 순서 -->
-  <section class="section reveal">
-    <div class="sec-head">
-      <span class="sec-n">07</span>
-      <h2 class="sec-t">읽기 순서</h2>
-    </div>
-    <div class="read-grid">
-      <div class="read-item">
-        <div class="read-n">01</div>
-        <div class="read-title">전체 흐름 파악</div>
-        <div class="read-desc">이 페이지의 수치 비교표와 요약으로 각 단계 결과를 먼저 확인합니다.</div>
-      </div>
-      <div class="read-item">
-        <div class="read-n">02</div>
-        <div class="read-title">화면 · 기능 비교</div>
-        <div class="read-desc">V1 → V2 → V3 각 보고서의 스크린샷에서 AI별 UI 차이를 비교합니다.</div>
-      </div>
-      <div class="read-item">
-        <div class="read-n">03</div>
-        <div class="read-title">코드 규칙 분석</div>
-        <div class="read-desc">팀에 AI를 도입할 때 참고할 패턴과 체크리스트는 코드 품질 가이드에서 확인합니다.</div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot" style="background:#111827;"></div>
+          <span class="ai-name">Cursor</span>
+          <span class="ai-model">auto (Cursor Agent)</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary">IDE 에이전트 방식으로 V1만 진행. 라이트 청록 테마. APK 자동 빌드 성공. V2·V3는 미진행이라 패턴 분석 제외.</p>
+          <div class="ai-tags">
+            <span class="ai-tag good">APK 자동 빌드</span>
+            <span class="ai-tag good">한국어 정상</span>
+            <span class="ai-tag warn">V1만 비교 가능</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
