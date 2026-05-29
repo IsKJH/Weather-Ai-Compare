@@ -295,6 +295,33 @@ body {
 .ai-tag.good { color: var(--ink); border-color: var(--border); }
 .ai-tag.bad  { color: var(--ink); font-weight: 700; }
 
+/* ── GROWTH CHART ── */
+.growth-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.growth-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.growth-head { display: flex; align-items: center; gap: 8px; padding: 13px 18px; border-bottom: 1px solid var(--border); }
+.growth-name { font-size: 14px; font-weight: 700; }
+.growth-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.growth-row { display: flex; align-items: center; gap: 10px; }
+.growth-label { font-size: 11.5px; font-weight: 600; color: var(--muted); width: 18px; flex-shrink: 0; }
+.growth-track { flex: 1; height: 6px; background: var(--faint); border-radius: 2px; overflow: hidden; }
+.growth-fill { height: 100%; border-radius: 2px; background: var(--ink); transition: width .6s cubic-bezier(.25,.46,.45,.94); }
+.growth-val { font-family: var(--mono); font-size: 12.5px; font-weight: 700; color: var(--ink); width: 52px; text-align: right; }
+.growth-diff { font-size: 11px; color: var(--muted); width: 48px; text-align: right; }
+.growth-note { font-size: 12.5px; color: var(--muted); margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border); line-height: 1.6; }
+
+/* ── V3 EVAL TABLE ── */
+.eval-wrap { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
+.eval-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.eval-table thead th { padding: 9px 16px 8px; background: var(--faint); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); border-bottom: 1px solid var(--border); text-align: left; }
+.eval-table thead th.cl { color: var(--claude); }
+.eval-table thead th.cd { color: var(--codex); }
+.eval-table thead th.gm { color: var(--gemini); }
+.eval-table tbody td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+.eval-table tbody tr:last-child td { border-bottom: none; font-weight: 700; background: var(--faint); }
+.eval-table td.crit { font-size: 13px; color: var(--muted); font-weight: 500; }
+.eval-table td.score { font-family: var(--mono); font-weight: 700; color: var(--ink); }
+.eval-table td.score.top { color: var(--codex); }
+
 /* ── READ GUIDE ── */
 .read-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 .read-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 20px 22px; }
@@ -354,12 +381,12 @@ body {
 <div class="stat-bar">
   <div class="stat-inner">
     <div class="stat-item">
-      <div class="stat-n">318초</div>
-      <div class="stat-l">Gemini 최단</div>
+      <div class="stat-n">217초</div>
+      <div class="stat-l">Gemini 평균 생성시간</div>
     </div>
     <div class="stat-item">
-      <div class="stat-n">82점</div>
-      <div class="stat-l">Codex 코드 품질</div>
+      <div class="stat-n">9.5점</div>
+      <div class="stat-l">V3 최고 평가 (Claude·Gemini)</div>
     </div>
     <div class="stat-item">
       <div class="stat-n">3단계</div>
@@ -370,12 +397,12 @@ body {
       <div class="stat-l">사람 vs AI 속도차</div>
     </div>
     <div class="stat-item">
-      <div class="stat-n">918K</div>
-      <div class="stat-l">Claude 토큰 사용</div>
+      <div class="stat-n">$0.35</div>
+      <div class="stat-l">Gemini V3 비용 최저</div>
     </div>
     <div class="stat-item">
-      <div class="stat-n">165K</div>
-      <div class="stat-l">Codex 토큰 최저</div>
+      <div class="stat-n">−178줄</div>
+      <div class="stat-l">Codex V3 리팩터링</div>
     </div>
   </div>
 </div>
@@ -385,7 +412,7 @@ body {
   <!-- 종합 요약 -->
   <div class="verdict reveal">
     <p class="verdict-text">
-      V3에서 눈에 띄는 변화는 <strong>Gemini가 가장 컸고</strong>, 코드 규칙 기준 품질은 <strong>Codex가 가장 높았습니다</strong>. 직접 만드는 건 AI보다 12.5배 느렸지만, 작성한 코드 줄 수는 거의 같았습니다.
+      속도는 <strong>Gemini가 전 단계 압도적으로 빨랐고</strong>(평균 217초), V3 종합 평가에서는 <strong>Claude와 Gemini가 9.5점으로 공동 1위</strong>. 코드 규칙 품질은 <strong>Codex 1위</strong>. Codex는 V3에서 유일하게 코드를 줄이며 리팩터링했습니다.
     </p>
     <div class="verdict-badge">
       <div class="vb-label">코드 품질 1위</div>
@@ -481,20 +508,26 @@ body {
           <tr>
             <td class="rk">V1 생성 시간</td>
             <td class="mono">537초</td>
-            <td class="mono">측정 불가</td>
+            <td class="mono">457초</td>
             <td class="mono win">318초 — 최단</td>
           </tr>
           <tr>
             <td class="rk">V2 생성 시간</td>
-            <td class="mono">—</td>
-            <td class="mono">—</td>
+            <td class="mono">360.6초</td>
+            <td class="mono">315초</td>
             <td class="mono win">149.4초 — 최단</td>
           </tr>
           <tr>
             <td class="rk">V3 생성 시간</td>
-            <td class="mono">—</td>
-            <td class="mono">—</td>
+            <td class="mono">412.5초</td>
+            <td class="mono">280초</td>
             <td class="mono win">185.2초 — 최단</td>
+          </tr>
+          <tr>
+            <td class="rk">평균 생성 시간</td>
+            <td class="mono">436.7초</td>
+            <td class="mono">350.7초</td>
+            <td class="mono win">217.5초 — 최단</td>
           </tr>
           <tr>
             <td class="rk">V1 토큰 합계</td>
@@ -503,10 +536,34 @@ body {
             <td>672,522</td>
           </tr>
           <tr>
+            <td class="rk">V2 토큰 합계</td>
+            <td>1,043,992</td>
+            <td>1,615,940</td>
+            <td class="win">642,641 — 최저</td>
+          </tr>
+          <tr>
+            <td class="rk">V3 실행 비용</td>
+            <td class="mono">$0.95</td>
+            <td class="mono">$0.45</td>
+            <td class="mono win">$0.35 — 최저</td>
+          </tr>
+          <tr>
             <td class="rk">V1 코드량</td>
-            <td>5개 파일 · 395줄</td>
-            <td>6개 파일 · 451줄</td>
-            <td>5개 파일 · 304줄</td>
+            <td>5파일 · 395줄</td>
+            <td>6파일 · 451줄</td>
+            <td>5파일 · 304줄</td>
+          </tr>
+          <tr>
+            <td class="rk">V3 코드량</td>
+            <td>5파일 · 612줄</td>
+            <td class="win">6파일 · 558줄 ↓</td>
+            <td>5파일 · 542줄</td>
+          </tr>
+          <tr>
+            <td class="rk">V3 종합 평가</td>
+            <td class="win">9.5점</td>
+            <td class="mono">9.0점</td>
+            <td class="win">9.5점</td>
           </tr>
           <tr>
             <td class="rk">자동 빌드</td>
@@ -517,7 +574,7 @@ body {
           <tr>
             <td class="rk">한국어 처리</td>
             <td><span class="badge ok">정상</span></td>
-            <td><span class="badge warn">인코딩 오류</span></td>
+            <td><span class="badge warn">V1 인코딩 오류→V2 수정</span></td>
             <td><span class="badge ok">정상</span></td>
           </tr>
           <tr>
@@ -529,13 +586,187 @@ body {
         </tbody>
       </table>
     </div>
-    <p class="note">Claude 토큰 918,278 중 865,307이 캐시 읽기(×0.1 과금)라 실질 비용은 경쟁력 있습니다.</p>
+    <p class="note">Codex V1 시간은 당초 "측정 불가"로 표기했으나 로그 검토 결과 457초로 확인. Claude 토큰 918,278 중 865,307이 캐시 읽기(×0.1 과금)라 실질 비용은 경쟁력 있습니다.</p>
+  </section>
+
+  <!-- 코드 성장 추이 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">03</span>
+      <h2 class="sec-t">코드 성장 추이</h2>
+      <span class="sec-sub">V1 → V2 → V3 Kotlin 코드 라인 수 변화</span>
+    </div>
+    <div class="growth-grid">
+      <div class="growth-card">
+        <div class="growth-head">
+          <div class="ai-dot cl"></div>
+          <span class="growth-name">Claude</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:auto;">총 +55%</span>
+        </div>
+        <div class="growth-body">
+          <div class="growth-row">
+            <span class="growth-label">V1</span>
+            <div class="growth-track"><div class="growth-fill" style="width:53%"></div></div>
+            <span class="growth-val">395줄</span>
+            <span class="growth-diff"></span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V2</span>
+            <div class="growth-track"><div class="growth-fill" style="width:79%"></div></div>
+            <span class="growth-val">580줄</span>
+            <span class="growth-diff">+185</span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V3</span>
+            <div class="growth-track"><div class="growth-fill" style="width:83%"></div></div>
+            <span class="growth-val">612줄</span>
+            <span class="growth-diff">+32</span>
+          </div>
+          <p class="growth-note">V3에서 소폭 증가. 기존 구조를 크게 손대지 않고 기능을 추가하는 방식.</p>
+        </div>
+      </div>
+      <div class="growth-card">
+        <div class="growth-head">
+          <div class="ai-dot cd"></div>
+          <span class="growth-name">Codex</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:auto;">+24% → <strong>V3 리팩터링</strong></span>
+        </div>
+        <div class="growth-body">
+          <div class="growth-row">
+            <span class="growth-label">V1</span>
+            <div class="growth-track"><div class="growth-fill" style="width:61%"></div></div>
+            <span class="growth-val">451줄</span>
+            <span class="growth-diff"></span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V2</span>
+            <div class="growth-track"><div class="growth-fill" style="width:100%"></div></div>
+            <span class="growth-val">736줄</span>
+            <span class="growth-diff">+285</span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V3</span>
+            <div class="growth-track"><div class="growth-fill" style="width:76%"></div></div>
+            <span class="growth-val">558줄</span>
+            <span class="growth-diff" style="color:var(--codex);font-weight:700;">−178</span>
+          </div>
+          <p class="growth-note">세 AI 중 유일하게 V3에서 코드량이 감소. 자율 혁신 단계에서 리팩터링을 선택.</p>
+        </div>
+      </div>
+      <div class="growth-card">
+        <div class="growth-head">
+          <div class="ai-dot gm"></div>
+          <span class="growth-name">Gemini</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:auto;">총 +78%</span>
+        </div>
+        <div class="growth-body">
+          <div class="growth-row">
+            <span class="growth-label">V1</span>
+            <div class="growth-track"><div class="growth-fill" style="width:41%"></div></div>
+            <span class="growth-val">304줄</span>
+            <span class="growth-diff"></span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V2</span>
+            <div class="growth-track"><div class="growth-fill" style="width:70%"></div></div>
+            <span class="growth-val">518줄</span>
+            <span class="growth-diff">+214</span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V3</span>
+            <div class="growth-track"><div class="growth-fill" style="width:73%"></div></div>
+            <span class="growth-val">542줄</span>
+            <span class="growth-diff">+24</span>
+          </div>
+          <p class="growth-note">V1 가장 적은 코드로 시작. V3도 세 AI 중 가장 적은 코드 유지.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- V3 종합 평가 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">04</span>
+      <h2 class="sec-t">V3 종합 평가 — 8개 항목</h2>
+      <span class="sec-sub">자율 혁신 단계 · 각 10점 만점</span>
+    </div>
+    <div class="ai-grid" style="margin-bottom:14px;">
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot cl"></div>
+          <span class="ai-name">Claude</span>
+          <span class="ai-model" style="color:var(--ink);font-weight:700;">평균 9.5점</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary" style="font-size:13.5px;margin-bottom:10px;"><strong>Visual Logic &amp; Advanced UI Indexing</strong> — UI 레이아웃 최적화와 고급 인덱싱. 코드 가독성·구조·에러 처리 만점.</p>
+          <div class="ai-tags">
+            <span class="ai-tag good">기능 통합 10</span>
+            <span class="ai-tag good">코드 품질 10</span>
+            <span class="ai-tag warn">창의성 8</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot cd"></div>
+          <span class="ai-name">Codex</span>
+          <span class="ai-model" style="color:var(--muted);font-weight:700;">평균 9.0점</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary" style="font-size:13.5px;margin-bottom:10px;"><strong>Dynamic Refresh Engine</strong> — 실시간 데이터 변동 시뮬레이션 엔진. 성능 항목 유일한 만점.</p>
+          <div class="ai-tags">
+            <span class="ai-tag good">성능 10</span>
+            <span class="ai-tag warn">UI/UX 8</span>
+            <span class="ai-tag warn">V3 코드 감소</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot gm"></div>
+          <span class="ai-name">Gemini</span>
+          <span class="ai-model" style="color:var(--ink);font-weight:700;">평균 9.5점</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary" style="font-size:13.5px;margin-bottom:10px;"><strong>Weather Narrative Insight</strong> — 사용자 맞춤형 AI 날씨 조언 카드 + 온도 기반 동적 배경. 창의성·UI 만점.</p>
+          <div class="ai-tags">
+            <span class="ai-tag good">창의성 10</span>
+            <span class="ai-tag good">UI/UX 10</span>
+            <span class="ai-tag good">종합 10</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="eval-wrap">
+      <table class="eval-table">
+        <thead>
+          <tr>
+            <th>평가 항목</th>
+            <th class="cl">Claude</th>
+            <th class="cd">Codex</th>
+            <th class="gm">Gemini</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="crit">기능 통합</td><td class="score top">10</td><td class="score">9</td><td class="score top">10</td></tr>
+          <tr><td class="crit">창의성 / 혁신</td><td class="score">8</td><td class="score">9</td><td class="score top">10</td></tr>
+          <tr><td class="crit">코드 가독성</td><td class="score top">10</td><td class="score">9</td><td class="score">9</td></tr>
+          <tr><td class="crit">UI / UX 완성도</td><td class="score top">10</td><td class="score">8</td><td class="score top">10</td></tr>
+          <tr><td class="crit">에러 처리</td><td class="score top">10</td><td class="score">9</td><td class="score">9</td></tr>
+          <tr><td class="crit">성능 / 효율</td><td class="score">9</td><td class="score top">10</td><td class="score">9</td></tr>
+          <tr><td class="crit">프로젝트 구조</td><td class="score top">10</td><td class="score">9</td><td class="score">9</td></tr>
+          <tr><td class="crit">종합 완성도</td><td class="score">9</td><td class="score">9</td><td class="score top">10</td></tr>
+          <tr><td class="crit">평균</td><td class="score">9.5</td><td class="score">9.0</td><td class="score">9.5</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <!-- 코드 품질 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-n">03</span>
+      <span class="sec-n">05</span>
       <h2 class="sec-t">코드 품질 점수</h2>
       <span class="sec-sub">기능 완성도 제외 · 코드 규칙 기준</span>
     </div>
@@ -587,7 +818,7 @@ body {
   <!-- AI별 요약 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-n">04</span>
+      <span class="sec-n">06</span>
       <h2 class="sec-t">AI별 요약</h2>
     </div>
     <div class="ai-grid">
@@ -642,7 +873,7 @@ body {
   <!-- 읽기 순서 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-n">05</span>
+      <span class="sec-n">07</span>
       <h2 class="sec-t">읽기 순서</h2>
     </div>
     <div class="read-grid">
