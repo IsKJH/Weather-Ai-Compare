@@ -350,18 +350,108 @@
     </div>
   </section>
 
-  <!-- ── Phase 2 (대기 중) ── -->
+  <!-- ── Phase 2 결과 ── -->
   <section class="card" id="phase2">
     <div class="sh">
       <span class="sh-num">04</span>
       <h2>Phase 2 — 기능 확장</h2>
-      <span class="phase-status todo" style="margin-left:auto;">진행 예정</span>
+      <span class="phase-status done" style="margin-left:auto;">완료</span>
     </div>
     <p class="lead">시간별 예보, 강수확률·UV·대기질, 새로고침, 즐겨찾기를 추가하는 V2 명세 기준입니다.</p>
-    <div class="pending-card">
-      <div class="pc-icon">⏱</div>
-      <div class="pc-title">Phase 2 구현 완료 후 업데이트 예정</div>
-      <div class="pc-desc">Flutter Phase 2를 완성하면 AI V2 시간(Gemini 149.4초)과 비교해 추가합니다.</div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">소요 시간 비교</h3>
+    <div class="time-cmp">
+      <div class="time-box highlight">
+        <div class="time-ai"><span class="dot human" style="display:inline-block;margin-right:5px;"></span>Human · Flutter</div>
+        <div class="time-val">53:51</div>
+        <div class="time-sub">3,231초 · 기능 추가</div>
+      </div>
+      <div class="time-box">
+        <div class="time-ai"><span class="dot claude" style="display:inline-block;margin-right:5px;"></span>Claude · Kotlin</div>
+        <div class="time-val">360.6초</div>
+        <div class="time-sub">6분 1초</div>
+      </div>
+      <div class="time-box">
+        <div class="time-ai"><span class="dot gemini" style="display:inline-block;margin-right:5px;"></span>Gemini · Kotlin</div>
+        <div class="time-val">149.4초</div>
+        <div class="time-sub">2분 29초</div>
+        <div class="time-badge">최단</div>
+      </div>
+      <div class="time-box">
+        <div class="time-ai"><span class="dot codex" style="display:inline-block;margin-right:5px;"></span>Codex · Kotlin</div>
+        <div class="time-val">315초</div>
+        <div class="time-sub">5분 15초</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">구현 시간 배율 (Gemini 기준)</h3>
+    <div class="diff-bar-wrap">
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot human" style="display:inline-block;margin-right:5px;"></span>Human</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill human" style="width:100%"></div></div>
+        <span class="diff-bar-num">×21.6배</span>
+      </div>
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot codex" style="display:inline-block;margin-right:5px;"></span>Codex</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill codex" style="width:9.8%"></div></div>
+        <span class="diff-bar-num">×2.1배</span>
+      </div>
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot claude" style="display:inline-block;margin-right:5px;"></span>Claude</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill claude" style="width:7.5%"></div></div>
+        <span class="diff-bar-num">×2.4배</span>
+      </div>
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot gemini" style="display:inline-block;margin-right:5px;"></span>Gemini</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill gemini" style="width:4.6%"></div></div>
+        <span class="diff-bar-num">×1.0 기준</span>
+      </div>
+    </div>
+    <div class="note-box">Phase 1(×12.5)보다 Phase 2(×21.6) 배율이 더 커졌습니다. AI는 기존 코드를 캐시로 활용해 V2에서 오히려 더 빨라졌지만(Gemini 318초→149초), 사람은 기존 코드를 파악하고 추가 기능을 구현하는 시간이 여전히 필요했기 때문입니다.</div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">Phase 2 코드량 비교</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th class="th-human">Human · Flutter</th>
+            <th class="th-claude">Claude · Kotlin</th>
+            <th class="th-gemini">Gemini · Kotlin</th>
+            <th class="th-codex">Codex · Kotlin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-label">파일 수</td>
+            <td>10개</td>
+            <td>5개</td>
+            <td>5개</td>
+            <td>6개</td>
+          </tr>
+          <tr>
+            <td class="col-label">총 코드 줄 수</td>
+            <td><strong>875줄</strong></td>
+            <td>580줄</td>
+            <td>518줄</td>
+            <td>736줄</td>
+          </tr>
+          <tr>
+            <td class="col-label">증가량 (Phase 1 대비)</td>
+            <td>+425줄</td>
+            <td>+185줄</td>
+            <td>+214줄</td>
+            <td>+285줄</td>
+          </tr>
+          <tr class="row-hl">
+            <td class="col-label">소요 시간</td>
+            <td><strong>3,231초 (53:51)</strong></td>
+            <td>360.6초</td>
+            <td><strong>149.4초 ✓ 최단</strong></td>
+            <td>315초</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -382,16 +472,16 @@
 
   <!-- ── 종합 (누적 업데이트) ── -->
   <section class="card" id="conclusion">
-    <div class="sh"><span class="sh-num">06</span><h2>종합 비교 — Phase 1 기준</h2></div>
+    <div class="sh"><span class="sh-num">06</span><h2>종합 비교 — Phase 1·2 완료</h2></div>
 
     <div class="verdict-row">
       <div class="verdict-main">
-        <h2 class="verdict-title">Phase 1 기준, 가장 빠른 AI(Gemini) 대비 손 코딩은 약 12.5배 느렸습니다.</h2>
-        <p class="verdict-copy">Gemini가 5분 18초 만에 완성한 V1 앱을 Flutter로 손 코딩하는 데 1시간 6분 24초가 걸렸습니다. 언어/아키텍처 차이(Flutter Clean Arch vs Kotlin MVVM)를 감안해도 속도 차이는 압도적입니다. 반면 코드 줄 수는 450줄로 Codex(451줄)와 거의 같아, AI가 더 짧게 작성하는 것은 아닙니다. AI의 속도 우위는 타이핑이 아니라 설계 결정의 즉각성에서 나옵니다.</p>
+        <h2 class="verdict-title">Phase 1·2 누적 기준, 사람은 AI(Gemini)보다 약 15.4배 느렸습니다.</h2>
+        <p class="verdict-copy">Phase 1(×12.5)보다 Phase 2(×21.6) 배율이 더 벌어졌습니다. AI는 기존 코드를 캐시로 재활용해 Phase 2에서 오히려 더 빨라진 반면, 사람은 기존 코드 파악 후 추가 구현까지 비슷한 시간이 필요했습니다. 누적 코드량은 875줄로 AI(518~736줄)보다 많습니다. 이는 Flutter Clean Architecture의 보일러플레이트 때문이며, 화면 구현 코드 자체는 AI와 유사한 수준입니다.</p>
       </div>
       <div class="verdict-aside">
-        <div class="aside-k">Phase 1 속도 차이</div>
-        <div class="aside-v">AI 대비<br>×12.5 느림</div>
+        <div class="aside-k">누적 속도 차이</div>
+        <div class="aside-v">AI 대비<br>×15.4 느림</div>
       </div>
     </div>
 
@@ -416,10 +506,10 @@
           </tr>
           <tr>
             <td class="col-label">Phase 2</td>
-            <td>—</td>
+            <td><strong>3,231초 (53:51)</strong></td>
             <td>149.4초</td>
-            <td>—</td>
-            <td>⏳ 진행 예정</td>
+            <td>×21.6</td>
+            <td>✅ 완료</td>
           </tr>
           <tr>
             <td class="col-label">Phase 3</td>
@@ -429,10 +519,10 @@
             <td>⏳ 진행 예정</td>
           </tr>
           <tr class="row-hl">
-            <td class="col-label">합계</td>
-            <td>3,984초~</td>
-            <td>652.6초~</td>
-            <td>—</td>
+            <td class="col-label">누적 합계</td>
+            <td><strong>7,215초 (2:00:15)</strong></td>
+            <td>467.4초~</td>
+            <td>×15.4</td>
             <td>진행 중</td>
           </tr>
         </tbody>
