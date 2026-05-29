@@ -385,8 +385,8 @@ body {
       <div class="stat-l">Gemini 평균 생성시간</div>
     </div>
     <div class="stat-item">
-      <div class="stat-n">9.5점</div>
-      <div class="stat-l">V3 최고 평가 (Claude·Gemini)</div>
+      <div class="stat-n">Gemini</div>
+      <div class="stat-l">V3 화면 변화 확인된 AI</div>
     </div>
     <div class="stat-item">
       <div class="stat-n">3단계</div>
@@ -412,7 +412,7 @@ body {
   <!-- 종합 요약 -->
   <div class="verdict reveal">
     <p class="verdict-text">
-      속도는 <strong>Gemini가 전 단계 압도적으로 빨랐고</strong>(평균 217초), V3 종합 평가에서는 <strong>Claude와 Gemini가 9.5점으로 공동 1위</strong>. 코드 규칙 품질은 <strong>Codex 1위</strong>. Codex는 V3에서 유일하게 코드를 줄이며 리팩터링했습니다.
+      속도는 <strong>Gemini가 전 단계 압도적으로 빨랐고</strong>(평균 217초), V3에서 스크린샷으로 변화가 확인된 건 <strong>Gemini만</strong>이었습니다. 코드 규칙 기준으로는 <strong>Codex가 private·순수 함수·computed UiState를 모두 갖춘 유일한 AI</strong>였고, Codex는 V3에서 유일하게 코드를 줄이며 리팩터링했습니다.
     </p>
     <div class="verdict-badge">
       <div class="vb-label">코드 품질 1위</div>
@@ -560,12 +560,6 @@ body {
             <td>5파일 · 542줄</td>
           </tr>
           <tr>
-            <td class="rk">V3 종합 평가</td>
-            <td class="win">9.5점</td>
-            <td class="mono">9.0점</td>
-            <td class="win">9.5점</td>
-          </tr>
-          <tr>
             <td class="rk">자동 빌드</td>
             <td><span class="badge err">수동 필요</span></td>
             <td><span class="badge ok">자동 성공</span></td>
@@ -684,26 +678,25 @@ body {
     </div>
   </section>
 
-  <!-- V3 종합 평가 -->
+  <!-- V3 자율 혁신 -->
   <section class="section reveal">
     <div class="sec-head">
       <span class="sec-n">04</span>
-      <h2 class="sec-t">V3 종합 평가 — 8개 항목</h2>
-      <span class="sec-sub">자율 혁신 단계 · 각 10점 만점</span>
+      <h2 class="sec-t">V3 — 각 AI가 선택한 자율 기능</h2>
+      <span class="sec-sub">스크린샷 기준 실제 체감 변화</span>
     </div>
-    <div class="ai-grid" style="margin-bottom:14px;">
+    <div class="ai-grid">
       <div class="ai-card">
         <div class="ai-card-head">
           <div class="ai-dot cl"></div>
           <span class="ai-name">Claude</span>
-          <span class="ai-model" style="color:var(--ink);font-weight:700;">평균 9.5점</span>
+          <span class="ai-model">Visual Logic &amp; UI Indexing</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary" style="font-size:13.5px;margin-bottom:10px;"><strong>Visual Logic &amp; Advanced UI Indexing</strong> — UI 레이아웃 최적화와 고급 인덱싱. 코드 가독성·구조·에러 처리 만점.</p>
+          <p class="ai-summary">코드 변경은 있었으나 스크린샷 기준 V2와 화면 차이가 뚜렷하지 않습니다. 내부 로직 개선 중심.</p>
           <div class="ai-tags">
-            <span class="ai-tag good">기능 통합 10</span>
-            <span class="ai-tag good">코드 품질 10</span>
-            <span class="ai-tag warn">창의성 8</span>
+            <span class="ai-tag warn">화면 변화 미확인</span>
+            <span class="ai-tag good">코드 구조 개선</span>
           </div>
         </div>
       </div>
@@ -711,14 +704,13 @@ body {
         <div class="ai-card-head">
           <div class="ai-dot cd"></div>
           <span class="ai-name">Codex</span>
-          <span class="ai-model" style="color:var(--muted);font-weight:700;">평균 9.0점</span>
+          <span class="ai-model">Dynamic Refresh Engine</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary" style="font-size:13.5px;margin-bottom:10px;"><strong>Dynamic Refresh Engine</strong> — 실시간 데이터 변동 시뮬레이션 엔진. 성능 항목 유일한 만점.</p>
+          <p class="ai-summary">새로고침 시 mock 데이터 값이 변동하는 시뮬레이션. 정적 스크린샷으로는 확인 불가 — 실제 조작 시 체감.</p>
           <div class="ai-tags">
-            <span class="ai-tag good">성능 10</span>
-            <span class="ai-tag warn">UI/UX 8</span>
-            <span class="ai-tag warn">V3 코드 감소</span>
+            <span class="ai-tag warn">상호작용 필요</span>
+            <span class="ai-tag good">코드량 −178줄</span>
           </div>
         </div>
       </div>
@@ -726,40 +718,16 @@ body {
         <div class="ai-card-head">
           <div class="ai-dot gm"></div>
           <span class="ai-name">Gemini</span>
-          <span class="ai-model" style="color:var(--ink);font-weight:700;">평균 9.5점</span>
+          <span class="ai-model">Weather Narrative Insight</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary" style="font-size:13.5px;margin-bottom:10px;"><strong>Weather Narrative Insight</strong> — 사용자 맞춤형 AI 날씨 조언 카드 + 온도 기반 동적 배경. 창의성·UI 만점.</p>
+          <p class="ai-summary">날씨·온도 기반 조언 카드 + 배경색 동적 변경. 도시 전환만 해도 화면에서 즉시 확인 가능.</p>
           <div class="ai-tags">
-            <span class="ai-tag good">창의성 10</span>
-            <span class="ai-tag good">UI/UX 10</span>
-            <span class="ai-tag good">종합 10</span>
+            <span class="ai-tag good">화면 변화 즉시 확인</span>
+            <span class="ai-tag good">UX 개선 뚜렷</span>
           </div>
         </div>
       </div>
-    </div>
-    <div class="eval-wrap">
-      <table class="eval-table">
-        <thead>
-          <tr>
-            <th>평가 항목</th>
-            <th class="cl">Claude</th>
-            <th class="cd">Codex</th>
-            <th class="gm">Gemini</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td class="crit">기능 통합</td><td class="score top">10</td><td class="score">9</td><td class="score top">10</td></tr>
-          <tr><td class="crit">창의성 / 혁신</td><td class="score">8</td><td class="score">9</td><td class="score top">10</td></tr>
-          <tr><td class="crit">코드 가독성</td><td class="score top">10</td><td class="score">9</td><td class="score">9</td></tr>
-          <tr><td class="crit">UI / UX 완성도</td><td class="score top">10</td><td class="score">8</td><td class="score top">10</td></tr>
-          <tr><td class="crit">에러 처리</td><td class="score top">10</td><td class="score">9</td><td class="score">9</td></tr>
-          <tr><td class="crit">성능 / 효율</td><td class="score">9</td><td class="score top">10</td><td class="score">9</td></tr>
-          <tr><td class="crit">프로젝트 구조</td><td class="score top">10</td><td class="score">9</td><td class="score">9</td></tr>
-          <tr><td class="crit">종합 완성도</td><td class="score">9</td><td class="score">9</td><td class="score top">10</td></tr>
-          <tr><td class="crit">평균</td><td class="score">9.5</td><td class="score">9.0</td><td class="score">9.5</td></tr>
-        </tbody>
-      </table>
     </div>
   </section>
 
@@ -767,49 +735,56 @@ body {
   <section class="section reveal">
     <div class="sec-head">
       <span class="sec-n">05</span>
-      <h2 class="sec-t">코드 품질 점수</h2>
-      <span class="sec-sub">기능 완성도 제외 · 코드 규칙 기준</span>
+      <h2 class="sec-t">코드 패턴 비교</h2>
+      <span class="sec-sub">실제 코드에서 확인한 사실</span>
     </div>
-    <div class="scores">
-      <div class="score-row">
-        <div class="score-who"><div class="score-dot cd"></div><span class="score-name">Codex</span></div>
-        <span class="score-rank">1</span>
-        <div class="score-track"><div class="score-fill cd" style="width:82%"></div></div>
-        <span class="score-pct">82</span>
-        <div class="score-tags">
-          <span class="score-tag">private 컴포저블</span>
-          <span class="score-tag">순수 함수 설계</span>
-          <span class="score-tag">computed UiState</span>
-        </div>
-      </div>
-      <div class="score-row">
-        <div class="score-who"><div class="score-dot gm"></div><span class="score-name">Gemini</span></div>
-        <span class="score-rank">2</span>
-        <div class="score-track"><div class="score-fill gm" style="width:68%"></div></div>
-        <span class="score-pct">68</span>
-        <div class="score-tags">
-          <span class="score-tag">원자적 상태 업데이트</span>
-          <span class="score-tag">LazyColumn 사용</span>
-          <span class="score-tag bad">lifecycle 누수 주의</span>
-        </div>
-      </div>
-      <div class="score-row">
-        <div class="score-who"><div class="score-dot cl"></div><span class="score-name">Claude</span></div>
-        <span class="score-rank">3</span>
-        <div class="score-track"><div class="score-fill cl" style="width:61%"></div></div>
-        <span class="score-pct">61</span>
-        <div class="score-tags">
-          <span class="score-tag">레이어 분리 우수</span>
-          <span class="score-tag bad">모놀리식 UI 340줄</span>
-          <span class="score-tag bad">비원자적 상태</span>
-        </div>
-      </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>패턴</th>
+            <th class="cl">Claude</th>
+            <th class="cd">Codex</th>
+            <th class="gm">Gemini</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rk">private Composable</td>
+            <td>❌</td><td>✅</td><td>❌</td>
+          </tr>
+          <tr>
+            <td class="rk">순수 함수 설계<br><span style="font-size:11px;color:var(--muted);font-weight:400;">UiState + callbacks</span></td>
+            <td>❌</td><td>✅</td><td>❌</td>
+          </tr>
+          <tr>
+            <td class="rk">원자적 상태 업데이트<br><span style="font-size:11px;color:var(--muted);font-weight:400;">update{} 사용</span></td>
+            <td>❌</td><td>❌</td><td>✅</td>
+          </tr>
+          <tr>
+            <td class="rk">computed UiState</td>
+            <td>❌</td><td>✅</td><td>❌</td>
+          </tr>
+          <tr>
+            <td class="rk">LazyColumn 성능</td>
+            <td>❌</td><td>❌</td><td>✅</td>
+          </tr>
+          <tr>
+            <td class="rk">레이어 분리 구조</td>
+            <td>✅</td><td>❌</td><td>❌</td>
+          </tr>
+          <tr>
+            <td class="rk">lifecycle 안전<br><span style="font-size:11px;color:var(--muted);font-weight:400;">collectAsStateWithLifecycle</span></td>
+            <td>✅</td><td>✅</td><td>⚠️ 누수 있음</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="guide-promo">
       <div>
         <div class="gp-label">코드 분석 가이드</div>
-        <div class="gp-title">점수 근거 · 패턴 18가지 · 팀 도입 체크리스트</div>
-        <div class="gp-desc">Before/After 코드 비교 · 체크리스트 · AI별 주의사항 · 리뷰 11항목</div>
+        <div class="gp-title">패턴 상세 비교 · Before/After 코드 · 팀 도입 체크리스트</div>
+        <div class="gp-desc">18가지 패턴 분석 · AI별 주의사항 · 커밋 전 체크리스트 11항목</div>
       </div>
       <a class="gp-btn" href="code-rules.html">가이드 보기</a>
     </div>

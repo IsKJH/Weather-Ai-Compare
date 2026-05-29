@@ -243,9 +243,9 @@ pre.inline-code {
         <div class="hero-stat-d">상태·설계·구조·성능 등</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-k">코드 품질 1위</div>
+        <div class="hero-stat-k">패턴 적용 최다</div>
         <div class="hero-stat-v">Codex</div>
-        <div class="hero-stat-d">Gemini 2위 · Claude 3위</div>
+        <div class="hero-stat-d">private · 순수 함수 · computed</div>
       </div>
     </div>
   </header>
@@ -523,43 +523,29 @@ ui/components/
       </div>
     </div>
 
-    <!-- score -->
-    <div class="sec-h3"><span class="sec-num">종합</span> 코드 품질 점수</div>
-    <p class="lead">상태 관리, Composable 설계, private 수식자, 패키지 구조, 성능 패턴, 안전성(경계값 검사·lifecycle) 6개 영역 합산.</p>
-    <div class="score-block">
-      <div class="score-row">
-        <div class="score-rank r1">1</div>
-        <div class="score-name"><span class="dot codex" style="margin-right:5px;"></span>Codex</div>
-        <div class="score-track"><div class="score-fill codex" style="width:82%"></div></div>
-        <div class="score-num">82</div>
-        <div class="score-tags">
-          <span class="score-tag good">private ✅</span>
-          <span class="score-tag good">순수 Composable ✅</span>
-          <span class="score-tag good">computed UiState ✅</span>
-        </div>
-      </div>
-      <div class="score-row">
-        <div class="score-rank r2">2</div>
-        <div class="score-name"><span class="dot gemini" style="margin-right:5px;"></span>Gemini</div>
-        <div class="score-track"><div class="score-fill gemini" style="width:68%"></div></div>
-        <div class="score-num">68</div>
-        <div class="score-tags">
-          <span class="score-tag good">update{} ✅</span>
-          <span class="score-tag good">LazyColumn ✅</span>
-          <span class="score-tag bad">lifecycle 누수 ❌</span>
-        </div>
-      </div>
-      <div class="score-row">
-        <div class="score-rank r3">3</div>
-        <div class="score-name"><span class="dot claude" style="margin-right:5px;"></span>Claude</div>
-        <div class="score-track"><div class="score-fill claude" style="width:61%"></div></div>
-        <div class="score-num">61</div>
-        <div class="score-tags">
-          <span class="score-tag good">폴더 구조 ✅</span>
-          <span class="score-tag bad">모놀리식 UI ❌</span>
-          <span class="score-tag bad">비원자적 업데이트 ❌</span>
-        </div>
-      </div>
+    <!-- fact table -->
+    <div class="sec-h3"><span class="sec-num">종합</span> 패턴 적용 여부</div>
+    <p class="lead">6개 패턴 영역에서 각 AI가 실제로 해당 패턴을 적용했는지 확인한 결과입니다.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>패턴</th>
+            <th class="th-claude">Claude</th>
+            <th class="th-codex">Codex</th>
+            <th class="th-gemini">Gemini</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="col-label">private Composable</td><td>❌</td><td>✅</td><td>❌</td></tr>
+          <tr><td class="col-label">순수 함수 설계</td><td>❌</td><td>✅</td><td>❌</td></tr>
+          <tr><td class="col-label">원자적 상태 (update{})</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td class="col-label">computed UiState</td><td>❌</td><td>✅</td><td>❌</td></tr>
+          <tr><td class="col-label">LazyColumn 성능</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td class="col-label">레이어 분리 구조</td><td>✅</td><td>❌</td><td>❌</td></tr>
+          <tr><td class="col-label">lifecycle 안전</td><td>✅</td><td>✅</td><td>⚠️ collectAsState 사용</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
