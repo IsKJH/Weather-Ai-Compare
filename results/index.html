@@ -3,707 +3,324 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WeatherNow AI 비교 실험 — 세 AI에게 앱을 맡기면 무엇이 달라질까</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>WeatherNow AI 비교 실험</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── RESET & BASE ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+
+:root {
+  --claude:   #C2622A;
+  --codex:    #0B8A5E;
+  --gemini:   #1A4FDB;
+  --human:    #5B21B6;
+  --ink:      #111111;
+  --bg:       #F5F5F5;
+  --surface:  #FFFFFF;
+  --border:   #E2E2E2;
+  --muted:    #777777;
+  --faint:    #F0F0F0;
+  --mono:     'JetBrains Mono', monospace;
+}
+
 body {
   font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #F6F6F6;
-  color: #111111;
-  font-size: 15px;
-  line-height: 1.75;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15.5px;
+  line-height: 1.8;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* ── CSS VARS ── */
-:root {
-  --claude:  #C2622A;
-  --codex:   #0B8A5E;
-  --gemini:  #1A4FDB;
-  --human:   #5B21B6;
-  --ink:     #0D0D0D;
-  --bg:      #F5F5F5;
-  --surface: #FFFFFF;
-  --border:  #E2E2E2;
-  --muted:   #6B6B6B;
-  --faint:   #F0F0F0;
-}
-
-/* ── STICKY NAV ── */
-.site-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(245,245,245,.97);
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,.96);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
-  padding: 0 40px;
-  display: flex;
-  align-items: center;
-  height: 48px;
+  display: flex; align-items: center;
+  height: 48px; padding: 0 36px; gap: 0;
 }
 .nav-logo {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: .3px;
-  padding-right: 20px;
-  border-right: 1px solid var(--border);
-  white-space: nowrap;
-  flex-shrink: 0;
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  padding-right: 20px; border-right: 1px solid var(--border);
+  white-space: nowrap; flex-shrink: 0;
 }
-.nav-links {
-  display: flex;
-  gap: 2px;
-  padding-left: 12px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
+.nav-links { display: flex; gap: 2px; padding-left: 12px; overflow-x: auto; scrollbar-width: none; }
 .nav-links::-webkit-scrollbar { display: none; }
 .nav-link {
-  text-decoration: none;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--muted);
-  padding: 5px 10px;
-  border-radius: 4px;
-  white-space: nowrap;
-  transition: background .12s, color .12s;
+  text-decoration: none; font-size: 13px; font-weight: 500;
+  color: var(--muted); padding: 5px 11px; border-radius: 4px;
+  white-space: nowrap; transition: background .12s, color .12s;
 }
 .nav-link:hover { background: var(--faint); color: var(--ink); }
 .nav-link.active { background: var(--ink); color: #fff; }
-.nav-link.human { color: var(--human); }
-.nav-link.human:hover { background: #EEE8FF; color: var(--human); }
+.nav-link.hl { color: var(--human); }
+.nav-link.hl:hover { background: #F3EEFF; }
 
 /* ── HERO ── */
 .hero {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 56px 40px 48px;
+  padding: 60px 36px 52px;
 }
 .hero-inner { max-width: 1100px; margin: 0 auto; }
-.hero-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 20px;
+.hero-date {
+  font-size: 12px; font-weight: 500; color: var(--muted);
+  margin-bottom: 18px; letter-spacing: .3px;
 }
 .hero-h1 {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: clamp(30px, 4vw, 50px);
-  font-weight: 400;
-  line-height: 1.18;
-  letter-spacing: -.3px;
-  color: var(--ink);
-  max-width: 800px;
-  margin-bottom: 20px;
-}
-.hero-h1 em {
-  font-style: italic;
-  color: var(--muted);
+  font-size: clamp(32px, 4.2vw, 52px);
+  font-weight: 800; line-height: 1.2;
+  letter-spacing: -.5px; color: var(--ink);
+  max-width: 760px; margin-bottom: 18px;
 }
 .hero-sub {
-  font-size: 15px;
-  color: var(--muted);
-  line-height: 1.82;
-  max-width: 560px;
-  margin-bottom: 32px;
+  font-size: 15.5px; color: var(--muted);
+  line-height: 1.85; max-width: 580px; margin-bottom: 28px;
 }
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+.hero-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.hero-badge {
+  font-size: 12px; font-weight: 500;
+  padding: 3px 10px; border-radius: 3px;
+  border: 1px solid var(--border); color: var(--muted);
 }
-.hero-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  font-weight: 500;
-  padding: 3px 9px;
-  border-radius: 3px;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  letter-spacing: .2px;
-}
-.hero-tag.c { border-color: rgba(194,98,42,.3); color: var(--claude); }
-.hero-tag.x { border-color: rgba(11,138,94,.3);  color: var(--codex); }
-.hero-tag.g { border-color: rgba(26,79,219,.3);  color: var(--gemini); }
+.hero-badge.c { color: var(--claude); border-color: rgba(194,98,42,.25); }
+.hero-badge.x { color: var(--codex);  border-color: rgba(11,138,94,.25); }
+.hero-badge.g { color: var(--gemini); border-color: rgba(26,79,219,.25); }
 
 /* ── STAT BAR ── */
 .stat-bar {
-  background: var(--surface);
-  padding: 0 40px;
-  display: flex;
-  align-items: stretch;
-  border-bottom: 1px solid var(--border);
-  overflow-x: auto;
-  scrollbar-width: none;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  display: flex; overflow-x: auto; scrollbar-width: none;
+  padding: 0 36px;
 }
 .stat-bar::-webkit-scrollbar { display: none; }
 .stat-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 14px 28px 13px;
-  border-right: 1px solid var(--border);
-  min-width: fit-content;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 16px 28px 14px; border-right: 1px solid var(--border);
   flex-shrink: 0;
 }
 .stat-item:first-child { padding-left: 0; }
-.stat-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1;
-  letter-spacing: -.5px;
+.stat-n {
+  font-family: var(--mono); font-size: 22px; font-weight: 700;
+  color: var(--ink); line-height: 1; letter-spacing: -.5px;
 }
-.stat-label {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: .3px;
-  text-transform: uppercase;
-  margin-top: 3px;
+.stat-l {
+  font-size: 11px; font-weight: 500; color: var(--muted);
+  margin-top: 3px; letter-spacing: .2px;
 }
 
 /* ── WRAP ── */
-.wrap { max-width: 1100px; margin: 0 auto; padding: 56px 40px 100px; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 48px 36px 100px; }
 
-/* ── SECTION HEADER ── */
+/* ── SECTION HEAD ── */
 .sec-head {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  margin-bottom: 24px;
-  padding-bottom: 14px;
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 22px; padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
 }
-.sec-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 1px;
-}
-.sec-title {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 26px;
-  font-weight: 400;
-  color: var(--ink);
-  line-height: 1.15;
-}
-.sec-note {
-  font-size: 13px;
-  color: var(--muted);
-  margin-left: auto;
+.sec-n { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--muted); }
+.sec-t { font-size: 19px; font-weight: 700; color: var(--ink); }
+.sec-sub { font-size: 13px; color: var(--muted); margin-left: auto; }
+
+/* ── CARDS (generic) ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 28px 32px; margin-bottom: 14px;
 }
 
-/* ── VERDICT STRIP ── */
+/* ── VERDICT ── */
 .verdict {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--ink);
-  border-radius: 4px;
-  padding: 28px 32px;
-  margin-bottom: 12px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 32px;
-  align-items: center;
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--ink); border-radius: 6px;
+  padding: 26px 30px; margin-bottom: 12px;
+  display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center;
 }
 .verdict-text {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 1.55;
-  color: var(--ink);
-  max-width: 680px;
+  font-size: 17px; font-weight: 500; line-height: 1.75; color: var(--ink);
 }
-.verdict-text strong { font-style: italic; }
+.verdict-text strong { font-weight: 800; }
 .verdict-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  min-width: 130px;
-  border-left: 1px solid var(--border);
-  padding-left: 24px;
-  flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 110px; border-left: 1px solid var(--border);
+  padding-left: 22px; flex-shrink: 0;
 }
-.vb-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.vb-value {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 26px;
-  color: var(--ink);
-  line-height: 1.1;
-  font-style: italic;
-}
+.vb-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.vb-value { font-size: 22px; font-weight: 800; color: var(--ink); }
 
 /* ── HUMAN BANNER ── */
 .human-banner {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--human);
-  border-radius: 4px;
-  padding: 28px 32px;
-  margin-bottom: 12px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 24px;
-  align-items: center;
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--human); border-radius: 6px;
+  padding: 26px 30px; margin-bottom: 12px;
+  display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
   position: relative;
 }
 .human-banner::before {
-  content: 'NEW';
-  position: absolute;
-  top: 16px; right: 16px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9.5px; font-weight: 700;
-  letter-spacing: 1.5px;
-  background: var(--human);
-  color: #fff;
-  padding: 2px 7px;
-  border-radius: 3px;
+  content: 'NEW'; position: absolute; top: 16px; right: 16px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 1.5px; background: var(--human); color: #fff;
+  padding: 2px 7px; border-radius: 3px;
 }
-.hb-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--human);
-  margin-bottom: 6px;
-  opacity: .7;
-}
-.hb-title {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 21px;
-  color: var(--ink);
-  line-height: 1.35;
-  margin-bottom: 5px;
-}
+.hb-tag { font-size: 11px; font-weight: 700; color: var(--human); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+.hb-title { font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.4; margin-bottom: 5px; }
 .hb-desc { font-size: 14px; color: var(--muted); line-height: 1.75; }
-.hb-nums {
-  display: flex;
-  gap: 24px;
-  flex-shrink: 0;
-}
-.hb-num-item { text-align: center; }
-.hb-n {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 26px; font-weight: 700;
-  color: var(--ink);
-  line-height: 1;
-  letter-spacing: -.5px;
-}
-.hb-n.dim { color: var(--muted); font-size: 20px; }
-.hb-k {
-  font-size: 10.5px; font-weight: 600;
-  color: var(--muted);
-  letter-spacing: .3px;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
+.hb-nums { display: flex; gap: 20px; flex-shrink: 0; align-items: center; }
+.hb-num { text-align: center; }
+.hb-n { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--ink); line-height: 1; }
+.hb-n.dim { color: var(--muted); font-size: 18px; }
+.hb-k { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.hb-vs { font-size: 12px; color: var(--muted); font-weight: 500; }
 .hb-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  text-decoration: none;
-  background: var(--ink);
-  color: #fff;
-  padding: 9px 18px;
-  border-radius: 4px;
-  font-size: 13px; font-weight: 600;
-  margin-top: 14px;
-  transition: opacity .15s;
+  display: inline-flex; align-items: center; gap: 5px;
+  text-decoration: none; background: var(--ink); color: #fff;
+  padding: 8px 16px; border-radius: 4px; font-size: 13px;
+  font-weight: 600; margin-top: 14px; transition: opacity .15s;
 }
 .hb-link:hover { opacity: .8; }
 
 /* ── SECTION BLOCK ── */
-.section { margin-bottom: 64px; }
+.section { margin-bottom: 56px; }
 
 /* ── PHASE GRID ── */
-.phase-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
+.phase-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 .phase-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: border-color .15s;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  overflow: hidden; display: flex; flex-direction: column; transition: border-color .15s;
 }
 .phase-card:hover { border-color: #999; }
-.phase-shot {
-  aspect-ratio: 9/16;
-  background: #1A1A1A;
-  overflow: hidden;
-  position: relative;
-}
-.phase-shot img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-  transition: transform .4s ease;
-}
-.phase-card:hover .phase-shot img { transform: scale(1.03); }
+.phase-shot { aspect-ratio: 9/16; background: #1A1A1A; overflow: hidden; border-bottom: 1px solid var(--border); }
+.phase-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 .phase-body { padding: 20px 22px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
-.phase-step {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 1px;
-  text-transform: uppercase;
+.phase-n { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--muted); }
+.phase-title { font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.phase-desc { font-size: 13.5px; color: var(--muted); line-height: 1.75; flex: 1; }
+.phase-result {
+  font-size: 12.5px; color: var(--muted);
+  background: var(--faint); border: 1px solid var(--border);
+  border-radius: 4px; padding: 7px 11px; line-height: 1.6;
 }
-.phase-h {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 20px; font-weight: 400;
-  color: var(--ink);
-  line-height: 1.25;
+.phase-link {
+  text-decoration: none; font-size: 13.5px; font-weight: 700; color: var(--ink);
+  border-bottom: 1.5px solid var(--border); padding-bottom: 1px;
+  align-self: flex-start; transition: border-color .15s;
 }
-.phase-p { font-size: 13.5px; color: #555; line-height: 1.7; flex: 1; }
-.phase-winner {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: var(--faint);
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  padding: 5px 10px;
-  font-size: 12px; font-weight: 600;
-  color: var(--muted);
-}
-.phase-cta {
-  display: inline-flex; align-items: center; gap: 4px;
-  text-decoration: none;
-  font-size: 13px; font-weight: 800;
-  color: var(--ink);
-  border-bottom: 1.5px solid var(--border);
-  padding-bottom: 1px;
-  transition: border-color .15s;
-  align-self: flex-start;
-}
-.phase-cta:hover { border-color: var(--ink); }
+.phase-link:hover { border-color: var(--ink); }
 
 /* ── DATA TABLE ── */
-.data-table-wrap {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13.5px;
-}
-.data-table thead th {
-  padding: 11px 20px 10px;
-  text-align: left;
-  background: var(--faint);
-  color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .6px;
-  text-transform: uppercase;
-  white-space: nowrap;
+.tbl-wrap { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--surface); }
+.tbl thead th {
+  padding: 10px 18px 9px; text-align: left;
+  background: var(--faint); color: var(--muted);
+  font-size: 11px; font-weight: 600; letter-spacing: .5px;
+  text-transform: uppercase; white-space: nowrap;
   border-bottom: 1px solid var(--border);
 }
-.data-table thead th.cl { color: var(--claude); }
-.data-table thead th.cd { color: var(--codex); }
-.data-table thead th.gm { color: var(--gemini); }
-.data-table tbody td {
-  padding: 13px 20px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
-.data-table tbody tr:last-child td { border-bottom: none; }
-.data-table tbody tr:hover td { background: var(--faint); }
-.data-table td.row-key {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: .3px;
-  white-space: nowrap;
-  width: 140px;
-}
-.data-table td.highlight {
-  font-weight: 800;
-  color: var(--ink);
-}
-.data-table td.winner {
-  background: #F0FDF4 !important;
-  font-weight: 700;
-  color: #166534;
-}
-.data-table .mono {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px;
-}
-.badge {
-  display: inline-flex; align-items: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px; font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 4px;
-  letter-spacing: .3px;
-}
-.badge.ok  { background: #DCFCE7; color: #14532D; }
-.badge.warn{ background: #FEF9C3; color: #713F12; }
-.badge.err { background: #FEE2E2; color: #7F1D1D; }
+.tbl thead th.cl { color: var(--claude); }
+.tbl thead th.cd { color: var(--codex); }
+.tbl thead th.gm { color: var(--gemini); }
+.tbl tbody td { padding: 12px 18px; border-bottom: 1px solid var(--border); vertical-align: middle; line-height: 1.6; }
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl tbody tr:nth-child(even) td { background: var(--faint); }
+.tbl tbody tr:hover td { background: #EBEBEB; }
+.tbl td.rk { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; width: 130px; }
+.tbl td.win { font-weight: 700; color: #166534; background: #F0FDF4 !important; }
+.tbl .mono { font-family: var(--mono); font-size: 12.5px; }
+.badge { display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 3px; }
+.badge.ok   { background: #F0FDF4; color: #166534; }
+.badge.warn { background: var(--faint); color: var(--muted); border: 1px solid var(--border); }
+.badge.err  { background: #FEF2F2; color: #B91C1C; }
+.note { font-size: 13px; color: var(--muted); border-left: 2px solid var(--border); padding-left: 12px; margin-top: 10px; line-height: 1.7; }
 
 /* ── SCORE BARS ── */
-.scores-section { margin-bottom: 12px; }
+.scores { margin-bottom: 12px; }
 .score-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 16px 20px;
-  gap: 18px;
+  display: flex; align-items: center; gap: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 14px 18px; margin-bottom: 8px;
 }
-.score-ai {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 110px;
-  flex-shrink: 0;
-}
-.score-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.score-dot.codex  { background: var(--codex); }
-.score-dot.gemini { background: var(--gemini); }
-.score-dot.claude { background: var(--claude); }
-.score-name {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px; font-weight: 700;
-  color: var(--ink);
-}
-.score-rank {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; font-weight: 800;
-  color: var(--muted);
-  width: 24px;
-  text-align: center;
-}
-.score-bar-wrap { flex: 1; height: 6px; background: var(--faint); border-radius: 2px; overflow: hidden; }
-.score-bar { height: 100%; border-radius: 2px; transition: width .6s cubic-bezier(.25,.46,.45,.94); }
-.score-bar.codex  { background: var(--codex); }
-.score-bar.gemini { background: var(--gemini); }
-.score-bar.claude { background: var(--claude); }
-.score-pct {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 20px; font-weight: 800;
-  color: var(--ink);
-  width: 52px;
-  text-align: right;
-  flex-shrink: 0;
-  letter-spacing: -1px;
-}
-.score-tags {
-  display: flex; gap: 6px; flex-wrap: wrap;
-  flex: 1;
-}
-.score-tag {
-  font-size: 11.5px; font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 3px;
-  color: var(--muted);
-  background: var(--faint);
-  border: 1px solid var(--border);
-}
-
-/* ── AI PROFILE CARDS ── */
-.ai-profiles {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 12px;
-}
-.ai-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.ai-card-head {
-  padding: 16px 20px 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid var(--border);
-}
-.ai-head-dot {
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.ai-head-dot.claude { background: var(--claude); }
-.ai-head-dot.codex  { background: var(--codex); }
-.ai-head-dot.gemini { background: var(--gemini); }
-.ai-head-name {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px; font-weight: 800;
-  color: var(--ink);
-}
-.ai-head-model {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: var(--muted);
-  margin-left: auto;
-}
-.ai-card-body { padding: 16px 22px; }
-.ai-verdict {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 17px;
-  color: var(--ink);
-  line-height: 1.35;
-  margin-bottom: 12px;
-}
-.ai-tags { display: flex; gap: 5px; flex-wrap: wrap; }
-.ai-tag {
-  font-size: 11.5px; font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 4px;
-}
-.ai-tag.good { background: #DCFCE7; color: #14532D; }
-.ai-tag.warn { background: #FEF9C3; color: #713F12; }
-.ai-tag.bad  { background: #FEE2E2; color: #7F1D1D; }
+.score-who { display: flex; align-items: center; gap: 8px; width: 90px; flex-shrink: 0; }
+.score-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.score-dot.cl { background: var(--claude); }
+.score-dot.cd { background: var(--codex); }
+.score-dot.gm { background: var(--gemini); }
+.score-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+.score-rank { font-family: var(--mono); font-size: 11px; color: var(--muted); width: 20px; text-align: center; flex-shrink: 0; }
+.score-track { flex: 1; height: 5px; background: var(--faint); border-radius: 2px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 2px; transition: width .6s cubic-bezier(.25,.46,.45,.94); }
+.score-fill.cl { background: var(--claude); }
+.score-fill.cd { background: var(--codex); }
+.score-fill.gm { background: var(--gemini); }
+.score-pct { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--ink); width: 44px; text-align: right; flex-shrink: 0; }
+.score-tags { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; }
+.score-tag { font-size: 11.5px; font-weight: 500; padding: 2px 8px; border-radius: 3px; color: var(--muted); background: var(--faint); border: 1px solid var(--border); }
+.score-tag.bad { background: #FEF2F2; color: #B91C1C; border-color: #FECACA; }
 
 /* ── GUIDE PROMO ── */
 .guide-promo {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--ink);
-  border-radius: 4px;
-  padding: 24px 28px;
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  justify-content: space-between;
-  margin-top: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--ink); border-radius: 6px;
+  padding: 22px 26px; display: flex; align-items: center;
+  gap: 24px; justify-content: space-between; margin-top: 14px;
 }
-.gp-eyebrow {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 5px;
-}
-.gp-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.35;
-  margin-bottom: 5px;
-}
+.gp-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.gp-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
 .gp-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
-.gp-cta {
-  display: inline-flex; align-items: center;
-  text-decoration: none;
-  background: var(--ink);
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-size: 13px; font-weight: 600;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: opacity .15s;
+.gp-btn {
+  text-decoration: none; background: var(--ink); color: #fff;
+  padding: 9px 18px; border-radius: 4px; font-size: 13px;
+  font-weight: 600; white-space: nowrap; flex-shrink: 0; transition: opacity .15s;
 }
-.gp-cta:hover { opacity: .8; }
+.gp-btn:hover { opacity: .8; }
 
-/* ── READING GUIDE ── */
-.reading-guide {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+/* ── AI CARDS ── */
+.ai-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.ai-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.ai-card-head {
+  padding: 14px 18px 12px; display: flex; align-items: center;
+  gap: 9px; border-bottom: 1px solid var(--border);
 }
-.rg-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 20px 22px;
-}
-.rg-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 30px; font-weight: 700;
-  color: var(--faint);
-  line-height: 1;
-  margin-bottom: 10px;
-  -webkit-text-stroke: 1.5px var(--border);
-}
-.rg-title { font-size: 14px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
-.rg-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.ai-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ai-dot.cl { background: var(--claude); }
+.ai-dot.cd { background: var(--codex); }
+.ai-dot.gm { background: var(--gemini); }
+.ai-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+.ai-model { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: auto; }
+.ai-card-body { padding: 16px 18px; }
+.ai-summary { font-size: 14px; color: var(--ink); line-height: 1.7; margin-bottom: 10px; }
+.ai-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.ai-tag { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 3px; }
+.ai-tag.good { background: #F0FDF4; color: #166534; }
+.ai-tag.warn { background: var(--faint); color: var(--muted); border: 1px solid var(--border); }
+.ai-tag.bad  { background: #FEF2F2; color: #B91C1C; }
 
-/* ── NOTE ── */
-.note {
-  background: var(--faint);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--muted);
-  border-radius: 0 3px 3px 0;
-  padding: 10px 14px;
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.65;
-  margin-top: 10px;
-}
-
-/* ── SCROLL REVEAL ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity .5s ease, transform .5s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: none;
-}
+/* ── READ GUIDE ── */
+.read-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.read-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 20px 22px; }
+.read-n { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--faint); line-height: 1; margin-bottom: 10px; -webkit-text-stroke: 1.5px var(--border); }
+.read-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+.read-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
 /* ── FOOTER ── */
-.site-footer {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  color: var(--muted);
-  padding: 24px 40px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  text-align: center;
-  letter-spacing: .2px;
-}
+.footer { background: var(--surface); border-top: 1px solid var(--border); padding: 22px 36px; font-size: 12px; color: var(--muted); text-align: center; }
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .45s ease, transform .45s ease; }
+.reveal.visible { opacity: 1; transform: none; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 860px) {
-  .hero { padding: 56px 24px 52px; }
-  .site-nav { padding: 0 20px; }
+  .hero { padding: 40px 20px 36px; }
+  .nav { padding: 0 20px; }
   .stat-bar { padding: 0 20px; }
-  .wrap { padding: 40px 20px 80px; }
-  .phase-grid, .ai-profiles, .reading-guide { grid-template-columns: 1fr; }
-  .verdict { grid-template-columns: 1fr; }
-  .verdict-badge { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 16px; flex-direction: row; justify-content: flex-start; }
-  .human-banner { grid-template-columns: 1fr; }
+  .wrap { padding: 36px 20px 80px; }
+  .phase-grid, .ai-grid, .read-grid { grid-template-columns: 1fr; }
+  .verdict, .human-banner { grid-template-columns: 1fr; }
+  .verdict-badge { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 14px; flex-direction: row; align-items: baseline; gap: 10px; }
   .hb-nums { flex-direction: row; }
   .guide-promo { flex-direction: column; align-items: flex-start; }
   .score-tags { display: none; }
@@ -712,68 +329,64 @@ body {
 </head>
 <body>
 
-<!-- ── STICKY NAV ── -->
-<nav class="site-nav">
-  <div class="nav-logo">WeatherNow / AI Compare</div>
+<nav class="nav">
+  <div class="nav-logo">WeatherNow 실험</div>
   <div class="nav-links">
     <a class="nav-link" href="report.html">V1 초기 생성</a>
     <a class="nav-link" href="report_v2.html">V2 기능 개선</a>
     <a class="nav-link" href="report_v3.html">V3 자율 혁신</a>
     <a class="nav-link active" href="code-rules.html">코드 품질 가이드</a>
-    <a class="nav-link human" href="report_human.html">👤 Human vs AI</a>
+    <a class="nav-link hl" href="report_human.html">직접 구현 vs AI</a>
   </div>
 </nav>
 
-<!-- ── HERO ── -->
 <header class="hero">
   <div class="hero-inner">
-    <div class="hero-label">WeatherNow · AI Coding Tool Comparison · 2026-05-28</div>
-    <h1 class="hero-h1">같은 앱 과제를,<br>세 AI에게 맡기면<br><em>무엇이 달라질까</em></h1>
-    <p class="hero-sub">Claude Code, OpenAI Codex, Gemini CLI에 동일한 Android Kotlin 앱 스펙을 주고 V1 생성 → V2 개선 → V3 자율 혁신 3단계로 비교했습니다. 그리고 같은 명세로 직접 Flutter 손 코딩을 해 AI와 시간을 겨뤘습니다.</p>
-    <div class="hero-tags">
-      <span class="hero-tag c">Claude Code v2.1.152</span>
-      <span class="hero-tag x">OpenAI Codex CLI v0.134.0</span>
-      <span class="hero-tag g">Gemini CLI v0.43.0</span>
-      <span class="hero-tag">Android · Kotlin · Jetpack Compose</span>
-      <span class="hero-tag">Mock Data Only</span>
+    <div class="hero-date">2026-05-28 · Android Kotlin · Jetpack Compose</div>
+    <h1 class="hero-h1">같은 앱을 세 AI에게 맡기면<br>무엇이 달라질까</h1>
+    <p class="hero-sub">Claude Code, OpenAI Codex, Gemini CLI에 동일한 날씨 앱 스펙을 주고 3단계로 비교했습니다. 직접 손 코딩한 시간과도 비교합니다.</p>
+    <div class="hero-badges">
+      <span class="hero-badge c">Claude Code</span>
+      <span class="hero-badge x">OpenAI Codex</span>
+      <span class="hero-badge g">Gemini CLI</span>
+      <span class="hero-badge">목 데이터 기반</span>
     </div>
   </div>
 </header>
 
-<!-- ── STAT TICKER ── -->
 <div class="stat-bar">
   <div class="stat-item">
-    <div class="stat-num">318s</div>
-    <div class="stat-label">Gemini 최단 V1</div>
+    <div class="stat-n">318초</div>
+    <div class="stat-l">Gemini 최단 V1</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">82</div>
-    <div class="stat-label">Codex 코드 품질</div>
+    <div class="stat-n">82점</div>
+    <div class="stat-l">Codex 코드 품질</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">3단계</div>
-    <div class="stat-label">실험 Phase</div>
+    <div class="stat-n">3단계</div>
+    <div class="stat-l">실험 구성</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">×12.5</div>
-    <div class="stat-label">Human vs AI 속도</div>
+    <div class="stat-n">×12.5</div>
+    <div class="stat-l">사람 vs AI 속도</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">918K</div>
-    <div class="stat-label">Claude 토큰 (캐시포함)</div>
+    <div class="stat-n">918K</div>
+    <div class="stat-l">Claude 토큰</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">165K</div>
-    <div class="stat-label">Codex 토큰 최저</div>
+    <div class="stat-n">165K</div>
+    <div class="stat-l">Codex 토큰 (최저)</div>
   </div>
 </div>
 
 <div class="wrap">
 
-  <!-- ── VERDICT ── -->
-  <div class="verdict reveal" style="margin-bottom:14px;">
+  <!-- 종합 요약 -->
+  <div class="verdict reveal">
     <p class="verdict-text">
-      V3에서 체감되는 변화는 <strong>Gemini가 가장 컸고</strong>, 코드 규칙 기준 품질은 <strong>Codex가 가장 높았습니다</strong>. 사람이 직접 만드는 건 AI보다 12.5배 느렸지만, 코드 줄 수는 거의 같았습니다.
+      V3에서 눈에 띄는 변화는 <strong>Gemini가 가장 컸고</strong>, 코드 규칙 기준 품질은 <strong>Codex가 가장 높았습니다</strong>. 직접 만드는 건 AI보다 12.5배 느렸지만, 작성한 코드 줄 수는 거의 같았습니다.
     </p>
     <div class="verdict-badge">
       <div class="vb-label">코드 품질 1위</div>
@@ -781,76 +394,76 @@ body {
     </div>
   </div>
 
-  <!-- ── HUMAN vs AI BANNER ── -->
+  <!-- 직접 구현 vs AI -->
   <div class="human-banner reveal">
     <div>
-      <div class="hb-label">Human vs AI · Phase 1 완료</div>
-      <h2 class="hb-title">직접 Flutter로 만들었더니 — AI보다 12.5배 느렸습니다</h2>
-      <p class="hb-desc">같은 날씨 앱 명세를 Flutter / Clean Architecture로 손 코딩. 기능은 동일, 코드 줄 수는 AI와 거의 같은데 시간 차이는 압도적이었습니다.</p>
-      <a class="hb-link" href="report_human.html">상세 비교 보고서 →</a>
+      <div class="hb-tag">직접 구현 — Phase 1 완료</div>
+      <h2 class="hb-title">Flutter로 직접 만들었더니 AI보다 12.5배 느렸습니다</h2>
+      <p class="hb-desc">같은 명세를 Flutter + Clean Architecture로 손 코딩. 기능·코드량은 비슷한데 시간 차이는 압도적이었습니다.</p>
+      <a class="hb-link" href="report_human.html">비교 보고서 보기</a>
     </div>
     <div class="hb-nums">
-      <div class="hb-num-item">
-        <div class="hb-n">1:06</div>
-        <div class="hb-k">Human Phase 1</div>
+      <div class="hb-num">
+        <div class="hb-n">1:06:24</div>
+        <div class="hb-k">직접 구현 (Phase 1)</div>
       </div>
-      <div style="font-size:13px;color:var(--muted);align-self:center;font-weight:500;padding:0 4px;">vs</div>
-      <div class="hb-num-item">
-        <div class="hb-n" style="color:rgba(255,255,255,.7);">318s</div>
-        <div class="hb-k">Gemini (최단 AI)</div>
+      <div class="hb-vs">vs</div>
+      <div class="hb-num">
+        <div class="hb-n dim">318초</div>
+        <div class="hb-k">Gemini (가장 빠른 AI)</div>
       </div>
     </div>
   </div>
 
-  <!-- ── PHASE REPORTS ── -->
+  <!-- 단계별 보고서 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-num">01 —</span>
-      <h2 class="sec-title">단계별 보고서</h2>
-      <span class="sec-note">V1 → V2 → V3 순서로 읽는 걸 권장합니다</span>
+      <span class="sec-n">01</span>
+      <h2 class="sec-t">단계별 보고서</h2>
+      <span class="sec-sub">V1 → V2 → V3 순으로 읽기를 권장합니다</span>
     </div>
     <div class="phase-grid">
       <article class="phase-card">
-        <div class="phase-shot"><img src="../screenshots/v1/gemini/01-top.png" alt="V1 대표 화면" loading="lazy"></div>
+        <div class="phase-shot"><img src="../screenshots/v1/gemini/01-top.png" alt="V1" loading="lazy"></div>
         <div class="phase-body">
-          <div class="phase-step">Phase 01 · V1</div>
-          <h3 class="phase-h">처음부터 앱 만들기</h3>
-          <p class="phase-p">동일한 프롬프트에서 각 AI가 어떤 구조와 UI를 선택하는지 비교했습니다. 아키텍처 설계, 파일 분리, 한국어 처리 방식이 모두 달랐습니다.</p>
-          <div class="phase-winner">🏆 속도 Gemini 318s · 빌드 Codex · 구조 Claude</div>
-          <a class="phase-cta" href="report.html">V1 보고서 보기 →</a>
+          <div class="phase-n">01</div>
+          <h3 class="phase-title">처음부터 앱 만들기</h3>
+          <p class="phase-desc">동일한 프롬프트에서 각 AI가 어떤 구조와 UI를 선택하는지 비교했습니다. 아키텍처, 파일 분리, 한국어 처리 방식이 모두 달랐습니다.</p>
+          <div class="phase-result">Gemini 318초 최단 · Codex 자동 빌드 · Claude 구조 우수</div>
+          <a class="phase-link" href="report.html">V1 보고서 보기</a>
         </div>
       </article>
       <article class="phase-card">
-        <div class="phase-shot"><img src="../screenshots/v2/codex/01-top.png" alt="V2 대표 화면" loading="lazy"></div>
+        <div class="phase-shot"><img src="../screenshots/v2/codex/01-top.png" alt="V2" loading="lazy"></div>
         <div class="phase-body">
-          <div class="phase-step">Phase 02 · V2</div>
-          <h3 class="phase-h">기존 코드 위에 기능 추가</h3>
-          <p class="phase-p">V1 결과물을 유지한 채 시간별 예보, 상세 날씨 정보, 새로고침, 즐겨찾기를 추가했습니다. AI가 자기 코드를 얼마나 잘 이해하는지 확인했습니다.</p>
-          <div class="phase-winner">🏆 세 AI 모두 기능 충족 · Gemini 149.4s 최단</div>
-          <a class="phase-cta" href="report_v2.html">V2 보고서 보기 →</a>
+          <div class="phase-n">02</div>
+          <h3 class="phase-title">기존 코드 위에 기능 추가</h3>
+          <p class="phase-desc">V1 결과물을 유지한 채 시간별 예보, 상세 날씨 정보, 새로고침, 즐겨찾기를 추가했습니다. AI가 자기 코드를 얼마나 잘 이해하는지 확인했습니다.</p>
+          <div class="phase-result">세 AI 모두 기능 충족 · Gemini 149.4초 최단</div>
+          <a class="phase-link" href="report_v2.html">V2 보고서 보기</a>
         </div>
       </article>
       <article class="phase-card">
-        <div class="phase-shot"><img src="../screenshots/v3/gemini/01-top.png" alt="V3 대표 화면" loading="lazy"></div>
+        <div class="phase-shot"><img src="../screenshots/v3/gemini/01-top.png" alt="V3" loading="lazy"></div>
         <div class="phase-body">
-          <div class="phase-step">Phase 03 · V3</div>
-          <h3 class="phase-h">AI가 스스로 기능 선택</h3>
-          <p class="phase-p">명세 없이 AI가 직접 스마트 기능을 정해 추가했습니다. 창의성과 실행력의 차이가 가장 극명하게 드러난 단계입니다.</p>
-          <div class="phase-winner">🏆 Gemini 인사이트 카드 + 온도 기반 배경</div>
-          <a class="phase-cta" href="report_v3.html">V3 보고서 보기 →</a>
+          <div class="phase-n">03</div>
+          <h3 class="phase-title">AI가 스스로 기능 선택</h3>
+          <p class="phase-desc">명세 없이 AI가 직접 스마트 기능을 정해 추가했습니다. 창의성과 실행력의 차이가 가장 극명하게 드러난 단계입니다.</p>
+          <div class="phase-result">Gemini 인사이트 카드 + 온도 기반 배경 가장 두드러짐</div>
+          <a class="phase-link" href="report_v3.html">V3 보고서 보기</a>
         </div>
       </article>
     </div>
   </section>
 
-  <!-- ── DATA TABLE ── -->
+  <!-- 수치 비교 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-num">02 —</span>
-      <h2 class="sec-title">단계별 수치 비교</h2>
+      <span class="sec-n">02</span>
+      <h2 class="sec-t">수치 비교</h2>
     </div>
-    <div class="data-table-wrap">
-      <table class="data-table">
+    <div class="tbl-wrap">
+      <table class="tbl">
         <thead>
           <tr>
             <th>항목</th>
@@ -861,135 +474,132 @@ body {
         </thead>
         <tbody>
           <tr>
-            <td class="row-key">모델</td>
+            <td class="rk">모델</td>
             <td class="mono">claude-sonnet-4-6</td>
             <td class="mono">gpt-5.5</td>
             <td class="mono">gemini-3-flash</td>
           </tr>
           <tr>
-            <td class="row-key">V1 생성 시간</td>
+            <td class="rk">V1 생성 시간</td>
             <td class="mono">537초</td>
             <td class="mono">측정 불가</td>
-            <td class="mono winner">318초 ✓ 최단</td>
+            <td class="mono win">318초 — 최단</td>
           </tr>
           <tr>
-            <td class="row-key">V2 생성 시간</td>
+            <td class="rk">V2 생성 시간</td>
             <td class="mono">—</td>
             <td class="mono">—</td>
-            <td class="mono winner">149.4초 ✓ 최단</td>
+            <td class="mono win">149.4초 — 최단</td>
           </tr>
           <tr>
-            <td class="row-key">V3 생성 시간</td>
+            <td class="rk">V3 생성 시간</td>
             <td class="mono">—</td>
             <td class="mono">—</td>
-            <td class="mono winner">185.2초 ✓ 최단</td>
+            <td class="mono win">185.2초 — 최단</td>
           </tr>
           <tr>
-            <td class="row-key">V1 토큰 합계</td>
-            <td>918,278 <span style="color:var(--muted);font-size:12px;">(캐시 포함)</span></td>
-            <td class="winner">165,761 ✓ 최저</td>
+            <td class="rk">V1 토큰 합계</td>
+            <td>918,278 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
+            <td class="win">165,761 — 최저</td>
             <td>672,522</td>
           </tr>
           <tr>
-            <td class="row-key">V1 Kotlin 파일</td>
-            <td>5개 · 395줄</td>
-            <td>6개 · 451줄</td>
-            <td>5개 · 304줄</td>
+            <td class="rk">V1 코드량</td>
+            <td>5개 파일 · 395줄</td>
+            <td>6개 파일 · 451줄</td>
+            <td>5개 파일 · 304줄</td>
           </tr>
           <tr>
-            <td class="row-key">APK 자동 빌드</td>
-            <td><span class="badge err">❌ 수동 필요</span></td>
-            <td><span class="badge ok">✅ 자동</span></td>
-            <td><span class="badge warn">⚠ mipmap 누락</span></td>
+            <td class="rk">자동 빌드</td>
+            <td><span class="badge err">수동 필요</span></td>
+            <td><span class="badge ok">자동 성공</span></td>
+            <td><span class="badge warn">리소스 누락</span></td>
           </tr>
           <tr>
-            <td class="row-key">한국어 처리</td>
-            <td><span class="badge ok">✅ 정상</span></td>
-            <td><span class="badge warn">⚠ stdin 깨짐</span></td>
-            <td><span class="badge ok">✅ 정상</span></td>
+            <td class="rk">한국어 처리</td>
+            <td><span class="badge ok">정상</span></td>
+            <td><span class="badge warn">인코딩 오류</span></td>
+            <td><span class="badge ok">정상</span></td>
           </tr>
           <tr>
-            <td class="row-key">코드 품질 순위</td>
+            <td class="rk">코드 품질 순위</td>
             <td>3위</td>
-            <td class="winner">1위 🥇</td>
+            <td class="win">1위</td>
             <td>2위</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="note">Claude 토큰 918,278 중 865,307이 캐시 읽기(×0.1 과금) — 원시 합계는 많지만 실질 비용은 경쟁력 있습니다.</div>
+    <p class="note">Claude 토큰 918,278 중 865,307이 캐시 읽기(×0.1 과금)라 실질 비용은 경쟁력 있습니다.</p>
   </section>
 
-  <!-- ── CODE QUALITY ── -->
+  <!-- 코드 품질 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-num">03 —</span>
-      <h2 class="sec-title">코드 품질 점수</h2>
-      <span class="sec-note">기능 완성도 제외 · 코드 규칙 기준</span>
+      <span class="sec-n">03</span>
+      <h2 class="sec-t">코드 품질 점수</h2>
+      <span class="sec-sub">기능 완성도 제외 · 코드 규칙 기준</span>
     </div>
-
-    <div class="scores-section">
+    <div class="scores">
       <div class="score-row">
-        <div class="score-ai"><div class="score-dot codex"></div><span class="score-name">Codex</span></div>
-        <span class="score-rank">#1</span>
-        <div class="score-bar-wrap"><div class="score-bar codex" style="width:82%"></div></div>
+        <div class="score-who"><div class="score-dot cd"></div><span class="score-name">Codex</span></div>
+        <span class="score-rank">1</span>
+        <div class="score-track"><div class="score-fill cd" style="width:82%"></div></div>
         <span class="score-pct">82</span>
         <div class="score-tags">
-          <span class="score-tag">private Composable</span>
+          <span class="score-tag">private 컴포저블</span>
           <span class="score-tag">순수 함수 설계</span>
           <span class="score-tag">computed UiState</span>
-          <span class="score-tag">bounds check</span>
         </div>
       </div>
       <div class="score-row">
-        <div class="score-ai"><div class="score-dot gemini"></div><span class="score-name">Gemini</span></div>
-        <span class="score-rank">#2</span>
-        <div class="score-bar-wrap"><div class="score-bar gemini" style="width:68%"></div></div>
+        <div class="score-who"><div class="score-dot gm"></div><span class="score-name">Gemini</span></div>
+        <span class="score-rank">2</span>
+        <div class="score-track"><div class="score-fill gm" style="width:68%"></div></div>
         <span class="score-pct">68</span>
         <div class="score-tags">
-          <span class="score-tag">update{} 원자적 업데이트</span>
-          <span class="score-tag">LazyColumn</span>
-          <span class="score-tag" style="background:#FEE2E2;color:#7F1D1D;border-color:#FECACA;">lifecycle 누수 주의</span>
+          <span class="score-tag">원자적 상태 업데이트</span>
+          <span class="score-tag">LazyColumn 사용</span>
+          <span class="score-tag bad">lifecycle 누수 주의</span>
         </div>
       </div>
       <div class="score-row">
-        <div class="score-ai"><div class="score-dot claude"></div><span class="score-name">Claude</span></div>
-        <span class="score-rank">#3</span>
-        <div class="score-bar-wrap"><div class="score-bar claude" style="width:61%"></div></div>
+        <div class="score-who"><div class="score-dot cl"></div><span class="score-name">Claude</span></div>
+        <span class="score-rank">3</span>
+        <div class="score-track"><div class="score-fill cl" style="width:61%"></div></div>
         <span class="score-pct">61</span>
         <div class="score-tags">
           <span class="score-tag">레이어 분리 우수</span>
-          <span class="score-tag" style="background:#FEE2E2;color:#7F1D1D;border-color:#FECACA;">모놀리식 UI 340줄</span>
-          <span class="score-tag" style="background:#FEE2E2;color:#7F1D1D;border-color:#FECACA;">비원자적 상태</span>
+          <span class="score-tag bad">모놀리식 UI 340줄</span>
+          <span class="score-tag bad">비원자적 상태</span>
         </div>
       </div>
     </div>
-
     <div class="guide-promo">
       <div>
-        <div class="gp-eyebrow">AI 바이브 코딩 실전 가이드</div>
-        <div class="gp-title">점수 근거 · 코드 패턴 18가지 · 팀 도입 체크리스트</div>
-        <div class="gp-desc">Before/During/After 체크리스트 · CLAUDE.md 예시 · AI별 필수 후처리 · 커밋 전 11항목 코드 리뷰</div>
+        <div class="gp-label">코드 분석 가이드</div>
+        <div class="gp-title">점수 근거 · 패턴 18가지 · 팀 도입 체크리스트</div>
+        <div class="gp-desc">Before/After 코드 비교 · 체크리스트 · AI별 주의사항 · 리뷰 11항목</div>
       </div>
-      <a class="gp-cta" href="code-rules.html">가이드 보기 →</a>
+      <a class="gp-btn" href="code-rules.html">가이드 보기</a>
     </div>
   </section>
 
-  <!-- ── AI PROFILES ── -->
+  <!-- AI별 요약 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-num">04 —</span>
-      <h2 class="sec-title">AI별 요약</h2>
+      <span class="sec-n">04</span>
+      <h2 class="sec-t">AI별 요약</h2>
     </div>
-    <div class="ai-profiles">
+    <div class="ai-grid">
       <div class="ai-card">
         <div class="ai-card-head">
-          <div class="ai-head-dot claude"></div>
-          <span class="ai-head-name">Claude</span>
-          <span class="ai-head-model">claude-sonnet-4-6</span>
+          <div class="ai-dot cl"></div>
+          <span class="ai-name">Claude</span>
+          <span class="ai-model">claude-sonnet-4-6</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-verdict">레이어 분리 구조가 가장 올바름. 하지만 UI가 340줄 모놀리식.</p>
+          <p class="ai-summary">레이어 분리 구조가 가장 체계적. 단 UI 파일이 340줄 모놀리식이고 private 수식자가 없어 후처리 필요.</p>
           <div class="ai-tags">
             <span class="ai-tag good">구조 우수</span>
             <span class="ai-tag warn">모놀리식 UI</span>
@@ -999,27 +609,27 @@ body {
       </div>
       <div class="ai-card">
         <div class="ai-card-head">
-          <div class="ai-head-dot codex"></div>
-          <span class="ai-head-name">Codex</span>
-          <span class="ai-head-model">gpt-5.5</span>
+          <div class="ai-dot cd"></div>
+          <span class="ai-name">Codex</span>
+          <span class="ai-model">gpt-5.5</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-verdict">컴포넌트 품질 1위 + APK 자동 빌드. 파일 위치 후처리 필요.</p>
+          <p class="ai-summary">컴포넌트 단위 코드 품질 1위. 자동 빌드 성공. 파일 위치와 테마 분리 후처리 필요.</p>
           <div class="ai-tags">
             <span class="ai-tag good">코드 품질 1위</span>
-            <span class="ai-tag good">APK 자동 빌드</span>
+            <span class="ai-tag good">자동 빌드</span>
             <span class="ai-tag warn">파일 위치</span>
           </div>
         </div>
       </div>
       <div class="ai-card">
         <div class="ai-card-head">
-          <div class="ai-head-dot gemini"></div>
-          <span class="ai-head-name">Gemini</span>
-          <span class="ai-head-model">gemini-3-flash</span>
+          <div class="ai-dot gm"></div>
+          <span class="ai-name">Gemini</span>
+          <span class="ai-model">gemini-3-flash</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-verdict">전 단계 가장 빠름. 성능 패턴 우수. lifecycle 누수 즉시 수정 필요.</p>
+          <p class="ai-summary">전 단계 가장 빠름. 성능 패턴 우수. lifecycle 누수는 생성 직후 수정 필요.</p>
           <div class="ai-tags">
             <span class="ai-tag good">전 단계 최단</span>
             <span class="ai-tag good">성능 패턴 우수</span>
@@ -1030,68 +640,57 @@ body {
     </div>
   </section>
 
-  <!-- ── READING GUIDE ── -->
+  <!-- 읽기 순서 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-num">05 —</span>
-      <h2 class="sec-title">추천 읽기 순서</h2>
+      <span class="sec-n">05</span>
+      <h2 class="sec-t">읽기 순서</h2>
     </div>
-    <div class="reading-guide">
-      <div class="rg-item">
-        <div class="rg-num">01</div>
-        <div class="rg-title">전체 흐름 파악</div>
-        <div class="rg-desc">이 페이지의 수치 비교표와 요약으로 V1·V2·V3 각 단계의 결과를 먼저 확인합니다.</div>
+    <div class="read-grid">
+      <div class="read-item">
+        <div class="read-n">01</div>
+        <div class="read-title">전체 흐름 파악</div>
+        <div class="read-desc">이 페이지의 수치 비교표와 요약으로 각 단계 결과를 먼저 확인합니다.</div>
       </div>
-      <div class="rg-item">
-        <div class="rg-num">02</div>
-        <div class="rg-title">화면 · 기능 비교</div>
-        <div class="rg-desc">V1 → V2 → V3 각 보고서의 스크린샷 섹션에서 AI별 UI 차이를 비교합니다.</div>
+      <div class="read-item">
+        <div class="read-n">02</div>
+        <div class="read-title">화면 · 기능 비교</div>
+        <div class="read-desc">V1 → V2 → V3 각 보고서의 스크린샷에서 AI별 UI 차이를 비교합니다.</div>
       </div>
-      <div class="rg-item">
-        <div class="rg-num">03</div>
-        <div class="rg-title">코드 규칙 분석</div>
-        <div class="rg-desc">팀에 AI를 도입할 때 참고할 코드 패턴과 체크리스트는 코드 품질 가이드에서 확인합니다.</div>
+      <div class="read-item">
+        <div class="read-n">03</div>
+        <div class="read-title">코드 규칙 분석</div>
+        <div class="read-desc">팀에 AI를 도입할 때 참고할 패턴과 체크리스트는 코드 품질 가이드에서 확인합니다.</div>
       </div>
     </div>
   </section>
 
 </div>
 
-<!-- ── FOOTER ── -->
-<footer class="site-footer">
-  WeatherNow AI Compare · 2026-05-28 · Claude Code / Codex CLI / Gemini CLI · Android Kotlin Jetpack Compose
+<footer class="footer">
+  WeatherNow AI 비교 실험 · 2026-05-28 · Claude Code / Codex CLI / Gemini CLI
 </footer>
 
 <script>
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      e.target.style.transitionDelay = (i * 0.05) + 's';
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
-    }
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
   });
 }, { threshold: 0.08 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// Score bar animation on scroll
-const scoreObserver = new IntersectionObserver((entries) => {
+const scoreIo = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
-      const bars = e.target.querySelectorAll('.score-bar');
-      bars.forEach(bar => {
-        const target = bar.style.width;
-        bar.style.width = '0';
-        requestAnimationFrame(() => {
-          setTimeout(() => { bar.style.width = target; }, 100);
-        });
+      e.target.querySelectorAll('.score-fill').forEach(b => {
+        const w = b.style.width; b.style.width = '0';
+        requestAnimationFrame(() => setTimeout(() => { b.style.width = w; }, 80));
       });
-      scoreObserver.unobserve(e.target);
+      scoreIo.unobserve(e.target);
     }
   });
 }, { threshold: 0.3 });
-document.querySelectorAll('.scores-section').forEach(el => scoreObserver.observe(el));
+document.querySelectorAll('.scores').forEach(el => scoreIo.observe(el));
 </script>
 </body>
 </html>
