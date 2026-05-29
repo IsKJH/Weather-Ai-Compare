@@ -122,7 +122,7 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
 .verdict-main { border:1px solid #DCDCDC; border-radius:12px; background:#fff; padding:26px 30px; }
 .verdict-title { font-size:21px; font-weight:950; letter-spacing:-.2px; margin-bottom:8px; }
 .verdict-copy { color:#4B5563; line-height:1.75; font-size:14.5px; }
-.verdict-aside { border:1px solid #DCDCDC; border-radius:12px; background:#111827; color:#fff; padding:22px 24px; }
+.verdict-aside { border:1px solid #222; border-radius:12px; background:#111; color:#fff; padding:22px 24px; }
 .aside-k { color:#9CA3AF; font-size:12px; font-weight:850; letter-spacing:1px; margin-bottom:8px; }
 .aside-v { font-size:24px; line-height:1.25; font-weight:950; letter-spacing:-.2px; }
 .phase-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }

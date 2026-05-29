@@ -3,95 +3,279 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WeatherNow AI 비교 보고서</title>
+<title>WeatherNow AI 비교 실험 — 전체 보고서</title>
 <link rel="stylesheet" href="report_common.css?v=20260528-02">
+<style>
+.report-link.active { background:#111; color:#fff; border-color:#111; }
+.score-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.score-label { font-size:14px; font-weight:700; color:#555; width:72px; flex-shrink:0; }
+.score-track { flex:1; height:9px; background:#F0F0F0; border-radius:5px; overflow:hidden; }
+.score-fill  { height:100%; border-radius:5px; }
+.score-fill.codex  { background:#0D8A68; }
+.score-fill.gemini { background:#1A56DB; }
+.score-fill.claude { background:#C2622A; }
+.score-num { font-size:14px; font-weight:900; color:#111; width:32px; text-align:right; }
+.score-note { font-size:12px; color:#999; }
+.guide-promo {
+  background:#fff;
+  border:1px solid #DCDCDC;
+  border-left:4px solid #111;
+  border-radius:12px;
+  padding:26px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  margin-top:18px;
+}
+.gp-left { flex:1; }
+.gp-eyebrow { font-size:11px; font-weight:900; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:6px; }
+.gp-title   { font-size:18px; font-weight:900; line-height:1.3; margin-bottom:6px; color:#111; }
+.gp-desc    { font-size:13.5px; color:#555; line-height:1.7; }
+.gp-link    {
+  display:inline-flex; align-items:center;
+  text-decoration:none; background:#111; color:#fff;
+  padding:12px 20px; border-radius:8px;
+  font-size:13px; font-weight:800; white-space:nowrap; flex-shrink:0;
+}
+.gp-link:hover { background:#333; }
+@media (max-width:760px) {
+  .guide-promo { flex-direction:column; align-items:flex-start; }
+  .score-note { display:none; }
+}
+</style>
 </head>
 <body>
 <div class="index-wrap">
+
+  <!-- ── HERO ── -->
   <section class="index-hero">
     <div class="index-topline">
       <div>
-        <div class="hero-kicker">WeatherNow AI 비교 실험</div>
+        <div class="hero-kicker">WeatherNow · AI Coding Tool Comparison · 2026-05-28</div>
         <h1 class="hero-title">같은 날씨 앱 과제를 세 AI에게 맡기면 무엇이 달라질까</h1>
-        <p class="hero-copy">Claude, Codex, Gemini가 만든 Android 앱을 v1 초기 생성, v2 기능 개선, v3 자율 혁신 단계로 비교했습니다. 이 페이지는 팀 공유용 요약이며, 세부 근거는 각 단계 보고서에 남겼습니다.</p>
+        <p class="hero-copy">Claude Code, OpenAI Codex, Gemini CLI에 동일한 Android Kotlin 앱 스펙을 주고 V1 초기 생성 → V2 기능 개선 → V3 자율 혁신 3단계로 비교했습니다. 속도·토큰·UI·코드 품질까지 모두 기록했습니다.</p>
       </div>
       <div class="report-links">
         <a class="report-link" href="report.html">V1 초기 생성</a>
         <a class="report-link" href="report_v2.html">V2 기능 개선</a>
         <a class="report-link" href="report_v3.html">V3 자율 혁신</a>
+        <a class="report-link active" href="code-rules.html">코드 품질 가이드</a>
       </div>
     </div>
-    <div class="takeaway-list"><div class="takeaway"><div class="takeaway-k">실험의 결론</div><div class="takeaway-v">v1은 초기 생성 성향, v2는 요구사항 이행력, v3는 자율 개선의 체감도를 비교하는 실험입니다.</div></div><div class="takeaway"><div class="takeaway-k">가장 명확한 변화</div><div class="takeaway-v">Gemini는 v3에서 인사이트 카드와 동적 배경을 추가해 화면만 봐도 변화가 드러납니다.</div></div><div class="takeaway"><div class="takeaway-k">주의할 부분</div><div class="takeaway-v">Claude와 Codex의 v3는 기능명에 비해 화면상 변화가 약해, 점수보다 캡처와 diff 근거를 함께 봐야 합니다.</div></div></div>
+    <div class="takeaway-list">
+      <div class="takeaway">
+        <div class="takeaway-k">전 단계 최단 시간</div>
+        <div class="takeaway-v">Gemini가 V1 318초, V2 149.4초, V3 185.2초로 3단계 모두 가장 빠르게 완료했습니다.</div>
+      </div>
+      <div class="takeaway">
+        <div class="takeaway-k">V3 체감 변화 1위</div>
+        <div class="takeaway-v">AI가 스스로 기능을 추가하는 V3에서 Gemini의 인사이트 카드와 동적 배경이 가장 명확히 보였습니다.</div>
+      </div>
+      <div class="takeaway">
+        <div class="takeaway-k">코드 품질 1위</div>
+        <div class="takeaway-v">기능이 아닌 코드 규칙 기준으로 Codex가 가장 우수했습니다. private Composable, 순수 함수 설계, 계산 프로퍼티 등.</div>
+      </div>
+    </div>
   </section>
 
-  <section class="verdict-row">
+  <!-- ── VERDICT ── -->
+  <div class="verdict-row">
     <div class="verdict-main">
-      <h2 class="verdict-title">결론부터 보면, v3에서 실제로 눈에 띄는 변화는 Gemini가 가장 큽니다.</h2>
-      <p class="verdict-copy">v2까지는 세 AI 모두 요구 기능을 대체로 충족했습니다. 하지만 “스스로 신선한 기능을 추가하라”는 v3에서는 Gemini가 인사이트 카드와 온도 기반 배경 변화를 화면에 명확히 드러냈고, Claude와 Codex는 정적 스크린샷 기준으로 v2와 차이가 약했습니다.</p>
+      <h2 class="verdict-title">V3에서 눈에 띄는 변화는 Gemini가 가장 컸고, 코드 품질은 Codex가 가장 높았습니다.</h2>
+      <p class="verdict-copy">V2까지는 세 AI 모두 요구 기능을 대체로 충족했습니다. V3에서는 Gemini가 인사이트 카드와 온도 기반 배경 색상 변화를 화면에 명확히 구현했고, Claude와 Codex는 정적 스크린샷 기준으로 V2와 차이가 약했습니다. 코드 품질 분석에서는 Codex가 private Composable, 순수 함수 설계, UiState computed property 등 코드 규칙 면에서 가장 완성도가 높았습니다.</p>
     </div>
     <div class="verdict-aside">
-      <div class="aside-k">가장 설득력 있는 시각 변화</div>
-      <div class="aside-v">Gemini v3<br>Weather Narrative Insight</div>
+      <div class="aside-k">코드 품질 최우수</div>
+      <div class="aside-v">Codex<br>private · 순수 설계</div>
     </div>
-  </section>
+  </div>
 
+  <!-- ── 실험 단계 ── -->
   <section class="card">
-    <div class="sh"><span class="sh-num">01</span><h2>한눈에 보는 결론</h2></div>
-    <div class="tbl-wrap"><table><thead><tr><th>단계</th><th>비교 관점</th><th>가장 빠른 실행</th><th>최저 토큰</th><th>핵심 해석</th></tr></thead><tbody><tr><td class="col-label">V1</td><td>초기 설계 성향 비교</td><td>Gemini · 318초</td><td>Codex · 165,761</td><td>초기 앱 구조와 UI 방향 차이가 핵심</td></tr><tr><td class="col-label">V2</td><td>요구사항 이행력 비교</td><td>Gemini · 149.4초</td><td>Gemini · 642,641</td><td>세 앱 모두 요구 기능 충족, 구조와 화면 완성도에서 차이</td></tr><tr class="row-hl"><td class="col-label">V3</td><td>체감 가능한 개선 비교</td><td>Gemini · 185.2초</td><td>Codex · 543,450</td><td>Gemini의 변화가 가장 명확하게 보임</td></tr></tbody></table></div>
-  </section>
-
-  <section class="card">
-    <div class="sh"><span class="sh-num">02</span><h2>단계별 보고서</h2></div>
+    <div class="sh"><span class="sh-num">01</span><h2>단계별 보고서</h2></div>
     <div class="phase-grid">
-        <article class="phase-card">
-          <div class="phase-shot"><img src="../screenshots/v1/gemini/01-top.png" alt="V1 대표 화면"></div>
-          <div class="phase-body">
-            <div class="phase-label">V1 · 초기 생성</div>
-            <h3 class="phase-title">초기 설계 성향 비교</h3>
-            <p class="phase-summary">동일한 앱 생성 프롬프트에서 각 AI가 어떤 기본 구조와 UI를 만드는지 비교했습니다.</p>
-            <div class="phase-result">초기 앱 구조와 UI 방향 차이가 핵심</div>
-            <a class="phase-link" href="report.html">상세 보고서 보기</a>
-          </div>
-        </article>
-
-        <article class="phase-card">
-          <div class="phase-shot"><img src="../screenshots/v2/codex/01-top.png" alt="V2 대표 화면"></div>
-          <div class="phase-body">
-            <div class="phase-label">V2 · 기능 개선</div>
-            <h3 class="phase-title">요구사항 이행력 비교</h3>
-            <p class="phase-summary">v1 앱을 유지한 채 시간별 예보, 상세 정보, 새로고침, 즐겨찾기 등을 추가했습니다.</p>
-            <div class="phase-result">세 앱 모두 요구 기능 충족, 구조와 화면 완성도에서 차이</div>
-            <a class="phase-link" href="report_v2.html">상세 보고서 보기</a>
-          </div>
-        </article>
-
-        <article class="phase-card">
-          <div class="phase-shot"><img src="../screenshots/v3/gemini/01-top.png" alt="V3 대표 화면"></div>
-          <div class="phase-body">
-            <div class="phase-label">V3 · 자율 혁신</div>
-            <h3 class="phase-title">체감 가능한 개선 비교</h3>
-            <p class="phase-summary">각 AI가 스스로 스마트 기능을 정해 추가한 결과를 비교했습니다.</p>
-            <div class="phase-result">Gemini의 변화가 가장 명확하게 보임</div>
-            <a class="phase-link" href="report_v3.html">상세 보고서 보기</a>
-          </div>
-        </article>
-</div>
-  </section>
-
-  <section class="card">
-    <div class="sh"><span class="sh-num">03</span><h2>읽는 순서</h2></div>
-    <div class="callout-grid">
-      <div class="callout"><div class="callout-k">1. 전체 흐름</div><div class="callout-v">먼저 이 페이지의 요약표로 v1, v2, v3의 비교 목적을 파악합니다.</div></div>
-      <div class="callout"><div class="callout-k">2. 화면 비교</div><div class="callout-v">각 보고서의 실행 화면 섹션에서 상단, 중간, 하단 캡처를 비교합니다.</div></div>
-      <div class="callout"><div class="callout-k">3. 근거 확인</div><div class="callout-v">토큰, 프롬프트 해석, 코드 요약을 함께 보면서 결과를 해석합니다.</div></div>
+      <article class="phase-card">
+        <div class="phase-shot"><img src="../screenshots/v1/gemini/01-top.png" alt="V1 대표 화면"></div>
+        <div class="phase-body">
+          <div class="phase-label">V1 · 초기 생성</div>
+          <h3 class="phase-title">처음부터 앱 만들기</h3>
+          <p class="phase-summary">동일한 최초 프롬프트에서 각 AI가 어떤 구조와 UI를 선택하는지 비교했습니다. Gemini 318초로 최단, Codex APK 자동 빌드, Claude 패키지 구조 우수.</p>
+          <div class="phase-result">Gemini 최단 · Codex APK 자동 빌드 · Claude 구조 우수</div>
+          <a class="phase-link" href="report.html">V1 보고서 보기 →</a>
+        </div>
+      </article>
+      <article class="phase-card">
+        <div class="phase-shot"><img src="../screenshots/v2/codex/01-top.png" alt="V2 대표 화면"></div>
+        <div class="phase-body">
+          <div class="phase-label">V2 · 기능 개선</div>
+          <h3 class="phase-title">기존 코드 위에 기능 추가</h3>
+          <p class="phase-summary">V1 결과물을 유지한 채 시간별 예보, 상세 날씨 정보, 새로고침, 즐겨찾기를 추가했습니다. 세 AI 모두 요구 기능을 충족했습니다.</p>
+          <div class="phase-result">세 앱 모두 요구 기능 충족 · Gemini 149.4초 최단</div>
+          <a class="phase-link" href="report_v2.html">V2 보고서 보기 →</a>
+        </div>
+      </article>
+      <article class="phase-card">
+        <div class="phase-shot"><img src="../screenshots/v3/gemini/01-top.png" alt="V3 대표 화면"></div>
+        <div class="phase-body">
+          <div class="phase-label">V3 · 자율 혁신</div>
+          <h3 class="phase-title">AI가 스스로 기능 선택</h3>
+          <p class="phase-summary">V2 완성 앱에서 AI가 직접 스마트 기능을 정해 추가했습니다. Gemini만 화면에서 바로 확인되는 변화를 보여줬습니다.</p>
+          <div class="phase-result">Gemini 인사이트 카드 · 온도 기반 배경 가장 두드러짐</div>
+          <a class="phase-link" href="report_v3.html">V3 보고서 보기 →</a>
+        </div>
+      </article>
     </div>
   </section>
 
+  <!-- ── 수치 비교 ── -->
   <section class="card">
-    <div class="sh"><span class="sh-num">04</span><h2>GitHub Pages 메모</h2></div>
-    <p class="lead">이 페이지는 <code>results/index.html</code> 기준으로 생성되었습니다. GitHub Pages를 저장소 루트에서 배포하면 이미지 경로가 그대로 동작합니다.</p>
-    <p class="lead">생성 시각: 2026-05-28T17:53:48</p>
+    <div class="sh"><span class="sh-num">02</span><h2>단계별 수치 비교</h2></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th class="th-claude">Claude</th>
+            <th class="th-codex">Codex</th>
+            <th class="th-gemini">Gemini</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-label">모델</td>
+            <td>claude-sonnet-4-6</td>
+            <td>gpt-5.5</td>
+            <td>gemini-3-flash-preview</td>
+          </tr>
+          <tr>
+            <td class="col-label">V1 생성 시간</td>
+            <td>537초</td>
+            <td>측정 불가</td>
+            <td><strong>318초 ✓ 최단</strong></td>
+          </tr>
+          <tr>
+            <td class="col-label">V2 생성 시간</td>
+            <td>—</td>
+            <td>—</td>
+            <td><strong>149.4초 ✓ 최단</strong></td>
+          </tr>
+          <tr>
+            <td class="col-label">V3 생성 시간</td>
+            <td>—</td>
+            <td>—</td>
+            <td><strong>185.2초 ✓ 최단</strong></td>
+          </tr>
+          <tr>
+            <td class="col-label">V1 토큰 (합계)</td>
+            <td>918,278 (캐시 포함)</td>
+            <td><strong>165,761 ✓ 최저</strong></td>
+            <td>672,522</td>
+          </tr>
+          <tr>
+            <td class="col-label">V1 Kotlin 파일</td>
+            <td>5개 · 395줄</td>
+            <td>6개 · 451줄</td>
+            <td>5개 · 304줄</td>
+          </tr>
+          <tr>
+            <td class="col-label">APK 자동 빌드</td>
+            <td>❌ 수동 필요</td>
+            <td>✅ assembleDebug 자동</td>
+            <td>⚠ mipmap 누락</td>
+          </tr>
+          <tr>
+            <td class="col-label">한국어 처리</td>
+            <td>✅ 정상</td>
+            <td>⚠ stdin 인코딩 깨짐</td>
+            <td>✅ 정상</td>
+          </tr>
+          <tr class="row-hl">
+            <td class="col-label">코드 품질 순위</td>
+            <td>3위</td>
+            <td>1위</td>
+            <td>2위</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box">Claude는 캐시 읽기 토큰(×0.1 과금)이 865,307 포함 — 원시 합계는 많지만 실질 비용은 경쟁력 있습니다.</div>
   </section>
+
+  <!-- ── 코드 품질 ── -->
+  <section class="card">
+    <div class="sh"><span class="sh-num">03</span><h2>코드 품질 순위 — 기능 제외, 코드 규칙 기준</h2></div>
+    <p class="lead">상태 관리 패턴, Composable 설계, private 수식자, 패키지 구조, 성능 패턴, 안전성 6개 영역으로 평가했습니다.</p>
+
+    <div style="margin:20px 0 4px;">
+      <div class="score-row">
+        <span class="score-label"><span class="dot codex" style="margin-right:6px;"></span>Codex</span>
+        <div class="score-track"><div class="score-fill codex" style="width:82%"></div></div>
+        <span class="score-num">82</span>
+        <span class="score-note">private Composable · 순수 함수 설계 · computed UiState · bounds check</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label"><span class="dot gemini" style="margin-right:6px;"></span>Gemini</span>
+        <div class="score-track"><div class="score-fill gemini" style="width:68%"></div></div>
+        <span class="score-num">68</span>
+        <span class="score-note">update{} 원자적 업데이트 · LazyColumn · lifecycle 누수 주의</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label"><span class="dot claude" style="margin-right:6px;"></span>Claude</span>
+        <div class="score-track"><div class="score-fill claude" style="width:61%"></div></div>
+        <span class="score-num">61</span>
+        <span class="score-note">레이어 분리 우수 · 모놀리식 UI 파일 · 비원자적 상태 업데이트</span>
+      </div>
+    </div>
+
+    <div class="guide-promo">
+      <div class="gp-left">
+        <div class="gp-eyebrow">AI 바이브 코딩 실전 가이드</div>
+        <div class="gp-title">점수 근거, 코드 패턴 분석, 팀 도입 체크리스트</div>
+        <div class="gp-desc">18가지 코드 패턴 비교 · Before/During/After 체크리스트 · CLAUDE.md 예시 · AI별 주의사항 · 커밋 전 11항목 리뷰</div>
+      </div>
+      <a class="gp-link" href="code-rules.html">가이드 보기 →</a>
+    </div>
+  </section>
+
+  <!-- ── AI별 핵심 정리 ── -->
+  <section class="card">
+    <div class="sh"><span class="sh-num">04</span><h2>AI별 한 줄 요약</h2></div>
+    <div class="callout-grid">
+      <div class="callout">
+        <div class="callout-k"><span class="dot claude" style="margin-right:5px;"></span>Claude</div>
+        <div class="callout-v">레이어 분리 구조는 가장 올바름. 단 WeatherScreen.kt가 340줄 모놀리식이고 private 수식자가 없어 후처리 필요.</div>
+      </div>
+      <div class="callout">
+        <div class="callout-k"><span class="dot codex" style="margin-right:5px;"></span>Codex</div>
+        <div class="callout-v">컴포넌트 단위 코드 품질 1위. APK 자동 빌드. Data·ViewModel 파일 위치와 Theme 파일 분리 후처리 필요.</div>
+      </div>
+      <div class="callout">
+        <div class="callout-k"><span class="dot gemini" style="margin-right:5px;"></span>Gemini</div>
+        <div class="callout-v">전 단계 가장 빠름. 상태 업데이트·성능 패턴 우수. collectAsState() lifecycle 누수와 하드코딩 패딩 생성 후 즉시 수정 필요.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 읽는 순서 ── -->
+  <section class="card">
+    <div class="sh"><span class="sh-num">05</span><h2>읽는 순서</h2></div>
+    <div class="callout-grid">
+      <div class="callout">
+        <div class="callout-k">1. 전체 흐름 파악</div>
+        <div class="callout-v">이 페이지의 수치 비교표로 V1·V2·V3 각 단계의 숫자를 먼저 확인합니다.</div>
+      </div>
+      <div class="callout">
+        <div class="callout-k">2. 화면·기능 비교</div>
+        <div class="callout-v">V1·V2·V3 각 보고서의 스크린샷 섹션에서 상단·중간·하단 캡처를 비교합니다.</div>
+      </div>
+      <div class="callout">
+        <div class="callout-k">3. 코드 규칙 분석</div>
+        <div class="callout-v">실제 팀 개발에 AI를 도입할 때 참고할 코드 패턴과 체크리스트는 코드 품질 가이드에서 확인합니다.</div>
+      </div>
+    </div>
+  </section>
+
 </div>
 </body>
 </html>
