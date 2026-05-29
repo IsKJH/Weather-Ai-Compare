@@ -768,36 +768,37 @@ body {
             <th class="cl">Claude</th>
             <th class="cd">Codex</th>
             <th class="gm">Gemini</th>
+            <th style="border-top:2px solid #111827;">Cursor</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td class="rk">private Composable</td>
-            <td>❌</td><td>✅</td><td>❌</td>
+            <td>❌</td><td>✅</td><td>❌</td><td style="color:var(--muted);">—</td>
           </tr>
           <tr>
             <td class="rk">순수 함수 설계<br><span style="font-size:11px;color:var(--muted);font-weight:400;">UiState + callbacks</span></td>
-            <td>❌</td><td>✅</td><td>❌</td>
+            <td>❌</td><td>✅</td><td>❌</td><td style="color:var(--muted);">—</td>
           </tr>
           <tr>
             <td class="rk">원자적 상태 업데이트<br><span style="font-size:11px;color:var(--muted);font-weight:400;">update{} 사용</span></td>
-            <td>❌</td><td>❌</td><td>✅</td>
+            <td>❌</td><td>❌</td><td>✅</td><td style="color:var(--muted);">—</td>
           </tr>
           <tr>
             <td class="rk">computed UiState</td>
-            <td>❌</td><td>✅</td><td>❌</td>
+            <td>❌</td><td>✅</td><td>❌</td><td style="color:var(--muted);">—</td>
           </tr>
           <tr>
             <td class="rk">LazyColumn 성능</td>
-            <td>❌</td><td>❌</td><td>✅</td>
+            <td>❌</td><td>❌</td><td>✅</td><td style="color:var(--muted);">—</td>
           </tr>
           <tr>
             <td class="rk">레이어 분리 구조</td>
-            <td>✅</td><td>❌</td><td>❌</td>
+            <td>✅</td><td>❌</td><td>❌</td><td style="color:var(--muted);">—</td>
           </tr>
           <tr>
             <td class="rk">lifecycle 안전<br><span style="font-size:11px;color:var(--muted);font-weight:400;">collectAsStateWithLifecycle</span></td>
-            <td>✅</td><td>✅</td><td>⚠️ 누수 있음</td>
+            <td>✅</td><td>✅</td><td>⚠️ 누수 있음</td><td style="color:var(--muted);">—</td>
           </tr>
         </tbody>
       </table>
