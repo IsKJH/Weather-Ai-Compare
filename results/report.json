@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-05-28",
   "project": "WeatherNow Android App - AI 비교 실험",
-  "prompt": "동일한 Android 날씨 앱 명세서를 3개 AI CLI에 제공, 결과 비교",
+  "prompt": "동일한 Android 날씨 앱 명세서를 AI에 제공, 결과 비교 (CLI 3종 + Cursor)",
 
   "results": {
     "claude": {
@@ -96,6 +96,35 @@
         "features": ["심플한 레이아웃", "카드형 상세 정보", "5일 예보"],
         "korean": "정상"
       }
+    },
+    "cursor": {
+      "model": "auto (Cursor Agent)",
+      "elapsedSec": 360,
+      "tokens": {
+        "grandTotal": 1170000,
+        "costUSD": 0.48,
+        "billingStatus": "Included",
+        "billingType": "free",
+        "note": "Cursor Usage 기준 총 토큰(15.3만+9.6만+92.1만). 입·출력 분리 미제공. US$0.48은 Included(무료 한도 포함, 추가 청구 아님)."
+      },
+      "code": {
+        "ktFiles": 7,
+        "ktLines": 473,
+        "totalFiles": 7
+      },
+      "build": {
+        "success": true,
+        "apkAutoBuilt": true,
+        "screenshotSuccess": true,
+        "note": "Cursor IDE Agent 대화형 세션. Gradle assembleDebug 및 ADB 스크린샷 검증 완료."
+      },
+      "ui": {
+        "theme": "라이트 — 청록(teal) 그라데이션",
+        "citySelector": "세그먼트 탭 (상단)",
+        "icons": "이모지",
+        "features": ["체감/습도/풍속 3칩", "5일 예보 가로 카드"],
+        "korean": "정상"
+      }
     }
   },
 
@@ -106,6 +135,7 @@
     "mostAutomated": "codex (APK 자동 빌드)",
     "bestKoreanSupport": "claude, gemini",
     "lowestRawTokenCount": "codex (165,761)",
-    "cachingAdvantage": "claude (캐시 읽기로 실질 비용 절감)"
+    "cachingAdvantage": "claude (캐시 읽기로 실질 비용 절감)",
+    "cursorNote": "Cursor v1: Usage 117만 토큰·$0.48 표시이나 Included(무료 포함). IDE 대화형 세션."
   }
 }

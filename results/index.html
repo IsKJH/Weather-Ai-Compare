@@ -3,95 +3,921 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WeatherNow AI 비교 보고서</title>
-<link rel="stylesheet" href="report_common.css?v=20260528-02">
+<title>WeatherNow AI 비교 실험</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --claude:   #C2622A;
+  --codex:    #0B8A5E;
+  --gemini:   #1A4FDB;
+  --human:    #5B21B6;
+  --ink:      #111111;
+  --bg:       #F5F5F5;
+  --surface:  #FFFFFF;
+  --border:   #E2E2E2;
+  --muted:    #777777;
+  --faint:    #F0F0F0;
+  --mono:     'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15.5px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  height: 48px; padding: 0 36px; gap: 0;
+}
+.nav-logo {
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  padding-right: 20px; border-right: 1px solid var(--border);
+  white-space: nowrap; flex-shrink: 0;
+}
+.nav-links { display: flex; gap: 2px; padding-left: 12px; overflow-x: auto; scrollbar-width: none; }
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-link {
+  text-decoration: none; font-size: 13px; font-weight: 500;
+  color: var(--muted); padding: 5px 11px; border-radius: 4px;
+  white-space: nowrap; transition: background .12s, color .12s;
+}
+.nav-link:hover { background: var(--faint); color: var(--ink); }
+.nav-link.active { background: var(--ink); color: #fff; }
+.nav-link.hl { color: var(--human); }
+.nav-link.hl:hover { background: #F3EEFF; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 60px 36px 52px;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; }
+.hero-date {
+  font-size: 12px; font-weight: 500; color: var(--muted);
+  margin-bottom: 18px; letter-spacing: .3px;
+}
+.hero-h1 {
+  font-size: clamp(32px, 4.2vw, 52px);
+  font-weight: 800; line-height: 1.2;
+  letter-spacing: -.5px; color: var(--ink);
+  max-width: 760px; margin-bottom: 18px;
+}
+.hero-sub {
+  font-size: 15.5px; color: var(--muted);
+  line-height: 1.85; max-width: 580px; margin-bottom: 28px;
+}
+.hero-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.hero-badge {
+  font-size: 12px; font-weight: 500;
+  padding: 3px 10px; border-radius: 3px;
+  border: 1px solid var(--border); color: var(--muted);
+}
+.hero-badge.c { color: var(--claude); border-color: rgba(194,98,42,.25); }
+.hero-badge.x { color: var(--codex);  border-color: rgba(11,138,94,.25); }
+.hero-badge.g { color: var(--gemini); border-color: rgba(26,79,219,.25); }
+
+/* ── STAT BAR ── */
+.stat-bar { background: var(--surface); border-bottom: 1px solid var(--border); }
+.stat-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 36px;
+  display: grid; grid-template-columns: repeat(6,1fr);
+}
+.stat-item {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center;
+  padding: 20px 8px 18px; border-right: 1px solid var(--border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-n {
+  font-family: var(--mono); font-size: 24px; font-weight: 700;
+  color: var(--ink); line-height: 1; letter-spacing: -.5px;
+}
+.stat-l {
+  font-size: 11px; font-weight: 500; color: var(--muted);
+  margin-top: 5px; letter-spacing: .1px;
+}
+
+/* ── WRAP ── */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 48px 36px 100px; }
+
+/* ── SECTION HEAD ── */
+.sec-head {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 22px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.sec-n { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--muted); }
+.sec-t { font-size: 19px; font-weight: 700; color: var(--ink); }
+.sec-sub { font-size: 13px; color: var(--muted); margin-left: auto; }
+
+/* ── CARDS (generic) ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 28px 32px; margin-bottom: 14px;
+}
+
+/* ── VERDICT ── */
+.verdict {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--ink); border-radius: 6px;
+  padding: 26px 30px; margin-bottom: 12px;
+  display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center;
+}
+.verdict-text {
+  font-size: 17px; font-weight: 500; line-height: 1.75; color: var(--ink);
+}
+.verdict-text strong { font-weight: 800; }
+.verdict-badge {
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 110px; border-left: 1px solid var(--border);
+  padding-left: 22px; flex-shrink: 0;
+}
+.vb-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.vb-value { font-size: 22px; font-weight: 800; color: var(--ink); }
+
+/* ── HUMAN BANNER ── */
+.human-banner {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--human); border-radius: 6px;
+  padding: 26px 30px; margin-bottom: 12px;
+  display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
+  position: relative;
+}
+.human-banner::before {
+  content: 'NEW'; position: absolute; top: 16px; right: 16px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 1.5px; background: var(--human); color: #fff;
+  padding: 2px 7px; border-radius: 3px;
+}
+.hb-tag { font-size: 11px; font-weight: 700; color: var(--human); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+.hb-title { font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.4; margin-bottom: 5px; }
+.hb-desc { font-size: 14px; color: var(--muted); line-height: 1.75; }
+.hb-nums { display: flex; gap: 20px; flex-shrink: 0; align-items: center; }
+.hb-num { text-align: center; }
+.hb-n { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--ink); line-height: 1; }
+.hb-n.dim { color: var(--muted); font-size: 18px; }
+.hb-k { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.hb-vs { font-size: 12px; color: var(--muted); font-weight: 500; }
+.hb-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  text-decoration: none; background: var(--ink); color: #fff;
+  padding: 8px 16px; border-radius: 4px; font-size: 13px;
+  font-weight: 600; margin-top: 14px; transition: opacity .15s;
+}
+.hb-link:hover { opacity: .8; }
+
+/* ── SECTION BLOCK ── */
+.section { margin-bottom: 56px; }
+
+/* ── PHASE GRID ── */
+.phase-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.phase-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  overflow: hidden; display: flex; flex-direction: column; transition: border-color .15s;
+}
+.phase-card:hover { border-color: #999; }
+.phase-shot { aspect-ratio: 9/16; background: #1A1A1A; overflow: hidden; border-bottom: 1px solid var(--border); }
+.phase-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+.phase-body { padding: 20px 22px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.phase-n { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--muted); }
+.phase-title { font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.phase-desc { font-size: 13.5px; color: var(--muted); line-height: 1.75; flex: 1; }
+.phase-result {
+  font-size: 12.5px; color: var(--muted);
+  background: var(--faint); border: 1px solid var(--border);
+  border-radius: 4px; padding: 7px 11px; line-height: 1.6;
+}
+.phase-link {
+  text-decoration: none; font-size: 13.5px; font-weight: 700; color: var(--ink);
+  border-bottom: 1.5px solid var(--border); padding-bottom: 1px;
+  align-self: flex-start; transition: border-color .15s;
+}
+.phase-link:hover { border-color: var(--ink); }
+
+/* ── DATA TABLE ── */
+.tbl-wrap { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--surface); }
+.tbl thead th {
+  padding: 10px 18px 9px; text-align: left;
+  background: var(--faint); color: var(--muted);
+  font-size: 11px; font-weight: 600; letter-spacing: .5px;
+  text-transform: uppercase; white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+.tbl thead th.cl { color: var(--claude); }
+.tbl thead th.cd { color: var(--codex); }
+.tbl thead th.gm { color: var(--gemini); }
+.tbl tbody td { padding: 12px 18px; border-bottom: 1px solid var(--border); vertical-align: middle; line-height: 1.6; }
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl tbody tr:hover td { background: var(--faint); }
+.tbl td.rk { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; width: 130px; }
+.tbl td.win { font-weight: 700; color: var(--ink); }
+.tbl .mono { font-family: var(--mono); font-size: 12.5px; }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 3px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+.badge.ok   { color: var(--ink); }
+.badge.warn { color: var(--muted); }
+.badge.err  { color: var(--muted); }
+.note { font-size: 13px; color: var(--muted); border-left: 2px solid var(--border); padding-left: 12px; margin-top: 10px; line-height: 1.7; }
+
+/* ── SCORE BARS ── */
+.scores { margin-bottom: 12px; }
+.score-row {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 14px 18px; margin-bottom: 8px;
+}
+.score-who { display: flex; align-items: center; gap: 8px; width: 90px; flex-shrink: 0; }
+.score-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.score-dot.cl { background: var(--claude); }
+.score-dot.cd { background: var(--codex); }
+.score-dot.gm { background: var(--gemini); }
+.score-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+.score-rank { font-family: var(--mono); font-size: 11px; color: var(--muted); width: 20px; text-align: center; flex-shrink: 0; }
+.score-track { flex: 1; height: 5px; background: var(--faint); border-radius: 2px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 2px; transition: width .6s cubic-bezier(.25,.46,.45,.94); }
+.score-fill.cl { background: var(--claude); }
+.score-fill.cd { background: var(--codex); }
+.score-fill.gm { background: var(--gemini); }
+.score-pct { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--ink); width: 44px; text-align: right; flex-shrink: 0; }
+.score-tags { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; }
+.score-tag { font-size: 11.5px; font-weight: 500; padding: 2px 8px; border-radius: 3px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); }
+.score-tag.bad { color: var(--ink); font-weight: 600; }
+
+/* ── GUIDE PROMO ── */
+.guide-promo {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--ink); border-radius: 6px;
+  padding: 22px 26px; display: flex; align-items: center;
+  gap: 24px; justify-content: space-between; margin-top: 14px;
+}
+.gp-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.gp-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.gp-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.gp-btn {
+  text-decoration: none; background: var(--ink); color: #fff;
+  padding: 9px 18px; border-radius: 4px; font-size: 13px;
+  font-weight: 600; white-space: nowrap; flex-shrink: 0; transition: opacity .15s;
+}
+.gp-btn:hover { opacity: .8; }
+
+/* ── AI CARDS ── */
+.ai-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.ai-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.ai-card-head {
+  padding: 14px 18px 12px; display: flex; align-items: center;
+  gap: 9px; border-bottom: 1px solid var(--border);
+}
+.ai-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ai-dot.cl { background: var(--claude); }
+.ai-dot.cd { background: var(--codex); }
+.ai-dot.gm { background: var(--gemini); }
+.ai-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+.ai-model { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: auto; }
+.ai-card-body { padding: 16px 18px; }
+.ai-summary { font-size: 14px; color: var(--ink); line-height: 1.7; margin-bottom: 10px; }
+.ai-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.ai-tag { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 3px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+.ai-tag.good { color: var(--ink); border-color: var(--border); }
+.ai-tag.bad  { color: var(--ink); font-weight: 700; }
+
+/* ── GROWTH CHART ── */
+.growth-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.growth-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.growth-head { display: flex; align-items: center; gap: 8px; padding: 13px 18px; border-bottom: 1px solid var(--border); }
+.growth-name { font-size: 14px; font-weight: 700; }
+.growth-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.growth-row { display: flex; align-items: center; gap: 10px; }
+.growth-label { font-size: 11.5px; font-weight: 600; color: var(--muted); width: 18px; flex-shrink: 0; }
+.growth-track { flex: 1; height: 6px; background: var(--faint); border-radius: 2px; overflow: hidden; }
+.growth-fill { height: 100%; border-radius: 2px; background: var(--ink); transition: width .6s cubic-bezier(.25,.46,.45,.94); }
+.growth-val { font-family: var(--mono); font-size: 12.5px; font-weight: 700; color: var(--ink); width: 52px; text-align: right; }
+.growth-diff { font-size: 11px; color: var(--muted); width: 48px; text-align: right; }
+.growth-note { font-size: 12.5px; color: var(--muted); margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border); line-height: 1.6; }
+
+/* ── V3 EVAL TABLE ── */
+.eval-wrap { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
+.eval-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.eval-table thead th { padding: 9px 16px 8px; background: var(--faint); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); border-bottom: 1px solid var(--border); text-align: left; }
+.eval-table thead th.cl { color: var(--claude); }
+.eval-table thead th.cd { color: var(--codex); }
+.eval-table thead th.gm { color: var(--gemini); }
+.eval-table tbody td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+.eval-table tbody tr:last-child td { border-bottom: none; font-weight: 700; background: var(--faint); }
+.eval-table td.crit { font-size: 13px; color: var(--muted); font-weight: 500; }
+.eval-table td.score { font-family: var(--mono); font-weight: 700; color: var(--ink); }
+.eval-table td.score.top { color: var(--codex); }
+
+/* ── READ GUIDE ── */
+.read-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.read-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 20px 22px; }
+.read-n { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--faint); line-height: 1; margin-bottom: 10px; -webkit-text-stroke: 1.5px var(--border); }
+.read-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+.read-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ── FOOTER ── */
+.footer { background: var(--surface); border-top: 1px solid var(--border); padding: 22px 36px; font-size: 12px; color: var(--muted); text-align: center; }
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .45s ease, transform .45s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .hero { padding: 40px 20px 36px; }
+  .nav { padding: 0 20px; }
+  .stat-inner { padding: 0 20px; grid-template-columns: repeat(3,1fr); }
+  .wrap { padding: 36px 20px 80px; }
+  .phase-grid, .ai-grid, .read-grid { grid-template-columns: 1fr; }
+  .verdict, .human-banner { grid-template-columns: 1fr; }
+  .verdict-badge { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 14px; flex-direction: row; align-items: baseline; gap: 10px; }
+  .hb-nums { flex-direction: row; }
+  .guide-promo { flex-direction: column; align-items: flex-start; }
+  .score-tags { display: none; }
+}
+</style>
 </head>
 <body>
-<div class="index-wrap">
-  <section class="index-hero">
-    <div class="index-topline">
-      <div>
-        <div class="hero-kicker">WeatherNow AI 비교 실험</div>
-        <h1 class="hero-title">같은 날씨 앱 과제를 여러 AI에게 맡기면 무엇이 달라질까</h1>
-        <p class="hero-copy">Claude, Codex, Gemini CLI와 Cursor Agent가 만든 Android 앱을 v1 초기 생성, v2 기능 개선, v3 자율 혁신 단계로 비교했습니다. v1에는 Cursor 결과가 포함됩니다. 이 페이지는 팀 공유용 요약이며, 세부 근거는 각 단계 보고서에 남겼습니다.</p>
+
+<nav class="nav">
+  <div class="nav-logo">WeatherNow 실험</div>
+  <div class="nav-links">
+    <a class="nav-link" href="report.html">V1 초기 생성</a>
+    <a class="nav-link" href="report_v2.html">V2 기능 개선</a>
+    <a class="nav-link" href="report_v3.html">V3 자율 혁신</a>
+    <a class="nav-link" href="code-rules.html">코드 품질 가이드</a>
+    <a class="nav-link" href="report_human.html">직접 구현 vs AI</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-date">2026-05-28 · Android Kotlin · Jetpack Compose</div>
+    <h1 class="hero-h1">같은 앱을 세 AI에게 맡기면<br>무엇이 달라질까</h1>
+    <p class="hero-sub">Claude Code, OpenAI Codex, Gemini CLI에 동일한 날씨 앱 스펙을 주고 3단계로 비교했습니다. 직접 손 코딩한 시간과도 비교합니다.</p>
+    <div class="hero-badges">
+      <span class="hero-badge c">Claude Code</span>
+      <span class="hero-badge x">OpenAI Codex</span>
+      <span class="hero-badge g">Gemini CLI</span>
+      <span class="hero-badge">목 데이터 기반</span>
+    </div>
+  </div>
+</header>
+
+<div class="stat-bar">
+  <div class="stat-inner">
+    <div class="stat-item">
+      <div class="stat-n">217초</div>
+      <div class="stat-l">Gemini 평균 생성시간</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">Gemini</div>
+      <div class="stat-l">V3 화면 변화 확인된 AI</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">3단계</div>
+      <div class="stat-l">실험 구성</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">×12.5</div>
+      <div class="stat-l">사람 vs AI 속도차</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">$0.35</div>
+      <div class="stat-l">Gemini V3 비용 최저</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">−178줄</div>
+      <div class="stat-l">Codex V3 리팩터링</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 종합 요약 -->
+  <div class="verdict reveal">
+    <p class="verdict-text">
+      속도는 <strong>Gemini가 전 단계 압도적으로 빨랐고</strong>(평균 217초), V3에서 스크린샷으로 변화가 확인된 건 <strong>Gemini만</strong>이었습니다. 코드 규칙 기준으로는 <strong>Codex가 private·순수 함수·computed UiState를 모두 갖춘 유일한 AI</strong>였고, Codex는 V3에서 유일하게 코드를 줄이며 리팩터링했습니다.
+    </p>
+    <div class="verdict-badge">
+      <div class="vb-label">코드 품질 1위</div>
+      <div class="vb-value">Codex</div>
+    </div>
+  </div>
+
+  <!-- 직접 구현 vs AI -->
+  <div class="human-banner reveal">
+    <div>
+      <div class="hb-tag">직접 구현 — Phase 1·2 완료</div>
+      <h2 class="hb-title">Phase 2까지 누적 2시간 — AI는 같은 작업을 7분 47초에 완성</h2>
+      <p class="hb-desc">Phase 1 ×12.5 → Phase 2 ×21.6로 배율이 더 커졌습니다. AI는 기존 코드 캐시로 Phase 2가 더 빨라진 반면, 사람은 기존 코드 파악 시간이 추가됩니다.</p>
+      <a class="hb-link" href="report_human.html">비교 보고서 보기</a>
+    </div>
+    <div class="hb-nums">
+      <div class="hb-num">
+        <div class="hb-n">2:00:15</div>
+        <div class="hb-k">누적 (Phase 1+2)</div>
       </div>
-      <div class="report-links">
-        <a class="report-link" href="report.html">V1 초기 생성</a>
-        <a class="report-link" href="report_v2.html">V2 기능 개선</a>
-        <a class="report-link" href="report_v3.html">V3 자율 혁신</a>
+      <div class="hb-vs">vs</div>
+      <div class="hb-num">
+        <div class="hb-n dim">467초</div>
+        <div class="hb-k">Gemini 누적</div>
       </div>
     </div>
-    <div class="takeaway-list"><div class="takeaway"><div class="takeaway-k">실험의 결론</div><div class="takeaway-v">v1은 초기 생성 성향, v2는 요구사항 이행력, v3는 자율 개선의 체감도를 비교하는 실험입니다.</div></div><div class="takeaway"><div class="takeaway-k">가장 명확한 변화</div><div class="takeaway-v">Gemini는 v3에서 인사이트 카드와 동적 배경을 추가해 화면만 봐도 변화가 드러납니다.</div></div><div class="takeaway"><div class="takeaway-k">주의할 부분</div><div class="takeaway-v">Claude와 Codex의 v3는 기능명에 비해 화면상 변화가 약해, 점수보다 캡처와 diff 근거를 함께 봐야 합니다.</div></div></div>
-  </section>
+  </div>
 
-  <section class="verdict-row">
-    <div class="verdict-main">
-      <h2 class="verdict-title">결론부터 보면, v3에서 실제로 눈에 띄는 변화는 Gemini가 가장 큽니다.</h2>
-      <p class="verdict-copy">v2까지는 세 AI 모두 요구 기능을 대체로 충족했습니다. 하지만 “스스로 신선한 기능을 추가하라”는 v3에서는 Gemini가 인사이트 카드와 온도 기반 배경 변화를 화면에 명확히 드러냈고, Claude와 Codex는 정적 스크린샷 기준으로 v2와 차이가 약했습니다.</p>
+  <!-- 단계별 보고서 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">01</span>
+      <h2 class="sec-t">단계별 보고서</h2>
+      <span class="sec-sub">V1 → V2 → V3 순으로 읽기를 권장합니다</span>
     </div>
-    <div class="verdict-aside">
-      <div class="aside-k">가장 설득력 있는 시각 변화</div>
-      <div class="aside-v">Gemini v3<br>Weather Narrative Insight</div>
-    </div>
-  </section>
-
-  <section class="card">
-    <div class="sh"><span class="sh-num">01</span><h2>한눈에 보는 결론</h2></div>
-    <div class="tbl-wrap"><table><thead><tr><th>단계</th><th>비교 관점</th><th>가장 빠른 실행</th><th>최저 토큰</th><th>핵심 해석</th></tr></thead><tbody><tr><td class="col-label">V1</td><td>초기 설계 성향 비교</td><td>Gemini · 318초</td><td>Codex · 165,761</td><td>초기 앱 구조와 UI 방향 차이가 핵심</td></tr><tr><td class="col-label">V2</td><td>요구사항 이행력 비교</td><td>Gemini · 149.4초</td><td>Gemini · 642,641</td><td>세 앱 모두 요구 기능 충족, 구조와 화면 완성도에서 차이</td></tr><tr class="row-hl"><td class="col-label">V3</td><td>체감 가능한 개선 비교</td><td>Gemini · 185.2초</td><td>Codex · 543,450</td><td>Gemini의 변화가 가장 명확하게 보임</td></tr></tbody></table></div>
-  </section>
-
-  <section class="card">
-    <div class="sh"><span class="sh-num">02</span><h2>단계별 보고서</h2></div>
     <div class="phase-grid">
-        <article class="phase-card">
-          <div class="phase-shot"><img src="../screenshots/v1/gemini/01-top.png" alt="V1 대표 화면"></div>
-          <div class="phase-body">
-            <div class="phase-label">V1 · 초기 생성</div>
-            <h3 class="phase-title">초기 설계 성향 비교</h3>
-            <p class="phase-summary">동일한 앱 생성 프롬프트에서 각 AI가 어떤 기본 구조와 UI를 만드는지 비교했습니다.</p>
-            <div class="phase-result">초기 앱 구조와 UI 방향 차이가 핵심</div>
-            <a class="phase-link" href="report.html">상세 보고서 보기</a>
-          </div>
-        </article>
-
-        <article class="phase-card">
-          <div class="phase-shot"><img src="../screenshots/v2/codex/01-top.png" alt="V2 대표 화면"></div>
-          <div class="phase-body">
-            <div class="phase-label">V2 · 기능 개선</div>
-            <h3 class="phase-title">요구사항 이행력 비교</h3>
-            <p class="phase-summary">v1 앱을 유지한 채 시간별 예보, 상세 정보, 새로고침, 즐겨찾기 등을 추가했습니다.</p>
-            <div class="phase-result">세 앱 모두 요구 기능 충족, 구조와 화면 완성도에서 차이</div>
-            <a class="phase-link" href="report_v2.html">상세 보고서 보기</a>
-          </div>
-        </article>
-
-        <article class="phase-card">
-          <div class="phase-shot"><img src="../screenshots/v3/gemini/01-top.png" alt="V3 대표 화면"></div>
-          <div class="phase-body">
-            <div class="phase-label">V3 · 자율 혁신</div>
-            <h3 class="phase-title">체감 가능한 개선 비교</h3>
-            <p class="phase-summary">각 AI가 스스로 스마트 기능을 정해 추가한 결과를 비교했습니다.</p>
-            <div class="phase-result">Gemini의 변화가 가장 명확하게 보임</div>
-            <a class="phase-link" href="report_v3.html">상세 보고서 보기</a>
-          </div>
-        </article>
-</div>
-  </section>
-
-  <section class="card">
-    <div class="sh"><span class="sh-num">03</span><h2>읽는 순서</h2></div>
-    <div class="callout-grid">
-      <div class="callout"><div class="callout-k">1. 전체 흐름</div><div class="callout-v">먼저 이 페이지의 요약표로 v1, v2, v3의 비교 목적을 파악합니다.</div></div>
-      <div class="callout"><div class="callout-k">2. 화면 비교</div><div class="callout-v">각 보고서의 실행 화면 섹션에서 상단, 중간, 하단 캡처를 비교합니다.</div></div>
-      <div class="callout"><div class="callout-k">3. 근거 확인</div><div class="callout-v">토큰, 프롬프트 해석, 코드 요약을 함께 보면서 결과를 해석합니다.</div></div>
+      <article class="phase-card">
+        <div class="phase-shot"><img src="../screenshots/v1/gemini/01-top.png" alt="V1" loading="lazy"></div>
+        <div class="phase-body">
+          <div class="phase-n">01</div>
+          <h3 class="phase-title">처음부터 앱 만들기</h3>
+          <p class="phase-desc">동일한 프롬프트에서 각 AI가 어떤 구조와 UI를 선택하는지 비교했습니다. 아키텍처, 파일 분리, 한국어 처리 방식이 모두 달랐습니다.</p>
+          <div class="phase-result">Gemini 318초 최단 · Codex 자동 빌드 · Claude 구조 우수</div>
+          <a class="phase-link" href="report.html">V1 보고서 보기</a>
+        </div>
+      </article>
+      <article class="phase-card">
+        <div class="phase-shot"><img src="../screenshots/v2/codex/01-top.png" alt="V2" loading="lazy"></div>
+        <div class="phase-body">
+          <div class="phase-n">02</div>
+          <h3 class="phase-title">기존 코드 위에 기능 추가</h3>
+          <p class="phase-desc">V1 결과물을 유지한 채 시간별 예보, 상세 날씨 정보, 새로고침, 즐겨찾기를 추가했습니다. AI가 자기 코드를 얼마나 잘 이해하는지 확인했습니다.</p>
+          <div class="phase-result">세 AI 모두 기능 충족 · Gemini 149.4초 최단</div>
+          <a class="phase-link" href="report_v2.html">V2 보고서 보기</a>
+        </div>
+      </article>
+      <article class="phase-card">
+        <div class="phase-shot"><img src="../screenshots/v3/gemini/01-top.png" alt="V3" loading="lazy"></div>
+        <div class="phase-body">
+          <div class="phase-n">03</div>
+          <h3 class="phase-title">AI가 스스로 기능 선택</h3>
+          <p class="phase-desc">명세 없이 AI가 직접 스마트 기능을 정해 추가했습니다. 창의성과 실행력의 차이가 가장 극명하게 드러난 단계입니다.</p>
+          <div class="phase-result">Gemini 인사이트 카드 + 온도 기반 배경 가장 두드러짐</div>
+          <a class="phase-link" href="report_v3.html">V3 보고서 보기</a>
+        </div>
+      </article>
     </div>
   </section>
 
-  <section class="card">
-    <div class="sh"><span class="sh-num">04</span><h2>GitHub Pages 메모</h2></div>
-    <p class="lead">이 페이지는 <code>results/index.html</code> 기준으로 생성되었습니다. GitHub Pages를 저장소 루트에서 배포하면 이미지 경로가 그대로 동작합니다.</p>
-    <p class="lead">생성 시각: 2026-05-29T17:58:08</p>
+  <!-- 수치 비교 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">02</span>
+      <h2 class="sec-t">수치 비교</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th class="cl">Claude</th>
+            <th class="cd">Codex</th>
+            <th class="gm">Gemini</th>
+            <th style="border-top:2px solid var(--cursor,#111827);">Cursor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rk">모델</td>
+            <td class="mono">claude-sonnet-4-6</td>
+            <td class="mono">gpt-5.5</td>
+            <td class="mono">gemini-3-flash</td>
+            <td class="mono">auto (Cursor Agent)</td>
+          </tr>
+          <tr>
+            <td class="rk">V1 생성 시간</td>
+            <td class="mono">537초</td>
+            <td class="mono">457초</td>
+            <td class="mono win">318초 — 최단</td>
+            <td class="mono">360초</td>
+          </tr>
+          <tr>
+            <td class="rk">V2 생성 시간</td>
+            <td class="mono">360.6초</td>
+            <td class="mono">315초</td>
+            <td class="mono win">149.4초 — 최단</td>
+            <td class="mono">V2 미진행</td>
+          </tr>
+          <tr>
+            <td class="rk">V3 생성 시간</td>
+            <td class="mono">412.5초</td>
+            <td class="mono">280초</td>
+            <td class="mono win">185.2초 — 최단</td>
+            <td class="mono">V3 미진행</td>
+          </tr>
+          <tr>
+            <td class="rk">V1 토큰 합계</td>
+            <td>918,278 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
+            <td class="win">165,761 — 최저</td>
+            <td>672,522</td>
+            <td>1,170,000 <span style="font-size:12px;color:var(--muted);">(Included)</span></td>
+          </tr>
+          <tr>
+            <td class="rk">V2 토큰 합계</td>
+            <td>1,043,992</td>
+            <td>1,615,940</td>
+            <td class="win">642,641 — 최저</td>
+            <td style="color:var(--muted);">—</td>
+          </tr>
+          <tr>
+            <td class="rk">V3 실행 비용</td>
+            <td class="mono">$0.95</td>
+            <td class="mono">$0.45</td>
+            <td class="mono win">$0.35 — 최저</td>
+            <td style="color:var(--muted);">—</td>
+          </tr>
+          <tr>
+            <td class="rk">V1 코드량</td>
+            <td>5파일 · 395줄</td>
+            <td>6파일 · 451줄</td>
+            <td>5파일 · 304줄</td>
+            <td>7파일 · 473줄</td>
+          </tr>
+          <tr>
+            <td class="rk">V3 코드량</td>
+            <td>5파일 · 612줄</td>
+            <td class="win">6파일 · 558줄 ↓</td>
+            <td>5파일 · 542줄</td>
+            <td style="color:var(--muted);">—</td>
+          </tr>
+          <tr>
+            <td class="rk">자동 빌드</td>
+            <td><span class="badge err">수동 필요</span></td>
+            <td><span class="badge ok">자동 성공</span></td>
+            <td><span class="badge warn">리소스 누락</span></td>
+            <td><span class="badge ok">자동 성공</span></td>
+          </tr>
+          <tr>
+            <td class="rk">한국어 처리</td>
+            <td><span class="badge ok">정상</span></td>
+            <td><span class="badge warn">V1 오류→V2 수정</span></td>
+            <td><span class="badge ok">정상</span></td>
+            <td><span class="badge ok">정상</span></td>
+          </tr>
+          <tr>
+            <td class="rk">코드 패턴 순위</td>
+            <td>3위</td>
+            <td class="win">1위</td>
+            <td>2위</td>
+            <td style="color:var(--muted);">분석 예정</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Codex V1 시간은 당초 "측정 불가"로 표기했으나 로그 검토 결과 457초로 확인. Claude 토큰 918,278 중 865,307이 캐시 읽기(×0.1 과금)라 실질 비용은 경쟁력 있습니다.</p>
   </section>
+
+  <!-- 코드 성장 추이 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">03</span>
+      <h2 class="sec-t">코드 성장 추이</h2>
+      <span class="sec-sub">V1 → V2 → V3 Kotlin 코드 라인 수 변화</span>
+    </div>
+    <div class="growth-grid">
+      <div class="growth-card">
+        <div class="growth-head">
+          <div class="ai-dot cl"></div>
+          <span class="growth-name">Claude</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:auto;">총 +55%</span>
+        </div>
+        <div class="growth-body">
+          <div class="growth-row">
+            <span class="growth-label">V1</span>
+            <div class="growth-track"><div class="growth-fill" style="width:53%"></div></div>
+            <span class="growth-val">395줄</span>
+            <span class="growth-diff"></span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V2</span>
+            <div class="growth-track"><div class="growth-fill" style="width:79%"></div></div>
+            <span class="growth-val">580줄</span>
+            <span class="growth-diff">+185</span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V3</span>
+            <div class="growth-track"><div class="growth-fill" style="width:83%"></div></div>
+            <span class="growth-val">612줄</span>
+            <span class="growth-diff">+32</span>
+          </div>
+          <p class="growth-note">V3에서 소폭 증가. 기존 구조를 크게 손대지 않고 기능을 추가하는 방식.</p>
+        </div>
+      </div>
+      <div class="growth-card">
+        <div class="growth-head">
+          <div class="ai-dot cd"></div>
+          <span class="growth-name">Codex</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:auto;">+24% → <strong>V3 리팩터링</strong></span>
+        </div>
+        <div class="growth-body">
+          <div class="growth-row">
+            <span class="growth-label">V1</span>
+            <div class="growth-track"><div class="growth-fill" style="width:61%"></div></div>
+            <span class="growth-val">451줄</span>
+            <span class="growth-diff"></span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V2</span>
+            <div class="growth-track"><div class="growth-fill" style="width:100%"></div></div>
+            <span class="growth-val">736줄</span>
+            <span class="growth-diff">+285</span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V3</span>
+            <div class="growth-track"><div class="growth-fill" style="width:76%"></div></div>
+            <span class="growth-val">558줄</span>
+            <span class="growth-diff" style="color:var(--codex);font-weight:700;">−178</span>
+          </div>
+          <p class="growth-note">세 AI 중 유일하게 V3에서 코드량이 감소. 자율 혁신 단계에서 리팩터링을 선택.</p>
+        </div>
+      </div>
+      <div class="growth-card">
+        <div class="growth-head">
+          <div class="ai-dot gm"></div>
+          <span class="growth-name">Gemini</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:auto;">총 +78%</span>
+        </div>
+        <div class="growth-body">
+          <div class="growth-row">
+            <span class="growth-label">V1</span>
+            <div class="growth-track"><div class="growth-fill" style="width:41%"></div></div>
+            <span class="growth-val">304줄</span>
+            <span class="growth-diff"></span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V2</span>
+            <div class="growth-track"><div class="growth-fill" style="width:70%"></div></div>
+            <span class="growth-val">518줄</span>
+            <span class="growth-diff">+214</span>
+          </div>
+          <div class="growth-row">
+            <span class="growth-label">V3</span>
+            <div class="growth-track"><div class="growth-fill" style="width:73%"></div></div>
+            <span class="growth-val">542줄</span>
+            <span class="growth-diff">+24</span>
+          </div>
+          <p class="growth-note">V1 가장 적은 코드로 시작. V3도 세 AI 중 가장 적은 코드 유지.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- V3 자율 혁신 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">04</span>
+      <h2 class="sec-t">V3 — 각 AI가 선택한 자율 기능</h2>
+      <span class="sec-sub">스크린샷 기준 실제 체감 변화</span>
+    </div>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot cl"></div>
+          <span class="ai-name">Claude</span>
+          <span class="ai-model">Visual Logic &amp; UI Indexing</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary">코드 변경은 있었으나 스크린샷 기준 V2와 화면 차이가 뚜렷하지 않습니다. 내부 로직 개선 중심.</p>
+          <div class="ai-tags">
+            <span class="ai-tag warn">화면 변화 미확인</span>
+            <span class="ai-tag good">코드 구조 개선</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot cd"></div>
+          <span class="ai-name">Codex</span>
+          <span class="ai-model">Dynamic Refresh Engine</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary">새로고침 시 mock 데이터 값이 변동하는 시뮬레이션. 정적 스크린샷으로는 확인 불가 — 실제 조작 시 체감.</p>
+          <div class="ai-tags">
+            <span class="ai-tag warn">상호작용 필요</span>
+            <span class="ai-tag good">코드량 −178줄</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot gm"></div>
+          <span class="ai-name">Gemini</span>
+          <span class="ai-model">Weather Narrative Insight</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary">날씨·온도 기반 조언 카드 + 배경색 동적 변경. 도시 전환만 해도 화면에서 즉시 확인 가능.</p>
+          <div class="ai-tags">
+            <span class="ai-tag good">화면 변화 즉시 확인</span>
+            <span class="ai-tag good">UX 개선 뚜렷</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot" style="background:#111827;"></div>
+          <span class="ai-name">Cursor</span>
+          <span class="ai-model">V1만 진행</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary">IDE 에이전트 방식. 라이트 청록 테마. 7파일 473줄로 가장 많은 코드. APK 자동 빌드 성공. V2·V3는 미진행.</p>
+          <div class="ai-tags">
+            <span class="ai-tag good">APK 자동 빌드</span>
+            <span class="ai-tag good">한국어 정상</span>
+            <span class="ai-tag warn">V1만 비교 가능</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 코드 품질 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">05</span>
+      <h2 class="sec-t">코드 패턴 비교</h2>
+      <span class="sec-sub">실제 코드에서 확인한 사실</span>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>패턴</th>
+            <th class="cl">Claude</th>
+            <th class="cd">Codex</th>
+            <th class="gm">Gemini</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rk">private Composable</td>
+            <td>❌</td><td>✅</td><td>❌</td>
+          </tr>
+          <tr>
+            <td class="rk">순수 함수 설계<br><span style="font-size:11px;color:var(--muted);font-weight:400;">UiState + callbacks</span></td>
+            <td>❌</td><td>✅</td><td>❌</td>
+          </tr>
+          <tr>
+            <td class="rk">원자적 상태 업데이트<br><span style="font-size:11px;color:var(--muted);font-weight:400;">update{} 사용</span></td>
+            <td>❌</td><td>❌</td><td>✅</td>
+          </tr>
+          <tr>
+            <td class="rk">computed UiState</td>
+            <td>❌</td><td>✅</td><td>❌</td>
+          </tr>
+          <tr>
+            <td class="rk">LazyColumn 성능</td>
+            <td>❌</td><td>❌</td><td>✅</td>
+          </tr>
+          <tr>
+            <td class="rk">레이어 분리 구조</td>
+            <td>✅</td><td>❌</td><td>❌</td>
+          </tr>
+          <tr>
+            <td class="rk">lifecycle 안전<br><span style="font-size:11px;color:var(--muted);font-weight:400;">collectAsStateWithLifecycle</span></td>
+            <td>✅</td><td>✅</td><td>⚠️ 누수 있음</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="guide-promo">
+      <div>
+        <div class="gp-label">코드 분석 가이드</div>
+        <div class="gp-title">패턴 상세 비교 · Before/After 코드 · 팀 도입 체크리스트</div>
+        <div class="gp-desc">18가지 패턴 분석 · AI별 주의사항 · 커밋 전 체크리스트 11항목</div>
+      </div>
+      <a class="gp-btn" href="code-rules.html">가이드 보기</a>
+    </div>
+  </section>
+
+  <!-- AI별 요약 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">06</span>
+      <h2 class="sec-t">AI별 요약</h2>
+    </div>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot cl"></div>
+          <span class="ai-name">Claude</span>
+          <span class="ai-model">claude-sonnet-4-6</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary">레이어 분리 구조가 가장 체계적. 단 UI 파일이 340줄 모놀리식이고 private 수식자가 없어 후처리 필요.</p>
+          <div class="ai-tags">
+            <span class="ai-tag good">구조 우수</span>
+            <span class="ai-tag warn">모놀리식 UI</span>
+            <span class="ai-tag warn">private 없음</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot cd"></div>
+          <span class="ai-name">Codex</span>
+          <span class="ai-model">gpt-5.5</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary">컴포넌트 단위 코드 품질 1위. 자동 빌드 성공. 파일 위치와 테마 분리 후처리 필요.</p>
+          <div class="ai-tags">
+            <span class="ai-tag good">코드 품질 1위</span>
+            <span class="ai-tag good">자동 빌드</span>
+            <span class="ai-tag warn">파일 위치</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head">
+          <div class="ai-dot gm"></div>
+          <span class="ai-name">Gemini</span>
+          <span class="ai-model">gemini-3-flash</span>
+        </div>
+        <div class="ai-card-body">
+          <p class="ai-summary">전 단계 가장 빠름. 성능 패턴 우수. lifecycle 누수는 생성 직후 수정 필요.</p>
+          <div class="ai-tags">
+            <span class="ai-tag good">전 단계 최단</span>
+            <span class="ai-tag good">성능 패턴 우수</span>
+            <span class="ai-tag bad">lifecycle 누수</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 읽기 순서 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">07</span>
+      <h2 class="sec-t">읽기 순서</h2>
+    </div>
+    <div class="read-grid">
+      <div class="read-item">
+        <div class="read-n">01</div>
+        <div class="read-title">전체 흐름 파악</div>
+        <div class="read-desc">이 페이지의 수치 비교표와 요약으로 각 단계 결과를 먼저 확인합니다.</div>
+      </div>
+      <div class="read-item">
+        <div class="read-n">02</div>
+        <div class="read-title">화면 · 기능 비교</div>
+        <div class="read-desc">V1 → V2 → V3 각 보고서의 스크린샷에서 AI별 UI 차이를 비교합니다.</div>
+      </div>
+      <div class="read-item">
+        <div class="read-n">03</div>
+        <div class="read-title">코드 규칙 분석</div>
+        <div class="read-desc">팀에 AI를 도입할 때 참고할 패턴과 체크리스트는 코드 품질 가이드에서 확인합니다.</div>
+      </div>
+    </div>
+  </section>
+
 </div>
+
+<footer class="footer">
+  WeatherNow AI 비교 실험 · 2026-05-28 · Claude Code / Codex CLI / Gemini CLI
+</footer>
+
+<script>
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+const scoreIo = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.score-fill').forEach(b => {
+        const w = b.style.width; b.style.width = '0';
+        requestAnimationFrame(() => setTimeout(() => { b.style.width = w; }, 80));
+      });
+      scoreIo.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.scores').forEach(el => scoreIo.observe(el));
+</script>
 </body>
 </html>
