@@ -32,7 +32,7 @@
   <section class="card" id="prompt">
     <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
     <p class="prompt-meta">prompt.txt · 새 Android 날씨 앱 생성</p>
-    <pre class="prompt-pre">Build a complete Android weather app project in the current directory based on the following specification. Create ALL necessary files including build.gradle, settings.gradle, AndroidManifest.xml, and all Kotlin source files.
+    <pre class="prompt-pre" style="max-height:260px">Build a complete Android weather app project in the current directory based on the following specification. Create ALL necessary files including build.gradle, settings.gradle, AndroidManifest.xml, and all Kotlin source files.
 
 ---
 
@@ -181,6 +181,8 @@ gradle/wrapper/
 - 3 cities switch correctly
 - 5-day forecast displays
 - No crashes</pre>
+    <div class="note-box">아래 표는 원문 프롬프트를 보고서 독자가 빠르게 이해할 수 있도록 한글로 풀어쓴 해석입니다.</div>
+    <div class="tbl-wrap"><table><thead><tr><th>구분</th><th>한글 해석</th></tr></thead><tbody><tr><td class="col-label">요약</td><td>세 AI에게 동일한 조건으로 Android 날씨 앱을 처음부터 만들게 한 프롬프트입니다.</td></tr><tr><td class="col-label">핵심 요구</td><td>Kotlin, Jetpack Compose, MVVM 구조를 사용하고 서울/부산/제주의 mock 날씨 데이터를 보여주는 앱을 만드는 것이 목표였습니다.</td></tr><tr><td class="col-label">평가 관점</td><td>초기 앱 생성 능력, 기본 UI 구성, 한국어 표시, 빌드 성공 여부를 비교하기 위한 입력입니다.</td></tr></tbody></table></div>
   </section>
   <section class="card" id="summary">
     <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
@@ -195,7 +197,7 @@ gradle/wrapper/
   <section class="card" id="screens">
     <div class="sh"><span class="sh-num">05</span><h2>실행 화면</h2></div>
     <p class="lead">각 앱을 실제 기기에 설치한 뒤 상단, 중간, 하단 스크롤 위치를 동일한 방식으로 캡처했습니다.</p>
-    <div class="screen-set"><div class="screen-ai"><div class="screen-ai-head"><span class="dot claude"></span>Claude</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v1/claude/01-top.png" alt="Claude 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 기능 영역</div><img src="../screenshots/v1/claude/02-middle.png" alt="Claude 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 예보/상세</div><img src="../screenshots/v1/claude/03-bottom.png" alt="Claude 하단 예보/상세"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot codex"></span>Codex</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v1/codex/01-top.png" alt="Codex 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 기능 영역</div><img src="../screenshots/v1/codex/02-middle.png" alt="Codex 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 예보/상세</div><img src="../screenshots/v1/codex/03-bottom.png" alt="Codex 하단 예보/상세"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot gemini"></span>Gemini</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v1/gemini/01-top.png" alt="Gemini 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 기능 영역</div><img src="../screenshots/v1/gemini/02-middle.png" alt="Gemini 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 예보/상세</div><img src="../screenshots/v1/gemini/03-bottom.png" alt="Gemini 하단 예보/상세"></div></div></div></div>
+    <div class="screen-set"><div class="screen-ai"><div class="screen-ai-head"><span class="dot claude"></span>Claude</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v1/claude/01-top.png" alt="Claude 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 · 하단 (동일)</div><img src="../screenshots/v1/claude/02-middle.png" alt="Claude 중간 기능 영역"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot codex"></span>Codex</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v1/codex/01-top.png" alt="Codex 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 · 하단 (동일)</div><img src="../screenshots/v1/codex/02-middle.png" alt="Codex 중간 기능 영역"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot gemini"></span>Gemini</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v1/gemini/01-top.png" alt="Gemini 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 기능 영역</div><img src="../screenshots/v1/gemini/02-middle.png" alt="Gemini 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 예보/상세</div><img src="../screenshots/v1/gemini/03-bottom.png" alt="Gemini 하단 예보/상세"></div></div></div></div>
   </section>
   <section class="card" id="observations">
     <div class="sh"><span class="sh-num">06</span><h2>구현 관찰</h2></div>
