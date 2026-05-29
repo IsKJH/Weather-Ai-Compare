@@ -4,228 +4,213 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AI 바이브 코딩 실전 가이드 — WeatherNow 실험 분석</title>
-<link rel="stylesheet" href="report_common.css?v=20260528-02">
+<link rel="stylesheet" href="report_common.css?v=20260529-01">
 <style>
 /* ── Hero ── */
 .guide-hero {
-  background:#fff;
-  border:1px solid #DCDCDC;
-  border-radius:12px;
-  padding:40px 48px 32px;
-  margin-bottom:20px;
-  box-shadow:0 2px 8px rgba(0,0,0,.04);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 40px 48px 32px;
+  margin-bottom: 16px;
 }
 .guide-kicker {
-  font-size:11px; font-weight:900; letter-spacing:2px;
-  text-transform:uppercase; color:#999; margin-bottom:12px;
+  font-size: 11px; font-weight: 600; letter-spacing: 1.4px;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 12px;
 }
 .guide-title {
-  font-size:32px; font-weight:950; letter-spacing:-.4px;
-  line-height:1.2; margin-bottom:10px; color:#111;
+  font-size: 28px; font-weight: 800; letter-spacing: -.3px;
+  line-height: 1.25; margin-bottom: 10px; color: var(--text);
 }
-.guide-sub { font-size:15px; color:#555; line-height:1.8; max-width:680px; margin-bottom:26px; }
+.guide-sub { font-size: 15px; color: var(--text2); line-height: 1.82; max-width: 680px; margin-bottom: 24px; }
 .hero-stats {
-  display:grid; grid-template-columns:repeat(4,1fr); gap:0;
-  border-top:1px solid #EBEBEB; padding-top:20px;
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
+  border-top: 1px solid var(--border); padding-top: 18px;
 }
-.hero-stat { padding-right:24px; }
-.hero-stat-k { font-size:11px; color:#999; font-weight:800; letter-spacing:.6px; text-transform:uppercase; margin-bottom:4px; }
-.hero-stat-v { font-size:20px; font-weight:900; color:#111; letter-spacing:-.2px; }
-.hero-stat-d { font-size:12px; color:#888; margin-top:2px; }
+.hero-stat { padding-right: 24px; }
+.hero-stat-k { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 4px; }
+.hero-stat-v { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -.3px; }
+.hero-stat-d { font-size: 12px; color: var(--text3); margin-top: 2px; }
 
 /* ── Section subheadings ── */
 .sec-h3 {
-  font-size:15.5px; font-weight:850; color:#111;
-  margin:32px 0 10px; padding-bottom:8px;
-  border-bottom:1px solid #F0F0F0;
-  display:flex; align-items:center; gap:10px;
+  font-size: 15px; font-weight: 700; color: var(--text);
+  margin: 28px 0 10px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
 }
 .sec-h3 .sec-num {
-  font-size:11px; font-weight:900; color:#999;
-  background:#F5F5F5; border-radius:4px;
-  padding:2px 7px; letter-spacing:.5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 600; color: var(--text3);
+  background: var(--bg); border-radius: 3px;
+  padding: 2px 7px; letter-spacing: .4px;
 }
 
 /* ── Pattern comparison (3-column) ── */
-.pattern-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:14px 0; }
-.pattern-card { border-radius:10px; border:1px solid #E5E5E5; overflow:hidden; }
+.pattern-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 12px 0; }
+.pattern-card { border-radius: 4px; border: 1px solid var(--border); overflow: hidden; }
 .pattern-head {
-  padding:10px 14px; font-size:12px; font-weight:900;
-  letter-spacing:.3px; border-bottom:1px solid #E5E5E5;
-  display:flex; align-items:center; justify-content:space-between;
+  padding: 9px 13px; font-size: 12px; font-weight: 700;
+  letter-spacing: .2px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg);
 }
-.pattern-head.claude { background:#FEF9EE; color:#92400E; border-bottom-color:#FDE68A; }
-.pattern-head.codex  { background:#F0FDF4; color:#065F46; border-bottom-color:#A7F3D0; }
-.pattern-head.gemini { background:#EFF6FF; color:#1E40AF; border-bottom-color:#BFDBFE; }
-.pattern-head .ph-ai   { font-weight:900; }
-.pattern-head .ph-verdict { font-size:13px; }
-.pattern-body { padding:13px 15px; font-size:13px; line-height:1.7; color:#374151; background:#fff; }
-.pattern-body code { font-size:12px; background:#F5F5F5; padding:1px 5px; border-radius:3px; }
-.pattern-body .verdict-bad  { color:#DC2626; font-weight:700; font-size:12.5px; }
-.pattern-body .verdict-good { color:#059669; font-weight:700; font-size:12.5px; }
+.pattern-head.claude { border-left: 3px solid var(--claude); }
+.pattern-head.codex  { border-left: 3px solid var(--codex); }
+.pattern-head.gemini { border-left: 3px solid var(--gemini); }
+.pattern-head .ph-ai   { font-weight: 700; color: var(--text); }
+.pattern-head .ph-verdict { font-size: 12.5px; color: var(--text3); }
+.pattern-body { padding: 13px 14px; font-size: 13px; line-height: 1.75; color: var(--text2); background: var(--surface); }
+.pattern-body code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; background: var(--bg); padding: 1px 5px; border-radius: 3px; color: var(--text); }
+.pattern-body .verdict-bad  { color: #B91C1C; font-weight: 600; font-size: 12.5px; }
+.pattern-body .verdict-good { color: #166534; font-weight: 600; font-size: 12.5px; }
 
 /* ── Code diff (side-by-side) ── */
-.diff-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0; }
-.diff-pane { border-radius:10px; overflow:hidden; border:1px solid #E5E5E5; }
-.diff-head { padding:9px 14px; font-size:12px; font-weight:800; display:flex; align-items:center; gap:7px; }
-.diff-head.bad  { background:#FEE2E2; color:#991B1B; }
-.diff-head.good { background:#D1FAE5; color:#065F46; }
+.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+.diff-pane { border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+.diff-head { padding: 8px 13px; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; gap: 7px; background: var(--bg); border-bottom: 1px solid var(--border); color: var(--text2); }
+.diff-head.bad  { border-left: 3px solid #B91C1C; }
+.diff-head.good { border-left: 3px solid #166534; }
 pre.diff-code {
-  background:#1A1A1A; color:#E2E8F0;
-  padding:14px 16px; font-size:12px; line-height:1.75; margin:0;
-  overflow-x:auto; font-family:'Consolas','Menlo',monospace; white-space:pre;
+  background: var(--code-bg); color: var(--code-fg);
+  padding: 14px 16px; font-size: 12px; line-height: 1.75; margin: 0;
+  overflow-x: auto; font-family: 'JetBrains Mono', monospace; white-space: pre;
 }
-pre.diff-code .hl-bad  { background:rgba(239,68,68,.25); border-radius:2px; }
-pre.diff-code .hl-good { background:rgba(16,185,129,.2);  border-radius:2px; }
-pre.diff-code .cm { color:#666; }
+pre.diff-code .hl-bad  { background: rgba(185,28,28,.22); border-radius: 2px; }
+pre.diff-code .hl-good { background: rgba(22,101,52,.2);  border-radius: 2px; }
+pre.diff-code .cm { color: #555; }
 
-/* ── Inline code block (inside pattern-body) ── */
+/* ── Inline code block ── */
 pre.inline-code {
-  background:#1A1A1A; color:#E2E8F0;
-  border-radius:7px; padding:10px 13px;
-  font-size:11.5px; line-height:1.65; margin:8px 0 0;
-  font-family:'Consolas','Menlo',monospace; white-space:pre; overflow-x:auto;
+  background: var(--code-bg); color: var(--code-fg);
+  border-radius: 4px; padding: 10px 13px;
+  font-size: 11.5px; line-height: 1.65; margin: 8px 0 0;
+  font-family: 'JetBrains Mono', monospace; white-space: pre; overflow-x: auto;
 }
 
 /* ── Score bars ── */
-.score-block { margin:18px 0 6px; }
-.score-row { display:flex; align-items:center; gap:12px; margin-bottom:9px; }
+.score-block { margin: 16px 0 6px; }
+.score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .score-rank {
-  width:22px; height:22px; border-radius:50%; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-  font-size:11px; font-weight:900;
+  font-family: 'JetBrains Mono', monospace;
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  background: var(--bg); color: var(--text3); border: 1px solid var(--border);
 }
-.score-rank.r1 { background:#F5F0D8; color:#78350F; }
-.score-rank.r2 { background:#EBEBEB; color:#444; }
-.score-rank.r3 { background:#FAE8D8; color:#7C2D12; }
-.score-name  { font-size:14px; font-weight:700; color:#111; width:64px; flex-shrink:0; }
-.score-track { flex:1; height:9px; background:#F0F0F0; border-radius:5px; overflow:hidden; }
-.score-fill  { height:100%; border-radius:5px; }
-.score-fill.codex  { background:#0D8A68; }
-.score-fill.gemini { background:#1A56DB; }
-.score-fill.claude { background:#C2622A; }
-.score-num  { font-size:14px; font-weight:900; color:#111; width:30px; text-align:right; }
-.score-tags { display:flex; gap:5px; flex-wrap:wrap; margin-left:4px; }
-.score-tag  {
-  font-size:11px; font-weight:700; padding:2px 7px;
-  border-radius:10px; white-space:nowrap;
-}
-.score-tag.good { background:#D1FAE5; color:#065F46; }
-.score-tag.bad  { background:#FEE2E2; color:#991B1B; }
+.score-name  { font-size: 13.5px; font-weight: 700; color: var(--text); width: 60px; flex-shrink: 0; }
+.score-track { flex: 1; height: 6px; background: var(--bg); border-radius: 2px; overflow: hidden; border: 1px solid var(--border); }
+.score-fill  { height: 100%; border-radius: 2px; }
+.score-fill.codex  { background: var(--codex); }
+.score-fill.gemini { background: var(--gemini); }
+.score-fill.claude { background: var(--claude); }
+.score-num  { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: var(--text); width: 28px; text-align: right; }
+.score-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-left: 4px; }
+.score-tag  { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 3px; white-space: nowrap; background: var(--bg); border: 1px solid var(--border); color: var(--text2); }
+.score-tag.good { background: #F0FDF4; color: #166534; border-color: #BBF7D0; }
+.score-tag.bad  { background: #FEF2F2; color: #B91C1C; border-color: #FECACA; }
 
 /* ── AI profile cards ── */
-.ai-profile-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0; }
-.ai-profile { border-radius:12px; border:1px solid #E5E5E5; overflow:hidden; }
-.ap-header { padding:16px 18px 12px; border-bottom:1px solid #E5E5E5; }
-.ap-header.claude { background:#FEF9EE; border-bottom-color:#FDE68A; }
-.ap-header.codex  { background:#F0FDF4; border-bottom-color:#A7F3D0; }
-.ap-header.gemini { background:#EFF6FF; border-bottom-color:#BFDBFE; }
-.ap-name  { font-size:19px; font-weight:950; margin-bottom:1px; }
-.ap-name.claude { color:#92400E; }
-.ap-name.codex  { color:#065F46; }
-.ap-name.gemini { color:#1E40AF; }
-.ap-model { font-size:11.5px; color:#888; font-weight:700; }
-.ap-body  { padding:14px 18px; background:#fff; }
-.ap-section { margin-bottom:14px; }
-.ap-section:last-child { margin-bottom:0; }
+.ai-profile-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 14px 0; }
+.ai-profile { border-radius: 6px; border: 1px solid var(--border); overflow: hidden; }
+.ap-header { padding: 14px 18px 12px; border-bottom: 1px solid var(--border); background: var(--bg); }
+.ap-header.claude { border-left: 3px solid var(--claude); }
+.ap-header.codex  { border-left: 3px solid var(--codex); }
+.ap-header.gemini { border-left: 3px solid var(--gemini); }
+.ap-name  { font-size: 18px; font-weight: 800; margin-bottom: 1px; color: var(--text); }
+.ap-model { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); font-weight: 500; }
+.ap-body  { padding: 14px 18px; background: var(--surface); }
+.ap-section { margin-bottom: 12px; }
+.ap-section:last-child { margin-bottom: 0; }
 .ap-label {
-  font-size:10.5px; font-weight:900; text-transform:uppercase;
-  letter-spacing:1px; color:#999; margin-bottom:6px;
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .8px; color: var(--text3); margin-bottom: 6px;
 }
-.ap-items { display:flex; flex-direction:column; gap:5px; }
+.ap-items { display: flex; flex-direction: column; gap: 4px; }
 .ap-item  {
-  font-size:13px; color:#333; line-height:1.55;
-  padding:5px 10px 5px 28px; position:relative;
-  border-radius:6px;
+  font-size: 13px; color: var(--text2); line-height: 1.6;
+  padding: 5px 10px 5px 24px; position: relative;
 }
-.ap-item.good { background:#F0FDF4; }
-.ap-item.bad  { background:#FFF5F5; }
-.ap-item.warn { background:#FFFBEB; }
 .ap-item::before {
-  content:''; position:absolute; left:10px; top:10px;
-  width:6px; height:6px; border-radius:50%;
+  content: ''; position: absolute; left: 9px; top: 11px;
+  width: 5px; height: 5px; border-radius: 50%;
 }
-.ap-item.good::before { background:#0D8A68; }
-.ap-item.bad::before  { background:#DC2626; }
-.ap-item.warn::before { background:#D97706; }
+.ap-item.good::before { background: var(--codex); }
+.ap-item.bad::before  { background: #B91C1C; }
+.ap-item.warn::before { background: #B45309; }
 
 /* ── Checklist ── */
-.check-section { margin:16px 0; }
+.check-section { margin: 14px 0; }
 .check-phase {
-  font-size:11px; font-weight:900; letter-spacing:2px; text-transform:uppercase;
-  color:#555; margin:22px 0 8px; padding:8px 14px;
-  background:#F5F5F5; border-radius:6px; display:flex; align-items:center; gap:8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text2); margin: 20px 0 7px; padding: 7px 13px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+  display: flex; align-items: center; gap: 8px;
 }
 .check-phase .cp-num {
-  font-size:10px; background:#555; color:#fff;
-  border-radius:3px; padding:1px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; background: var(--text); color: #fff;
+  border-radius: 3px; padding: 1px 6px;
 }
-.check-list { display:flex; flex-direction:column; gap:4px; }
+.check-list { display: flex; flex-direction: column; gap: 3px; }
 .check-row {
-  display:flex; align-items:flex-start; gap:12px;
-  padding:11px 14px; border-radius:8px;
-  border:1px solid #EBEBEB; background:#fff;
-  font-size:13.5px; line-height:1.65; color:#333;
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 10px 13px; border-radius: 4px;
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: 13.5px; line-height: 1.7; color: var(--text2);
 }
-.check-row.hi { background:#FFFBEB; border-color:#F5E07A; }
+.check-row.hi { background: var(--bg); border-color: var(--border2); }
 .check-box {
-  flex-shrink:0; width:16px; height:16px;
-  border:1.5px solid #CCC; border-radius:3px; margin-top:3px; background:#fff;
+  flex-shrink: 0; width: 15px; height: 15px;
+  border: 1.5px solid var(--border2); border-radius: 3px; margin-top: 3px;
 }
-.check-row strong { color:#111; }
+.check-row strong { color: var(--text); }
 
 /* ── Rule list (review checklist) ── */
-.rule-list { border:1px solid #E8E8E8; border-radius:10px; overflow:hidden; margin:14px 0; }
+.rule-list { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin: 12px 0; }
 .rule-item {
-  display:flex; gap:14px; padding:16px 20px;
-  border-bottom:1px solid #F0F0F0; align-items:flex-start;
+  display: flex; gap: 14px; padding: 14px 18px;
+  border-bottom: 1px solid var(--border); align-items: flex-start;
 }
-.rule-item:last-child { border-bottom:none; }
-.rule-item:nth-child(even) { background:#FAFAFA; }
+.rule-item:last-child { border-bottom: none; }
+.rule-item:nth-child(even) { background: var(--bg); }
 .rule-num {
-  flex-shrink:0; width:26px; height:26px; border-radius:50%;
-  background:#F0F0F0; display:flex; align-items:center; justify-content:center;
-  font-size:12px; font-weight:900; color:#555; margin-top:1px;
+  flex-shrink: 0; width: 24px; height: 24px; border-radius: 4px;
+  background: var(--bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; color: var(--text3); margin-top: 1px;
 }
-.rule-body { flex:1; }
-.rule-title { font-size:14px; font-weight:850; color:#111; margin-bottom:3px; }
-.rule-desc  { font-size:13px; color:#555; line-height:1.65; }
-.rule-source {
-  font-size:11.5px; color:#999; margin-top:6px;
-  padding-left:10px; border-left:2px solid #E0E0E0;
-}
+.rule-body { flex: 1; }
+.rule-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.rule-desc  { font-size: 13px; color: var(--text2); line-height: 1.7; }
+.rule-source { font-size: 11.5px; color: var(--text3); margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--border); }
 
 /* ── Guide boxes ── */
-.guide-box { border-radius:9px; padding:16px 18px; margin:12px 0; font-size:13.5px; line-height:1.7; }
-.guide-box.blue  { background:#EFF6FF; border:1px solid #BFDBFE; color:#1E3A8A; }
-.guide-box.green { background:#F0FDF4; border:1px solid #A7F3D0; color:#065F46; }
-.guide-box.amber { background:#FFFBEB; border:1px solid #FDE68A; color:#78350F; }
-.guide-box strong { font-weight:850; }
+.guide-box { border-radius: 4px; padding: 14px 16px; margin: 10px 0; font-size: 13.5px; line-height: 1.75; background: var(--surface); border: 1px solid var(--border); color: var(--text2); }
+.guide-box.blue  { border-left: 3px solid var(--gemini); }
+.guide-box.green { border-left: 3px solid var(--codex); }
+.guide-box.amber { border-left: 3px solid var(--claude); }
+.guide-box strong { font-weight: 700; color: var(--text); }
 
 /* ── Team grid ── */
-.team-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:16px; }
-.team-card { border:1px solid #E5E5E5; border-radius:10px; padding:16px 18px; background:#fff; }
-.team-card-title { font-size:13px; font-weight:900; color:#111; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid #F0F0F0; }
-.team-list { display:flex; flex-direction:column; gap:5px; }
-.team-item {
-  font-size:13px; color:#444; line-height:1.55;
-  padding-left:14px; position:relative;
-}
-.team-item::before { content:'·'; position:absolute; left:2px; color:#999; }
+.team-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-top: 14px; }
+.team-card { border: 1px solid var(--border); border-radius: 6px; padding: 15px 17px; background: var(--surface); }
+.team-card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid var(--border); }
+.team-list { display: flex; flex-direction: column; gap: 5px; }
+.team-item { font-size: 13px; color: var(--text2); line-height: 1.6; padding-left: 14px; position: relative; }
+.team-item::before { content: '·'; position: absolute; left: 3px; color: var(--text3); }
 
 /* ── Nav ── */
-.back-nav { margin-bottom:20px; }
-.back-link {
-  text-decoration:none; color:#777; font-size:13px; font-weight:700;
-  display:inline-flex; align-items:center; gap:5px;
-}
-.back-link:hover { color:#111; }
+.back-nav { margin-bottom: 18px; }
+.back-link { text-decoration: none; color: var(--text3); font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+.back-link:hover { color: var(--text); }
 
-@media (max-width:760px) {
-  .guide-hero { padding:26px 22px; }
-  .guide-title { font-size:26px; }
-  .hero-stats { grid-template-columns:repeat(2,1fr); gap:16px; }
-  .pattern-grid, .ai-profile-grid, .diff-grid, .team-grid { grid-template-columns:1fr; }
+@media (max-width: 760px) {
+  .guide-hero { padding: 24px 20px; }
+  .guide-title { font-size: 24px; }
+  .hero-stats { grid-template-columns: repeat(2,1fr); gap: 16px; }
+  .pattern-grid, .ai-profile-grid, .diff-grid, .team-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -692,7 +677,7 @@ ui/components/
   <!-- ── S3 ── -->
   <section class="card" id="s3">
     <div class="sh"><span class="sh-num">03</span><h2>바이브 코딩 체크리스트 — Before / During / After</h2></div>
-    <p class="lead">AI 코드 생성 전후로 팀이 지켜야 할 규칙을 3단계로 정리했습니다. <span style="background:#FFFBEB;padding:1px 6px;border-radius:4px;font-size:13px;color:#92400E;font-weight:700;">노란색 항목</span>이 실험에서 가장 많이 놓친 항목입니다.</p>
+    <p class="lead">AI 코드 생성 전후로 팀이 지켜야 할 규칙을 3단계로 정리했습니다. <span style="background:var(--bg);padding:1px 6px;border-radius:3px;font-size:13px;color:var(--text2);font-weight:700;border:1px solid var(--border2);">굵게 표시된 항목</span>이 실험에서 가장 많이 놓친 항목입니다.</p>
 
     <div class="check-section">
       <div class="check-phase"><span class="cp-num">BEFORE</span> 프롬프트 작성 전 — 팀 규칙 먼저 설정</div>

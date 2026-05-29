@@ -4,92 +4,93 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>WeatherNow 인간 vs AI 비교</title>
-<link rel="stylesheet" href="report_common.css?v=20260528-02">
+<link rel="stylesheet" href="report_common.css?v=20260529-01">
 <style>
-.dot.human { background:#7C3AED; }
-.th-human  { border-top:3px solid #7C3AED; }
-.human-pill { background:#F5F3FF; border-color:#DDD6FE; color:#5B21B6; }
+:root { --human: #5B21B6; }
+.dot.human { background: var(--human); }
+.th-human  { border-top: 2px solid var(--human); }
+.human-pill { background: var(--bg, #F6F6F6); border-color: var(--border, #E8E8E8); color: var(--human); }
 
 .phase-status {
-  display:inline-flex; align-items:center; gap:6px;
-  font-size:12px; font-weight:800; letter-spacing:.5px;
-  padding:4px 10px; border-radius:20px;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: .4px;
+  padding: 3px 9px; border-radius: 4px;
 }
-.phase-status.done   { background:#D1FAE5; color:#065F46; }
-.phase-status.todo   { background:#F3F4F6; color:#9CA3AF; }
+.phase-status.done { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+.phase-status.todo { background: var(--bg, #F6F6F6); color: var(--text3, #888); border: 1px solid var(--border, #E8E8E8); }
 
-.time-cmp { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; margin:16px 0; }
+.time-cmp { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin: 14px 0; }
 .time-box {
-  border:1px solid #E2E2E2;
-  border-radius:10px;
-  padding:16px 18px;
-  background:#FAFAFA;
-  position:relative;
+  border: 1px solid var(--border, #E8E8E8);
+  border-radius: 6px;
+  padding: 14px 16px;
+  background: var(--surface, #fff);
+  position: relative;
 }
-.time-box.highlight { background:#F5F3FF; border-color:#C4B5FD; }
-.time-ai  { font-size:11px; font-weight:800; letter-spacing:.5px; color:#9CA3AF; margin-bottom:4px; }
-.time-val { font-size:22px; font-weight:900; color:#111; letter-spacing:-.5px; line-height:1.1; }
-.time-sub { font-size:12px; color:#9CA3AF; margin-top:3px; }
+.time-box.highlight { border-left: 3px solid var(--human); }
+.time-ai  { font-size: 11px; font-weight: 600; letter-spacing: .4px; color: var(--text3, #888); margin-bottom: 4px; }
+.time-val { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: var(--text, #111); letter-spacing: -.5px; line-height: 1.1; }
+.time-sub { font-size: 11.5px; color: var(--text3, #888); margin-top: 3px; }
 .time-badge {
-  position:absolute; top:10px; right:10px;
-  font-size:10px; font-weight:900; letter-spacing:.5px;
-  background:#111; color:#fff;
-  padding:2px 7px; border-radius:10px;
+  position: absolute; top: 9px; right: 9px;
+  font-size: 10px; font-weight: 700; letter-spacing: .4px;
+  background: var(--text, #111); color: #fff;
+  padding: 2px 6px; border-radius: 3px;
 }
 
-.diff-bar-wrap { margin:20px 0 8px; }
-.diff-bar-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-.diff-bar-label { font-size:13.5px; font-weight:700; color:#555; width:130px; flex-shrink:0; }
-.diff-bar-track { flex:1; height:10px; background:#F0F0F0; border-radius:5px; overflow:hidden; }
-.diff-bar-fill  { height:100%; border-radius:5px; }
-.diff-bar-fill.human  { background:#7C3AED; }
-.diff-bar-fill.claude { background:#C2622A; }
-.diff-bar-fill.gemini { background:#1A56DB; }
-.diff-bar-fill.codex  { background:#0D8A68; }
-.diff-bar-num  { font-size:14px; font-weight:900; color:#111; width:80px; text-align:right; flex-shrink:0; }
+.diff-bar-wrap { margin: 16px 0 6px; }
+.diff-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+.diff-bar-label { font-size: 13px; font-weight: 600; color: var(--text2, #444); width: 120px; flex-shrink: 0; }
+.diff-bar-track { flex: 1; height: 6px; background: var(--bg, #F6F6F6); border-radius: 2px; overflow: hidden; border: 1px solid var(--border, #E8E8E8); }
+.diff-bar-fill  { height: 100%; border-radius: 2px; }
+.diff-bar-fill.human  { background: var(--human); }
+.diff-bar-fill.claude { background: #C2622A; }
+.diff-bar-fill.gemini { background: #1A4FDB; }
+.diff-bar-fill.codex  { background: #0B8A5E; }
+.diff-bar-num  { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--text, #111); width: 72px; text-align: right; flex-shrink: 0; }
 
-.arch-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
-.arch-card { border:1px solid #E2E2E2; border-radius:10px; overflow:hidden; }
-.arch-head { padding:10px 16px; background:#FAFAFA; border-bottom:1px solid #EBEBEB; font-weight:800; font-size:14px; display:flex; align-items:center; gap:8px; }
-.arch-body { padding:14px 16px; font-size:13.5px; color:#374151; line-height:1.7; }
-.arch-body ul { margin-left:16px; }
-.arch-body li { margin-bottom:3px; }
+.arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+.arch-card { border: 1px solid var(--border, #E8E8E8); border-radius: 6px; overflow: hidden; }
+.arch-head { padding: 10px 15px; background: var(--bg, #F6F6F6); border-bottom: 1px solid var(--border, #E8E8E8); font-weight: 700; font-size: 13.5px; display: flex; align-items: center; gap: 8px; }
+.arch-body { padding: 13px 15px; font-size: 13.5px; color: var(--text2, #444); line-height: 1.75; }
+.arch-body ul { margin-left: 16px; }
+.arch-body li { margin-bottom: 3px; }
 
 .pending-card {
-  border:1px dashed #D1D5DB;
-  border-radius:10px;
-  padding:28px 24px;
-  background:#FAFAFA;
-  text-align:center;
-  color:#9CA3AF;
+  border: 1px dashed var(--border2, #CCC);
+  border-radius: 6px;
+  padding: 28px 24px;
+  background: var(--bg, #F6F6F6);
+  text-align: center;
+  color: var(--text3, #888);
 }
-.pending-card .pc-icon { font-size:28px; margin-bottom:8px; }
-.pending-card .pc-title { font-size:15px; font-weight:800; color:#6B7280; margin-bottom:6px; }
-.pending-card .pc-desc  { font-size:13px; line-height:1.6; }
+.pending-card .pc-icon { font-size: 26px; margin-bottom: 8px; }
+.pending-card .pc-title { font-size: 14.5px; font-weight: 700; color: var(--text2, #444); margin-bottom: 5px; }
+.pending-card .pc-desc  { font-size: 13px; line-height: 1.65; }
 
-.insight-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
-.insight { border:1px solid #E5E7EB; border-radius:10px; padding:15px 16px; background:#FAFAFA; }
-.insight.purple { border-left:3px solid #7C3AED; }
-.insight.orange { border-left:3px solid #C2622A; }
-.insight.blue   { border-left:3px solid #1A56DB; }
-.insight-k { font-size:12px; font-weight:850; color:#1F2937; margin-bottom:5px; }
-.insight-v { font-size:13.5px; line-height:1.6; color:#374151; }
+.insight-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 12px; }
+.insight { border: 1px solid var(--border, #E8E8E8); border-radius: 6px; padding: 14px 15px; background: var(--surface, #fff); }
+.insight.purple { border-left: 3px solid var(--human); }
+.insight.orange { border-left: 3px solid #C2622A; }
+.insight.blue   { border-left: 3px solid #1A4FDB; }
+.insight-k { font-size: 12px; font-weight: 700; color: var(--text, #111); margin-bottom: 4px; }
+.insight-v { font-size: 13.5px; line-height: 1.7; color: var(--text2, #444); }
 
 .file-tree {
-  background:#1A1A1A; color:#E2E8F0;
-  border-radius:8px; padding:14px 18px;
-  font-family:'Consolas','Menlo',monospace;
-  font-size:13px; line-height:1.8;
-  margin:12px 0;
+  background: #1C1C1C; color: #D4D4D4;
+  border-radius: 4px; padding: 14px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px; line-height: 1.8;
+  margin: 10px 0;
 }
-.file-tree .dir  { color:#93C5FD; }
-.file-tree .file { color:#A7F3D0; }
-.file-tree .note { color:#6B7280; font-size:12px; }
+.file-tree .dir  { color: #93C5FD; }
+.file-tree .file { color: #86EFAC; }
+.file-tree .note { color: #555; font-size: 11.5px; }
 
-@media (max-width:760px) {
-  .time-cmp { grid-template-columns:1fr 1fr; }
-  .arch-grid { grid-template-columns:1fr; }
-  .insight-grid { grid-template-columns:1fr; }
+@media (max-width: 760px) {
+  .time-cmp { grid-template-columns: 1fr 1fr; }
+  .arch-grid { grid-template-columns: 1fr; }
+  .insight-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
