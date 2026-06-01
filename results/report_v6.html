@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WeatherNow V6 버그 디버깅 비교</title>
+<link rel="stylesheet" href="report_common.css?v=20260529-02">
+</head>
+<body id="top">
+<div class="wrap">
+  <header class="rh">
+    <div class="rh-eyebrow">AI CODING TOOL COMPARISON · V6</div>
+    <h1 class="rh-title">WeatherNow V6 버그 디버깅 비교</h1>
+    <p class="rh-sub">동일하게 5개의 버그를 심은 코드에서 각 AI가 얼마나 찾아냈는지, 그리고 어떤 방식으로 진단하고 수정했는지를 비교한 결과입니다.</p>
+    <div class="rh-meta">
+      <span class="ai-pill"><span class="dot claude"></span>Claude</span><span class="ai-pill"><span class="dot codex"></span>Codex</span><span class="ai-pill"><span class="dot gemini"></span>Gemini</span>
+      <span class="tag-sm">baseline: weather-v4 (버그 주입)</span>
+      <span class="tag-sm">result: 버그 수정 완료</span>
+      <span class="tag-sm">generated: 2026-06-01</span>
+    </div>
+  </header>
+  <nav class="toc">
+    <a href="index.html">전체 요약</a><a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#bugs">주입 버그</a><a href="#summary">종합 비교</a><a href="#approach">디버깅 접근</a><a href="#tokens">토큰</a><a href="#observations">관찰</a><a href="#verdict">최종 평가</a>
+  </nav>
+
+  <section class="card" id="overview">
+    <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
+    <p class="lead">V4에서 각 AI가 작성한 코드베이스에 동일한 유형의 버그 5개를 의도적으로 주입한 뒤, "이 앱에 버그가 있다, 찾아서 고쳐라"는 단일 지시만 주었습니다. 위치 힌트는 일절 제공하지 않았습니다.</p>
+    <div class="callout-grid">
+      <div class="callout"><div class="callout-k">실험 설계</div><div class="callout-v">각 AI는 자신이 V1~V4에 걸쳐 직접 작성한 코드를 디버깅합니다. 버그 유형은 동일(로딩 상태 누락·즐겨찾기 토글·온도 필드 스왑·에러 미초기화·중복 방지 제거)하지만, 코드 구조가 달라 위치는 다릅니다.</div></div>
+      <div class="callout"><div class="callout-k">핵심 발견</div><div class="callout-v">세 AI 모두 5/5 버그를 발견했습니다. 하지만 검증 품질에서 뚜렷한 차이가 났습니다. Codex는 프롬프트에 없던 단위 테스트까지 자체 실행했고 JAVA_HOME 문제도 스스로 해결했습니다. Gemini는 빌드 검증에 실패했습니다.</div></div>
+      <div class="callout"><div class="callout-k">아키텍처 영향</div><div class="callout-v">Claude는 V4에서 Repository 계층을 분리했기 때문에 버그가 2개 파일(WeatherViewModel + WeatherRepository)에 분산됐습니다. Codex·Gemini는 1개 파일에 집중됐습니다. Claude는 분산된 버그도 모두 발견했습니다.</div></div>
+    </div>
+    <div class="metric-grid">
+      <div class="metric"><div class="metric-k">버그 발견율</div><div class="metric-v">전원 5/5 (100%)</div></div>
+      <div class="metric"><div class="metric-k">빌드+테스트 통과</div><div class="metric-v">Codex (유일)</div></div>
+      <div class="metric"><div class="metric-k">Codex 토큰</div><div class="metric-v">62,909</div></div>
+    </div>
+  </section>
+
+  <section class="card" id="prompt">
+    <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
+    <p class="prompt-meta">prompt_v6.txt · 버그 디버깅 (동일 프롬프트 3개 AI 공통 사용)</p>
+    <pre class="prompt-pre">You are debugging the existing WeatherNow Android app in this directory.
+
+This is V6 of an AI comparison experiment. You previously built and improved this app through V1, V2, V3, V4, and V5.
+Read the existing code first, then find and fix all bugs.
+
+Goal:
+This app has been intentionally broken. There are exactly 5 bugs hidden in the Kotlin source code.
+Find all 5 bugs and fix them. Do not add new features or refactor unrelated code.
+
+What you know about the bugs:
+- All bugs are in the Kotlin source files (not in XML, Gradle, or resources).
+- Each bug causes a visible or testable problem in the running app.
+- The bugs are subtle — they look like plausible code but behave incorrectly.
+
+After fixing:
+1. Run ./gradlew assembleDebug to confirm the build passes.
+2. List each bug you found: what it was, where it was, and what you changed.
+3. If you find fewer than 5 bugs, say so explicitly — do not pretend you found all 5.
+
+Do not ask for hints. Read the code carefully and reason from first principles.</pre>
+    <div class="note-box">버그 위치·유형에 대한 힌트는 일절 제공하지 않았습니다. 각 AI가 코드를 읽고 스스로 이상한 부분을 추론하도록 설계했습니다.</div>
+  </section>
+
+  <section class="card" id="bugs">
+    <div class="sh"><span class="sh-num">03</span><h2>주입된 버그 5개 (실험 종료 후 공개)</h2></div>
+    <p class="lead">실험 전 미리 설계한 버그입니다. 같은 유형이지만 각 AI의 코드 구조에 맞게 위치를 다르게 심었습니다.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>ID</th><th>유형</th><th>증상</th><th>Claude 위치</th><th>Codex 위치</th><th>Gemini 위치</th></tr></thead><tbody>
+      <tr><td class="col-label">B1</td><td>로딩 스피너 잔류</td><td>에러 발생 시 isLoading = false 누락 → 스피너가 영원히 사라지지 않음</td><td>WeatherViewModel.kt catch</td><td>WeatherViewModel.kt onFailure</td><td>WeatherViewModel.kt catch</td></tr>
+      <tr><td class="col-label">B2</td><td>즐겨찾기 해제 불가</td><td>toggleFavorite()에서 null 분기 제거 → 한번 설정하면 해제 불가</td><td>WeatherViewModel.kt</td><td>WeatherViewModel.kt</td><td>WeatherViewModel.kt</td></tr>
+      <tr class="row-hl"><td class="col-label">B3</td><td>온도 필드 스왑</td><td>currentTemp ↔ feelsLike 뒤바뀜 → 현재 온도와 체감 온도가 반대로 표시</td><td><strong>WeatherRepository.kt</strong> (별도 파일)</td><td>WeatherViewModel.kt</td><td>WeatherViewModel.kt</td></tr>
+      <tr><td class="col-label">B4</td><td>에러 메시지 잔류</td><td>새 fetch 시작 시 error = null 누락 → 이전 에러가 성공 후에도 화면에 남음</td><td>WeatherViewModel.kt</td><td>WeatherViewModel.kt</td><td>WeatherViewModel.kt</td></tr>
+      <tr><td class="col-label">B5</td><td>중복 실행 / 도시 고정</td><td>Claude·Codex: 중복 fetch 방지 제거 / Gemini: 새로고침 시 항상 서울로 고정</td><td>WeatherViewModel.kt (fetchJob?.cancel() 제거)</td><td>WeatherViewModel.kt (refresh 가드 제거)</td><td>WeatherViewModel.kt (selectCity("서울") 하드코딩)</td></tr>
+    </tbody></table></div>
+    <div class="note-box"><strong>B3 관찰:</strong> Claude만 온도 스왑 버그가 WeatherRepository.kt에 있었습니다. V4에서 Repository 계층을 분리한 결과, 같은 유형의 버그가 다른 파일에 위치했습니다. Claude는 이를 포함해 5개 전부 발견했습니다.</div>
+  </section>
+
+  <section class="card" id="summary">
+    <div class="sh"><span class="sh-num">04</span><h2>종합 비교</h2></div>
+    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody>
+      <tr><td class="col-label">모델</td><td>claude-sonnet-4-6</td><td>gpt-5.5</td><td>gemini-3-flash-preview</td></tr>
+      <tr class="row-hl"><td class="col-label">버그 발견</td><td>5 / 5 ✅</td><td>5 / 5 ✅</td><td>5 / 5 ✅</td></tr>
+      <tr><td class="col-label">빌드 검증</td><td>성공 ✅</td><td>성공 ✅</td><td>실패 ❌ (JAVA_HOME 미설정)</td></tr>
+      <tr class="row-hl"><td class="col-label">단위 테스트 실행</td><td>미실행</td><td><strong>자체 실행 · 전체 통과</strong> ✅</td><td>미실행</td></tr>
+      <tr><td class="col-label">도구 오류</td><td>없음</td><td>없음</td><td>replace 실패 1회 (회복)</td></tr>
+      <tr><td class="col-label">사용 토큰</td><td>미집계</td><td>62,909</td><td>미집계</td></tr>
+      <tr><td class="col-label">버그 위치 파일 수</td><td>2개 파일</td><td>1개 파일</td><td>1개 파일</td></tr>
+      <tr><td class="col-label">첫 시도 수정</td><td>전부 ✅</td><td>전부 ✅</td><td>전부 ✅ (도구 오류 1회 후 회복)</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section class="card" id="approach">
+    <div class="sh"><span class="sh-num">05</span><h2>디버깅 접근 방식 비교</h2></div>
+    <p class="lead">같은 목표(5개 버그 발견)에 대해 각 AI가 어떤 순서와 방법으로 코드를 읽고 진단했는지 비교합니다.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>첫 번째 행동</th><th>진단 방법</th><th>수정 순서</th><th>검증 방법</th></tr></thead><tbody>
+      <tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>git diff로 변경 이력 확인</td><td>diff 각 hunk를 의미 기준으로 해석 → 버그 추론</td><td>파일별 순차 수정 (ViewModel → Repository)</td><td>./gradlew assembleDebug</td></tr>
+      <tr class="row-hl"><td class="col-label"><span class="dot codex"></span> Codex</td><td>모든 .kt 파일 목록 + 전체 읽기</td><td>전체 코드 이해 후 git diff로 의심 지점 좁히기</td><td>논리적 의존 순서로 수정</td><td>assembleDebug + <strong>testDebugUnitTest (자체 실행)</strong> · JAVA_HOME 직접 해결</td></tr>
+      <tr><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>WeatherViewModel.kt 직독</td><td>코드 흐름 추적으로 이상 패턴 식별</td><td>발견 즉시 수정 (1개 replace 오류 후 회복)</td><td>./gradlew 실패 → 정적 분석 + V5 단위 테스트 교차 검증으로 대체</td></tr>
+    </tbody></table></div>
+    <div class="note-box"><strong>Codex의 자발적 단위 테스트 실행:</strong> 프롬프트는 "빌드 통과"만 요구했지만, Codex는 V5에서 본인이 직접 작성한 단위 테스트가 있다는 것을 인지하고 자체적으로 <code>testDebugUnitTest</code>까지 실행했습니다. "코드가 컴파일된다"와 "기능이 올바르다"를 구분한 것입니다.</div>
+  </section>
+
+  <section class="card" id="tokens">
+    <div class="sh"><span class="sh-num">06</span><h2>토큰 사용량</h2></div>
+    <div class="token-cards">
+      <div class="token-card">
+        <div class="tc-head"><span class="dot claude"></span><span class="tc-name">Claude</span><span class="tc-model">claude-sonnet-4-6</span></div>
+        <div class="kv-list">
+          <div class="kv-row hl"><span class="kv-k">빌드 결과</span><span class="kv-v">BUILD SUCCESSFUL (1m 57s)</span></div>
+          <div class="kv-row"><span class="kv-k">총 토큰</span><span class="kv-v">미집계</span></div>
+          <div class="kv-row"><span class="kv-k">버그 발견</span><span class="kv-v">5 / 5</span></div>
+        </div>
+        <p class="tc-note">--print 모드로 실행해 토큰 집계가 제공되지 않았습니다. git diff를 가장 먼저 확인하는 접근으로 빠르게 버그를 특정했습니다.</p>
+      </div>
+      <div class="token-card">
+        <div class="tc-head"><span class="dot codex"></span><span class="tc-name">Codex</span><span class="tc-model">gpt-5.5</span></div>
+        <div class="kv-list">
+          <div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">62,909</span></div>
+          <div class="kv-row"><span class="kv-k">빌드 결과</span><span class="kv-v">BUILD SUCCESSFUL</span></div>
+          <div class="kv-row"><span class="kv-k">단위 테스트</span><span class="kv-v">전체 통과 (자체 실행)</span></div>
+          <div class="kv-row"><span class="kv-k">버그 발견</span><span class="kv-v">5 / 5</span></div>
+        </div>
+        <p class="tc-note">Codex exec 최종 출력 'tokens used: 62,909'. 전체 .kt 파일을 읽고 단위 테스트까지 실행한 가장 철저한 검증임에도 토큰 효율이 높습니다.</p>
+      </div>
+      <div class="token-card">
+        <div class="tc-head"><span class="dot gemini"></span><span class="tc-name">Gemini</span><span class="tc-model">gemini-3-flash-preview</span></div>
+        <div class="kv-list">
+          <div class="kv-row hl"><span class="kv-k">빌드 결과</span><span class="kv-v">미검증 (JAVA_HOME 미설정)</span></div>
+          <div class="kv-row"><span class="kv-k">총 토큰</span><span class="kv-v">미집계</span></div>
+          <div class="kv-row"><span class="kv-k">도구 오류</span><span class="kv-v">replace 1회 실패 후 회복</span></div>
+          <div class="kv-row"><span class="kv-k">버그 발견</span><span class="kv-v">5 / 5</span></div>
+        </div>
+        <p class="tc-note">JAVA_HOME 문제 발생 시 우회 경로를 탐색하지 않고 정적 분석으로 대체했습니다. Codex는 동일 환경에서 Android Studio JBR 경로를 스스로 찾아 해결했습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="observations">
+    <div class="sh"><span class="sh-num">07</span><h2>구현 관찰</h2></div>
+    <p class="lead">버그 발견율은 3개 AI 모두 동일(5/5)했지만, "완료"의 기준과 장애물 대응에서 차이가 드러났습니다.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>강점</th><th>약점 / 한계</th><th>주목할 행동</th></tr></thead><tbody>
+      <tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>git diff를 첫 단계로 활용해 변경 범위를 빠르게 파악. 2개 파일에 분산된 버그도 모두 탐지.</td><td>프롬프트 요구사항인 빌드까지만 확인. 단위 테스트 자발적 실행 없음.</td><td>V4에서 Repository 계층을 분리한 결과, 온도 버그가 별도 파일에 위치했음에도 누락 없이 발견.</td></tr>
+      <tr class="row-hl"><td class="col-label"><span class="dot codex"></span> Codex</td><td>모든 파일을 체계적으로 읽고, 빌드 + 단위 테스트까지 자발적 검증. JAVA_HOME 문제를 우회 경로로 해결.</td><td>접근 방식이 가장 철저하지만 상대적으로 더 많은 단계를 실행.</td><td>프롬프트에 없던 <code>testDebugUnitTest</code>를 자체 실행 — "컴파일 성공"과 "기능 정확성"을 구분하는 엔지니어링 마인드셋.</td></tr>
+      <tr><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>코드 흐름 추적 능력이 뛰어나 모든 버그를 정적 분석만으로 발견.</td><td>JAVA_HOME 문제에서 우회 경로 탐색 없이 포기. replace 도구 오류 1회 발생.</td><td>빌드 검증 실패를 V5 단위 테스트로 교차 검증하는 방식으로 대체 — 완전히 포기하지는 않음.</td></tr>
+    </tbody></table></div>
+
+    <div class="note-box" style="margin-top:16px"><strong>V5 단위 테스트가 V6 디버깅에 미친 영향:</strong> Gemini는 빌드를 검증하지 못하자 V5에서 작성한 단위 테스트를 교차 검증 수단으로 활용했습니다. 단위 테스트는 "테스트를 통과시키는 단계(V5)"뿐 아니라 "이후 코드 변경이 올바른지 확인하는 안전망"으로도 기능했습니다. V4 → V5 → V6의 연결이 실제 개발 사이클과 동일한 패턴을 보여줍니다.</div>
+  </section>
+
+  <section class="card" id="verdict">
+    <div class="sh"><span class="sh-num">08</span><h2>최종 평가</h2></div>
+    <p class="lead">버그 탐지 능력은 세 AI가 동등합니다. 차이는 <strong>"얼마나 발견했는가"가 아니라 "발견 후 어떻게 검증했는가"</strong>에 있습니다.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>평가 기준</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody>
+      <tr><td class="col-label">버그 탐지</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td></tr>
+      <tr><td class="col-label">수정 정확성</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td></tr>
+      <tr class="row-hl"><td class="col-label">검증 품질</td><td>⭐⭐ (빌드만)</td><td>⭐⭐⭐ (빌드 + 유닛 테스트)</td><td>⭐ (정적 분석만)</td></tr>
+      <tr><td class="col-label">장애물 대응</td><td>⭐⭐⭐ (문제 없음)</td><td>⭐⭐⭐ (JAVA_HOME 자체 해결)</td><td>⭐ (JAVA_HOME 포기)</td></tr>
+      <tr><td class="col-label">자율 범위 확장</td><td>⭐⭐ (요구사항 준수)</td><td>⭐⭐⭐ (단위 테스트 자체 실행)</td><td>⭐⭐ (교차 검증 시도)</td></tr>
+    </tbody></table></div>
+    <div class="note-box" style="margin-top:16px">
+      <strong>V1~V6 종합 관찰:</strong> 단순 구현(V1~V3)에서는 Gemini·Cursor가 체감 기능에서 앞섰고, 아키텍처 설계(V4)에서는 Claude가 유지보수성을 먼저 고려했습니다. 단위 테스트(V5)에서는 Claude의 V4 설계 선택이 가장 단순한 테스트 코드를 만들었고, 디버깅(V6)에서는 탐지 능력은 동등하지만 Codex가 검증 깊이에서 앞섰습니다. <strong>각 AI의 강점이 단계마다 다르게 드러난다는 점이 이 실험의 핵심 발견입니다.</strong>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

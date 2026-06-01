@@ -36,8 +36,8 @@ class WeatherViewModel : ViewModel() {
     }
 
     fun refresh() {
-        val currentCityName = _uiState.value.weatherData?.city ?: "서울"
-        selectCity(currentCityName)
+        val currentCity = _uiState.value.weatherData?.city ?: "서울"
+        selectCity(currentCity)
     }
 
     private fun fetchWeatherData(city: City) {
@@ -50,16 +50,17 @@ class WeatherViewModel : ViewModel() {
                     it.copy(
                         weatherData = mappedData,
                         isLoading = false,
+                        error = null,
                         lastUpdated = getCurrentTime(),
                         smartInsight = generateInsight(mappedData)
                     )
                 }
             } catch (e: Exception) {
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
-                        isLoading = false, 
+                        isLoading = false,
                         error = "날씨 정보를 불러오는 데 실패했습니다: ${e.message}"
-                    ) 
+                    )
                 }
             }
         }
@@ -135,8 +136,7 @@ class WeatherViewModel : ViewModel() {
 
     fun toggleFavorite(city: String) {
         _uiState.update {
-            val newFavorite = if (it.favoriteCity == city) null else city
-            it.copy(favoriteCity = newFavorite)
+            it.copy(favoriteCity = if (it.favoriteCity == city) null else city)
         }
     }
 

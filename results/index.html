@@ -361,6 +361,7 @@ body {
     <a class="nav-link" href="report_v3.html">V3 자율 혁신</a>
     <a class="nav-link" href="report_v4.html">V4 실제 API</a>
     <a class="nav-link" href="report_v5.html">V5 단위 테스트</a>
+    <a class="nav-link" href="report_v6.html">V6 버그 디버깅</a>
     <a class="nav-link" href="report_human.html">직접 구현 vs AI</a>
   </div>
 </nav>
@@ -375,7 +376,7 @@ body {
       <span class="hero-badge x">OpenAI Codex</span>
       <span class="hero-badge g">Gemini CLI</span>
       <span class="hero-badge" style="color:#111827;border-color:rgba(17,24,39,.25);">Cursor Agent</span>
-      <span class="hero-badge">V1–V3 목 데이터 · V4 실 API · V5 단위 테스트</span>
+      <span class="hero-badge">V1–V3 목 데이터 · V4 실 API · V5 단위 테스트 · V6 버그 디버깅</span>
     </div>
   </div>
 </header>
@@ -383,8 +384,8 @@ body {
 <div class="stat-bar">
   <div class="stat-inner">
     <div class="stat-item">
-      <div class="stat-n">5단계</div>
-      <div class="stat-l">V1 → V2 → V3 → V4 → V5</div>
+      <div class="stat-n">6단계</div>
+      <div class="stat-l">V1 → V2 → V3 → V4 → V5 → V6</div>
     </div>
     <div class="stat-item">
       <div class="stat-n">Gemini</div>
@@ -501,6 +502,18 @@ body {
           <p class="phase-desc">V4 앱에 단위 테스트를 추가했습니다. 같은 요구사항에서 AI마다 모킹 전략이 완전히 달랐습니다. 특히 V4 아키텍처 선택이 V5 테스트 복잡도를 직접 결정했습니다.</p>
           <div class="phase-result">세 AI 모두 5/5 통과 · Codex URLStreamHandler 독창 접근 · Gemini 최단 231초</div>
           <a class="phase-link" href="report_v5.html">V5 보고서 보기</a>
+        </div>
+      </article>
+      <article class="phase-card">
+        <div class="phase-shot" style="background:#1a1a2e;display:flex;align-items:center;justify-content:center;min-height:160px;">
+          <span style="font-size:40px;">🐛</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-n">06</div>
+          <h3 class="phase-title">버그 디버깅</h3>
+          <p class="phase-desc">V4 코드에 동일한 유형의 버그 5개를 심고 "찾아서 고쳐라"는 지시만 주었습니다. 발견율은 세 AI 모두 5/5로 동일했지만 검증 품질과 장애물 대응에서 차이가 드러났습니다.</p>
+          <div class="phase-result">전원 5/5 발견 · Codex 단위 테스트 자체 실행 · Gemini 빌드 검증 실패</div>
+          <a class="phase-link" href="report_v6.html">V6 보고서 보기</a>
         </div>
       </article>
     </div>
@@ -641,6 +654,20 @@ body {
             <td>MockK (mockkObject)</td>
             <td>URLStreamHandlerFactory (직접 구현)</td>
             <td>MockK + Turbine</td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V6 버그 발견</td>
+            <td><span class="badge ok">5 / 5</span></td>
+            <td><span class="badge ok">5 / 5</span></td>
+            <td><span class="badge ok">5 / 5</span></td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V6 빌드 검증</td>
+            <td><span class="badge ok">성공</span></td>
+            <td><span class="badge ok">빌드 + 단위 테스트</span></td>
+            <td><span class="badge err">미검증 (JAVA_HOME)</span></td>
             <td style="color:var(--muted);">한도 초과</td>
           </tr>
           <tr>

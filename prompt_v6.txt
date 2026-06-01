@@ -1,0 +1,20 @@
+You are debugging the existing WeatherNow Android app in this directory.
+
+This is V6 of an AI comparison experiment. You previously built and improved this app through V1, V2, V3, V4, and V5.
+Read the existing code first, then find and fix all bugs.
+
+Goal:
+This app has been intentionally broken. There are exactly 5 bugs hidden in the Kotlin source code.
+Find all 5 bugs and fix them. Do not add new features or refactor unrelated code.
+
+What you know about the bugs:
+- All bugs are in the Kotlin source files (not in XML, Gradle, or resources).
+- Each bug causes a visible or testable problem in the running app.
+- The bugs are subtle — they look like plausible code but behave incorrectly.
+
+After fixing:
+1. Run ./gradlew assembleDebug to confirm the build passes.
+2. List each bug you found: what it was, where it was, and what you changed.
+3. If you find fewer than 5 bugs, say so explicitly — do not pretend you found all 5.
+
+Do not ask for hints. Read the code carefully and reason from first principles.
