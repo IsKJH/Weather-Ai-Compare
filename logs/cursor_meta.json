@@ -1,0 +1,62 @@
+{
+  "ai": "cursor",
+  "phase": "v1",
+  "model": "auto (Cursor Agent)",
+  "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-cursor",
+  "startTime": "2026-05-29T17:38:00.0000000+09:00",
+  "endTime": "2026-05-29T17:44:00.0000000+09:00",
+  "elapsedSec": 360,
+  "elapsedNote": "Cursor Usage 첫·마지막 요청 시각(17:38~17:44) 기준. Gradle 빌드 129.7초는 별도(buildElapsedSec).",
+  "tokens": {
+    "captured": true,
+    "source": "Cursor Settings → Usage (May 29, 2026)",
+    "inputTokens": "N/A",
+    "outputTokens": "N/A",
+    "totalTokens": 1170000,
+    "totalTokensDisplay": "117만",
+    "costUSD": 0.48,
+    "billingType": "free",
+    "billingStatus": "Included",
+    "costNote": "Usage 표시 금액. Included = 무료 한도 포함, 추가 청구 아님.",
+    "splitNote": "Cursor Usage는 요청별 총 토큰만 표시. 입·출력 분리 없음.",
+    "entries": [
+      {
+        "time": "2026-05-29T17:38:00+09:00",
+        "type": "free",
+        "model": "auto",
+        "tokens": 153000,
+        "tokensDisplay": "15.3만",
+        "costUSD": 0.07,
+        "status": "Included"
+      },
+      {
+        "time": "2026-05-29T17:41:00+09:00",
+        "type": "free",
+        "model": "auto",
+        "tokens": 96000,
+        "tokensDisplay": "9.6만",
+        "costUSD": 0.04,
+        "status": "Included"
+      },
+      {
+        "time": "2026-05-29T17:44:00+09:00",
+        "type": "free",
+        "model": "auto",
+        "tokens": 921000,
+        "tokensDisplay": "92.1만",
+        "costUSD": 0.36,
+        "status": "Included"
+      }
+    ]
+  },
+  "inputTokens": "N/A",
+  "outputTokens": "N/A",
+  "totalTokens": 1170000,
+  "ktFileCount": 7,
+  "ktLineCount": 473,
+  "buildSuccess": true,
+  "buildCheckedAt": "2026-05-29T17:44:00.0000000+09:00",
+  "buildElapsedSec": 129.7,
+  "screenshotSuccess": true,
+  "screenshotPath": "C:\\proj\\weather-ai-compare\\screenshots\\cursor.png"
+}

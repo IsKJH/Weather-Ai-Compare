@@ -1,0 +1,37 @@
+{
+  "ai": "claude",
+  "phase": "v5",
+  "model": "claude-sonnet-4-6",
+  "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-claude",
+  "startTime": "2026-06-01T14:54:12.000+09:00",
+  "endTime": "2026-06-01T15:01:20.000+09:00",
+  "elapsedSec": 428,
+  "tokens": {
+    "captured": true,
+    "source": "Claude session JSONL (d8479881-cc73-4bcb-9ddc-0fcaff9006e1.jsonl)",
+    "inputTokens": 53,
+    "outputTokens": 31692,
+    "cacheReadTokens": 1522076,
+    "cacheCreationTokens": 135788,
+    "totalTokens": 1689609,
+    "totalTokensDisplay": "169.0만",
+    "totalTokensNote": "input+output+cache_read+cache_creation 합산"
+  },
+  "testFile": "app/src/test/java/com/example/weathernow/viewmodel/WeatherViewModelTest.kt",
+  "testFileLines": 140,
+  "testCount": 5,
+  "testPassed": 5,
+  "testFailed": 0,
+  "selfCorrected": false,
+  "buildSuccess": true,
+  "mockingStrategy": "MockK mockkObject(WeatherRepository) — object 싱글톤 직접 모킹",
+  "dispatcherStrategy": "StandardTestDispatcher + Dispatchers.setMain + advanceUntilIdle()",
+  "newDependencies": ["junit4:4.13.2", "kotlinx-coroutines-test:1.8.1", "mockk:1.13.12"],
+  "testScenarios": [
+    "initial state has isLoading true before fetch completes",
+    "successful fetch clears loading and error and sets weather data",
+    "error state is set when fetch throws an exception",
+    "selectCity changes the selected city index",
+    "toggleFavorite sets and then unsets the favorite city"
+  ]
+}

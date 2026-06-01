@@ -142,15 +142,15 @@
     <div class="metric-grid" style="margin-top:18px;">
       <div class="metric">
         <div class="metric-k">진행 상태</div>
-        <div class="metric-v">Phase 1 완료</div>
+        <div class="metric-v">Phase 1·2·3 완료</div>
       </div>
       <div class="metric">
         <div class="metric-k">누적 구현 시간</div>
-        <div class="metric-v">1시간 06분 24초</div>
+        <div class="metric-v">2시간 36분 12초</div>
       </div>
       <div class="metric">
         <div class="metric-k">작성 코드</div>
-        <div class="metric-v">9파일 · 450줄</div>
+        <div class="metric-v">12파일 · 1,010줄</div>
       </div>
     </div>
   </section>
@@ -455,33 +455,118 @@
     </div>
   </section>
 
-  <!-- ── Phase 3 (대기 중) ── -->
+  <!-- ── Phase 3 결과 ── -->
   <section class="card" id="phase3">
     <div class="sh">
       <span class="sh-num">05</span>
       <h2>Phase 3 — 자유 기능 추가</h2>
-      <span class="phase-status todo" style="margin-left:auto;">진행 예정</span>
+      <span class="phase-status done" style="margin-left:auto;">완료</span>
     </div>
-    <p class="lead">본인이 선택한 스마트 기능 1개를 자유롭게 추가하는 V3 명세 기준입니다.</p>
-    <div class="pending-card">
-      <div class="pc-icon">⏱</div>
-      <div class="pc-title">Phase 3 구현 완료 후 업데이트 예정</div>
-      <div class="pc-desc">Flutter Phase 3를 완성하면 AI V3 시간(Gemini 185.2초)과 비교해 추가합니다.</div>
+    <p class="lead">선택한 스마트 기능: <strong>"지금 나갈까?" 외출 어드바이저 카드</strong> — 날씨 위험도 점수 기반 이모지(😊/😐/😣) + 한 줄 조언 + 상황별 액션 칩.</p>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">소요 시간 비교</h3>
+    <div class="time-cmp">
+      <div class="time-box highlight">
+        <div class="time-ai"><span class="dot human" style="display:inline-block;margin-right:5px;"></span>Human · Flutter</div>
+        <div class="time-val">35:57</div>
+        <div class="time-sub">2,157초 · 외출 어드바이저</div>
+      </div>
+      <div class="time-box">
+        <div class="time-ai"><span class="dot claude" style="display:inline-block;margin-right:5px;"></span>Claude · Kotlin</div>
+        <div class="time-val">412.5초</div>
+        <div class="time-sub">Visual Logic &amp; UI</div>
+      </div>
+      <div class="time-box">
+        <div class="time-ai"><span class="dot gemini" style="display:inline-block;margin-right:5px;"></span>Gemini · Kotlin</div>
+        <div class="time-val">185.2초</div>
+        <div class="time-sub">Narrative Insight 카드</div>
+        <div class="time-badge">최단</div>
+      </div>
+      <div class="time-box">
+        <div class="time-ai"><span class="dot codex" style="display:inline-block;margin-right:5px;"></span>Codex · Kotlin</div>
+        <div class="time-val">280초</div>
+        <div class="time-sub">Dynamic Refresh Engine</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">구현 시간 배율 (Gemini 기준)</h3>
+    <div class="diff-bar-wrap">
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot human" style="display:inline-block;margin-right:5px;"></span>Human</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill human" style="width:100%"></div></div>
+        <span class="diff-bar-num">×11.6배</span>
+      </div>
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot claude" style="display:inline-block;margin-right:5px;"></span>Claude</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill claude" style="width:19.2%"></div></div>
+        <span class="diff-bar-num">×2.2배</span>
+      </div>
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot codex" style="display:inline-block;margin-right:5px;"></span>Codex</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill codex" style="width:13.0%"></div></div>
+        <span class="diff-bar-num">×1.5배</span>
+      </div>
+      <div class="diff-bar-row">
+        <span class="diff-bar-label"><span class="dot gemini" style="display:inline-block;margin-right:5px;"></span>Gemini</span>
+        <div class="diff-bar-track"><div class="diff-bar-fill gemini" style="width:8.6%"></div></div>
+        <span class="diff-bar-num">×1.0 기준</span>
+      </div>
+    </div>
+    <div class="note-box">Phase 3는 Phase 1(×12.5), Phase 2(×21.6)보다 배율이 줄었습니다(×11.6). Clean Architecture 기반이 이미 갖춰진 상태에서 스마트 기능 로직만 추가했기 때문입니다.</div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">Phase 3 구현 내용</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th class="th-human">Human · Flutter</th>
+            <th class="th-gemini">AI 비교 (Gemini 예시)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-label">스마트 기능명</td>
+            <td>지금 나갈까? 외출 어드바이저</td>
+            <td>Weather Narrative Insight</td>
+          </tr>
+          <tr>
+            <td class="col-label">입력 요소</td>
+            <td>humidity, condition, precipitation, uvIndex, windSpeed, temp/feelsLike</td>
+            <td>condition, temp, humidity</td>
+          </tr>
+          <tr>
+            <td class="col-label">출력 UI</td>
+            <td>위험도 이모지(😊/😐/😣) + 한 줄 조언 + 액션 칩 3개</td>
+            <td>인사이트 카드 + 동적 배경</td>
+          </tr>
+          <tr>
+            <td class="col-label">신규 코드 위치</td>
+            <td>lib/core/utils/weather_icon.dart (weatherGradeIcon, weatherBriefMessage, weatherActionChips)</td>
+            <td>WeatherViewModel + WeatherScreen</td>
+          </tr>
+          <tr class="row-hl">
+            <td class="col-label">코드량 변화</td>
+            <td>12파일 · 1,010줄 (+135줄 from Phase 2)</td>
+            <td>Gemini: 5파일 · 542줄 (+24줄)</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <!-- ── 종합 (누적 업데이트) ── -->
+  <!-- ── 종합 (전체 완료) ── -->
   <section class="card" id="conclusion">
-    <div class="sh"><span class="sh-num">06</span><h2>종합 비교 — Phase 1·2 완료</h2></div>
+    <div class="sh"><span class="sh-num">06</span><h2>종합 비교 — Phase 1·2·3 완료</h2></div>
 
     <div class="verdict-row">
       <div class="verdict-main">
-        <h2 class="verdict-title">Phase 1·2 누적 기준, 사람은 AI(Gemini)보다 약 15.4배 느렸습니다.</h2>
-        <p class="verdict-copy">Phase 1(×12.5)보다 Phase 2(×21.6) 배율이 더 벌어졌습니다. AI는 기존 코드를 캐시로 재활용해 Phase 2에서 오히려 더 빨라진 반면, 사람은 기존 코드 파악 후 추가 구현까지 비슷한 시간이 필요했습니다. 누적 코드량은 875줄로 AI(518~736줄)보다 많습니다. 이는 Flutter Clean Architecture의 보일러플레이트 때문이며, 화면 구현 코드 자체는 AI와 유사한 수준입니다.</p>
+        <h2 class="verdict-title">3개 Phase 완료 기준, 사람은 AI(Gemini)보다 약 14.4배 느렸습니다.</h2>
+        <p class="verdict-copy">Phase 3(×11.6)에서 배율이 다소 줄어들었습니다. Clean Architecture가 갖춰진 상태에서 스마트 기능 로직만 추가하는 작업은 상대적으로 빨랐기 때문입니다. 총 9,372초(2시간 36분)를 기록했고, AI(Gemini) 누적 652.6초와 비교하면 약 14.4배 차이입니다. 코드량은 1,010줄로 AI(518~986줄) 범위 안에 있습니다.</p>
       </div>
       <div class="verdict-aside">
-        <div class="aside-k">누적 속도 차이</div>
-        <div class="aside-v">AI 대비<br>×15.4 느림</div>
+        <div class="aside-k">최종 속도 차이</div>
+        <div class="aside-v">AI 대비<br>×14.4 느림</div>
       </div>
     </div>
 
@@ -513,20 +598,35 @@
           </tr>
           <tr>
             <td class="col-label">Phase 3</td>
-            <td>—</td>
+            <td><strong>2,157초 (35:57)</strong></td>
             <td>185.2초</td>
-            <td>—</td>
-            <td>⏳ 진행 예정</td>
+            <td>×11.6</td>
+            <td>✅ 완료</td>
           </tr>
           <tr class="row-hl">
             <td class="col-label">누적 합계</td>
-            <td><strong>7,215초 (2:00:15)</strong></td>
-            <td>467.4초~</td>
-            <td>×15.4</td>
-            <td>진행 중</td>
+            <td><strong>9,372초 (2:36:12)</strong></td>
+            <td>652.6초</td>
+            <td>×14.4</td>
+            <td>✅ 전체 완료</td>
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="insight-grid" style="margin-top:16px;">
+      <div class="insight purple">
+        <div class="insight-k">Phase별 배율 변화</div>
+        <div class="insight-v">×12.5 → ×21.6 → ×11.6. Phase 2에서 가장 벌어졌다가 Phase 3에서 좁혀졌습니다. 기반이 갖춰질수록 기능 추가 속도가 빨라집니다.</div>
+      </div>
+      <div class="insight orange">
+        <div class="insight-k">코드량 최종</div>
+        <div class="insight-v">1,010줄 · 12파일. Cursor V3(986줄)와 비슷한 수준. Flutter Clean Arch 보일러플레이트를 제외하면 화면 코드는 AI와 유사합니다.</div>
+      </div>
+      <div class="insight blue">
+        <div class="insight-k">스마트 기능 비교</div>
+        <div class="insight-v">"지금 나갈까?" 어드바이저는 6개 요소를 입력해 Gemini·Cursor와 유사한 체감 변화를 구현했습니다. 다만 완성까지 35분 57초가 필요했습니다.</div>
+      </div>
     </div>
   </section>
 

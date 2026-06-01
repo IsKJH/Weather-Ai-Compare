@@ -1,0 +1,34 @@
+{
+  "ai": "codex",
+  "phase": "v5",
+  "model": "gpt-5.5",
+  "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-codex",
+  "startTime": "2026-06-01T15:01:31.000+09:00",
+  "endTime": "2026-06-01T15:05:47.000+09:00",
+  "elapsedSec": 256,
+  "tokens": {
+    "captured": true,
+    "source": "Codex session output (tokens used: 73,606)",
+    "totalTokens": 73606,
+    "totalTokensDisplay": "7.4만",
+    "totalTokensNote": "Codex CLI 세션 합산 보고값"
+  },
+  "testFile": "app/src/test/java/com/example/weathernow/WeatherViewModelTest.kt",
+  "testFileLines": 245,
+  "testCount": 5,
+  "testPassed": 5,
+  "testFailed": 0,
+  "selfCorrected": true,
+  "selfCorrectedNote": "1차 실행: 3개 실패(TimeoutCancellationException). StandardTestDispatcher→UnconfinedTestDispatcher + Dispatchers.Default.limitedParallelism(1) 로 자가 수정 후 전부 통과",
+  "buildSuccess": true,
+  "mockingStrategy": "URLStreamHandlerFactory fake — https:// 프로토콜을 JVM 레벨에서 가로채는 핸드메이드 fake (MockK 미사용)",
+  "dispatcherStrategy": "UnconfinedTestDispatcher + Dispatchers.Default.limitedParallelism(1) for awaitState()",
+  "newDependencies": ["junit:4.13.2", "kotlinx-coroutines-test:1.10.2", "org.json:json:20250517"],
+  "testScenarios": [
+    "initialState_isLoadingOnStart",
+    "selectCity_changesSelectedCity",
+    "toggleFavorite_setsAndUnsetsSelectedCityAsFavorite",
+    "networkFailure_setsErrorAndClearsLoading",
+    "successfulFetch_clearsLoadingAndErrorStates"
+  ]
+}

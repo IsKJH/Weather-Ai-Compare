@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.weathernow.City
 import com.example.weathernow.HourlyForecast
 import com.example.weathernow.WeatherData
 import com.example.weathernow.WeatherUiState
@@ -46,6 +48,7 @@ private val AppColorScheme = darkColorScheme(
     secondary = Color(0xFFFCD34D),
     background = Color(0xFF0D1321),
     surface = Color(0xFF172033),
+    error = Color(0xFFFCA5A5),
     onPrimary = Color(0xFF06121E),
     onBackground = Color(0xFFEFF6FF),
     onSurface = Color(0xFFEFF6FF),
@@ -90,27 +93,36 @@ fun WeatherScreen(
         ) {
             Header(
                 lastUpdated = uiState.lastUpdated,
-                isRefreshing = uiState.isRefreshing,
+                isBusy = uiState.isLoading || uiState.isRefreshing,
                 onRefresh = onRefresh
             )
             CitySelector(
-                cities = uiState.weatherList.map { it.city },
+                cities = uiState.cities,
                 selectedIndex = uiState.selectedCityIndex,
                 favoriteCityIndex = uiState.favoriteCityIndex,
                 onCitySelected = onCitySelected
             )
-            CurrentWeatherCard(
-                weather = weather,
-                isFavorite = uiState.isSelectedCityFavorite,
-                onFavoriteToggle = onFavoriteToggle
-            )
-            CurrentMetrics(weather = weather)
-            SectionTitle(text = "시간별 예보")
-            HourlyForecastStrip(items = weather.hourlyForecast)
-            SectionTitle(text = "5일 예보")
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                weather.forecast.forEach { forecastDay ->
-                    ForecastRow(day = forecastDay)
+            uiState.errorMessage?.let { message ->
+                ErrorBanner(message = message)
+            }
+
+            when {
+                uiState.isLoading && weather == null -> LoadingCard()
+                weather != null -> {
+                    CurrentWeatherCard(
+                        weather = weather,
+                        isFavorite = uiState.isSelectedCityFavorite,
+                        onFavoriteToggle = onFavoriteToggle
+                    )
+                    CurrentMetrics(weather = weather)
+                    SectionTitle(text = "시간별 예보")
+                    HourlyForecastStrip(items = weather.hourlyForecast)
+                    SectionTitle(text = "5일 예보")
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        weather.forecast.forEach { forecastDay ->
+                            ForecastRow(day = forecastDay)
+                        }
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -121,7 +133,7 @@ fun WeatherScreen(
 @Composable
 private fun Header(
     lastUpdated: String,
-    isRefreshing: Boolean,
+    isBusy: Boolean,
     onRefresh: () -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -145,7 +157,7 @@ private fun Header(
             }
             OutlinedButton(
                 onClick = onRefresh,
-                enabled = !isRefreshing,
+                enabled = !isBusy,
                 shape = RoundedCornerShape(8.dp),
                 contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -153,10 +165,10 @@ private fun Header(
                     contentColor = MaterialTheme.colorScheme.onSurface
                 )
             ) {
-                Text(text = if (isRefreshing) "갱신 중" else "새로고침")
+                Text(text = if (isBusy) "불러오는 중" else "새로고침")
             }
         }
-        if (isRefreshing) {
+        if (isBusy) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.primary,
@@ -168,7 +180,7 @@ private fun Header(
 
 @Composable
 private fun CitySelector(
-    cities: List<String>,
+    cities: List<City>,
     selectedIndex: Int,
     favoriteCityIndex: Int?,
     onCitySelected: (Int) -> Unit
@@ -177,7 +189,7 @@ private fun CitySelector(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        cities.forEachIndexed { index, label ->
+        cities.forEachIndexed { index, city ->
             val selected = selectedIndex == index
             OutlinedButton(
                 onClick = { onCitySelected(index) },
@@ -200,13 +212,51 @@ private fun CitySelector(
                 )
             ) {
                 Text(
-                    text = if (favoriteCityIndex == index) "★ $label" else label,
+                    text = if (favoriteCityIndex == index) "★ ${city.name}" else city.name,
                     maxLines = 1,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.SemiBold
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun LoadingCard() {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
+    ) {
+        Column(
+            modifier = Modifier.padding(28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            Text(
+                text = "실시간 날씨를 불러오는 중입니다.",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@Composable
+private fun ErrorBanner(message: String) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
+        color = MaterialTheme.colorScheme.error.copy(alpha = 0.18f)
+    ) {
+        Text(
+            text = message,
+            modifier = Modifier.padding(14.dp),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.error
+        )
     }
 }
 

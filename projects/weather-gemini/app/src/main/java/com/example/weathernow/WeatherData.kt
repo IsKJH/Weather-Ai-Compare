@@ -1,5 +1,33 @@
 package com.example.weathernow
 
+data class City(
+    val name: String,
+    val latitude: Double,
+    val longitude: Double
+)
+
+val cities = listOf(
+    City("서울", 37.5665, 126.9780),
+    City("부산", 35.1796, 129.0756),
+    City("제주", 33.4996, 126.5312)
+)
+
+fun mapWeatherCode(code: Int): String {
+    return when (code) {
+        0 -> "맑음"
+        1 -> "구름조금"
+        2 -> "구름많음"
+        3 -> "흐림"
+        45, 48 -> "안개"
+        in 51..55 -> "이슬비"
+        in 61..65 -> "비"
+        in 71..75 -> "눈"
+        in 80..82 -> "소나기"
+        95, 96, 99 -> "뇌우"
+        else -> "알 수 없음"
+    }
+}
+
 data class WeatherData(
     val city: String,
     val currentTemp: Int,

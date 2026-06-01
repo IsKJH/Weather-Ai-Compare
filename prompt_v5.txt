@@ -1,0 +1,26 @@
+You are adding unit tests to the existing WeatherNow Android app in this directory.
+
+This is V5 of an AI comparison experiment. The app was built through V1–V4 and now fetches real weather data from Open-Meteo API.
+Read the existing code first, then add tests without modifying production code.
+
+Goal:
+Write unit tests for the ViewModel (and Repository/data layer if it exists separately).
+
+Requirements:
+1. Write tests that cover these scenarios:
+   - Initial loading state (isLoading = true on start)
+   - City selection changes the selected city
+   - Favorite toggle works correctly (set and unset)
+   - Error state is set when the network call fails
+   - Successful data fetch clears loading and error states
+2. Use kotlinx-coroutines-test for coroutine/Flow testing (TestScope, runTest, Turbine optional).
+3. Use MockK or a hand-written fake — your choice. Do NOT use Mockito.
+4. Add only the test dependencies you need to app/build.gradle.kts (testImplementation scope).
+5. Tests must be in src/test/ (JVM unit tests, not instrumented).
+6. Ensure ./gradlew test passes with all tests green.
+
+After implementation:
+- Run ./gradlew test.
+- Report how many tests passed, how many failed.
+- Briefly describe what each test covers.
+- Confirm the test run result.

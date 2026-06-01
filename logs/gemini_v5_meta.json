@@ -1,0 +1,37 @@
+{
+  "ai": "gemini",
+  "phase": "v5",
+  "model": "gemini-3-flash-preview",
+  "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-gemini",
+  "startTime": "2026-06-01T15:06:32.000+09:00",
+  "endTime": "2026-06-01T15:10:23.000+09:00",
+  "elapsedSec": 231,
+  "tokens": {
+    "captured": true,
+    "source": "Gemini CLI session JSONL (session-2026-06-01T06-06-444510de.jsonl)",
+    "inputTokens": 2017559,
+    "outputTokens": 5936,
+    "cachedTokens": 1709633,
+    "thoughtsTokens": 12131,
+    "totalTokens": 3745259,
+    "totalTokensDisplay": "374.5만",
+    "totalTokensNote": "전체 턴 input+output+cached+thoughts 합산. 컨텍스트 반복 포함."
+  },
+  "testFile": "app/src/test/java/com/example/weathernow/WeatherViewModelTest.kt",
+  "testFileLines": 199,
+  "testCount": 5,
+  "testPassed": 5,
+  "testFailed": 0,
+  "selfCorrected": false,
+  "buildSuccess": true,
+  "mockingStrategy": "MockK mockkObject(WeatherApiService.Companion) — Retrofit 서비스 생성 팩토리 모킹",
+  "dispatcherStrategy": "MainDispatcherRule (StandardTestDispatcher) + runTest",
+  "newDependencies": ["mockk", "kotlinx-coroutines-test", "turbine"],
+  "testScenarios": [
+    "initial loading state is true on start",
+    "city selection changes the selected city",
+    "favorite toggle works correctly (set and unset)",
+    "error state is set when the network call fails",
+    "successful data fetch clears loading and error states"
+  ]
+}

@@ -20,10 +20,15 @@ import com.example.weathernow.HourlyForecast
 fun WeatherIcon(condition: String, fontSize: Int = 48, modifier: Modifier = Modifier) {
     val emoji = when (condition) {
         "맑음" -> "☀️"
-        "구름많음" -> "☁️"
+        "구름조금" -> "🌤️"
+        "구름많음" -> "⛅"
+        "흐림" -> "☁️"
+        "안개" -> "🌫️"
+        "이슬비" -> "🌦️"
         "비" -> "🌧️"
-        "천둥번개" -> "⛈️"
         "눈" -> "❄️"
+        "소나기" -> "🚿"
+        "뇌우" -> "⛈️"
         else -> "❓"
     }
     Text(text = emoji, fontSize = fontSize.sp, modifier = modifier)

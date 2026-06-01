@@ -27,86 +27,24 @@ data class HourlyForecast(
     val temperature: Int
 )
 
-val mockWeatherList = listOf(
-    WeatherData(
-        city = "서울",
-        currentTemp = 23,
-        feelsLike = 21,
-        condition = "맑음",
-        humidity = 55,
-        windSpeed = 3.2,
-        precipitationProbability = 10,
-        uvIndex = 6,
-        airQuality = "보통",
-        hourlyForecast = listOf(
-            HourlyForecast("06시", "맑음", 18),
-            HourlyForecast("09시", "맑음", 20),
-            HourlyForecast("12시", "맑음", 23),
-            HourlyForecast("15시", "구름", 22),
-            HourlyForecast("18시", "구름", 20),
-            HourlyForecast("21시", "맑음", 17),
-            HourlyForecast("00시", "맑음", 15)
-        ),
-        forecast = listOf(
-            ForecastDay("월", "맑음", 25, 15),
-            ForecastDay("화", "구름", 22, 14),
-            ForecastDay("수", "비", 18, 12),
-            ForecastDay("목", "맑음", 24, 16),
-            ForecastDay("금", "맑음", 26, 17)
-        )
-    ),
-    WeatherData(
-        city = "부산",
-        currentTemp = 27,
-        feelsLike = 29,
-        condition = "흐림",
-        humidity = 72,
-        windSpeed = 5.1,
-        precipitationProbability = 40,
-        uvIndex = 4,
-        airQuality = "나쁨",
-        hourlyForecast = listOf(
-            HourlyForecast("06시", "흐림", 22),
-            HourlyForecast("09시", "흐림", 24),
-            HourlyForecast("12시", "비", 26),
-            HourlyForecast("15시", "비", 27),
-            HourlyForecast("18시", "흐림", 25),
-            HourlyForecast("21시", "구름", 23),
-            HourlyForecast("00시", "구름", 21)
-        ),
-        forecast = listOf(
-            ForecastDay("월", "흐림", 28, 20),
-            ForecastDay("화", "비", 24, 19),
-            ForecastDay("수", "비", 22, 18),
-            ForecastDay("목", "구름", 25, 19),
-            ForecastDay("금", "맑음", 27, 20)
-        )
-    ),
-    WeatherData(
-        city = "제주",
-        currentTemp = 29,
-        feelsLike = 32,
-        condition = "맑음",
-        humidity = 68,
-        windSpeed = 7.3,
-        precipitationProbability = 5,
-        uvIndex = 9,
-        airQuality = "좋음",
-        hourlyForecast = listOf(
-            HourlyForecast("06시", "맑음", 24),
-            HourlyForecast("09시", "맑음", 26),
-            HourlyForecast("12시", "맑음", 29),
-            HourlyForecast("15시", "맑음", 31),
-            HourlyForecast("18시", "맑음", 28),
-            HourlyForecast("21시", "구름", 26),
-            HourlyForecast("00시", "맑음", 24)
-        ),
-        forecast = listOf(
-            ForecastDay("월", "맑음", 30, 22),
-            ForecastDay("화", "맑음", 31, 23),
-            ForecastDay("수", "구름", 28, 21),
-            ForecastDay("목", "비", 25, 20),
-            ForecastDay("금", "맑음", 29, 22)
-        )
-    )
+data class CityInfo(val name: String, val lat: Double, val lon: Double)
+
+val CITIES = listOf(
+    CityInfo("서울", 37.5665, 126.9780),
+    CityInfo("부산", 35.1796, 129.0756),
+    CityInfo("제주", 33.4996, 126.5312)
 )
+
+fun wmoToCondition(code: Int): String = when {
+    code == 0 -> "맑음"
+    code == 1 -> "구름조금"
+    code == 2 -> "구름많음"
+    code == 3 -> "흐림"
+    code in 45..48 -> "안개"
+    code in 51..55 -> "이슬비"
+    code in 61..65 -> "비"
+    code in 71..75 -> "눈"
+    code in 80..82 -> "소나기"
+    code in 95..99 -> "뇌우"
+    else -> "맑음"
+}

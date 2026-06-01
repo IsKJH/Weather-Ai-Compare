@@ -1,0 +1,47 @@
+{
+  "ai": "gemini",
+  "phase": "v4",
+  "model": "gemini-3-flash-preview",
+  "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-gemini",
+  "httpLibrary": "Retrofit + Gson + OkHttp (새 라이브러리 추가)",
+  "newDependencies": true,
+  "newDependenciesDetail": ["retrofit", "converter-gson", "okhttp"],
+  "startTime": "2026-06-01T10:42:14.000+09:00",
+  "endTime": "2026-06-01T10:49:20.000+09:00",
+  "elapsedSec": 426,
+  "elapsedNote": "Gemini CLI session (session-2026-06-01T01-42-10f2a17c.jsonl) 기준. 첫 요청~마지막 응답.",
+  "tokens": {
+    "captured": true,
+    "source": "Gemini CLI session JSONL (session-2026-06-01T01-42-10f2a17c.jsonl)",
+    "inputTokens": 2036455,
+    "outputTokens": 20351,
+    "totalTokens": 2065397,
+    "totalTokensDisplay": "206.5만",
+    "totalTokensNote": "전체 턴 input+output 합산. 각 턴에서 컨텍스트가 반복 포함됨. 캐시 토큰도 포함.",
+    "splitNote": "Gemini CLI JSONL 기준 input/output 합산. cached 토큰은 input에 포함되어 있음."
+  },
+  "ktFileCount": 6,
+  "ktLineCount": 716,
+  "ktLineCountV3": 518,
+  "ktLineCountDelta": 198,
+  "changedFileCountFromV3": 7,
+  "changedFilesFromV3": [
+    "projects/weather-gemini/app/build.gradle.kts",
+    "projects/weather-gemini/gradle/libs.versions.toml",
+    "projects/weather-gemini/app/src/main/AndroidManifest.xml",
+    "projects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherData.kt",
+    "projects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherViewModel.kt",
+    "projects/weather-gemini/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt",
+    "projects/weather-gemini/app/src/main/java/com/example/weathernow/ui/components/WeatherComponents.kt"
+  ],
+  "newFilesFromV3": [
+    "projects/weather-gemini/app/src/main/java/com/example/weathernow/WeatherApiService.kt"
+  ],
+  "buildSuccess": true,
+  "buildCheckedAt": "2026-06-01T10:49:00.000+09:00",
+  "v3FeaturesPreserved": true,
+  "apiApproach": "WeatherApiService 인터페이스로 Retrofit 분리. ViewModel에서 코루틴으로 호출. 로딩/에러 상태 관리.",
+  "loadingState": true,
+  "errorState": true,
+  "internetPermission": true
+}

@@ -1,0 +1,63 @@
+{
+  "ai": "cursor",
+  "phase": "v2",
+  "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-cursor",
+  "startTime": "2026-05-29T18:26:00.0000000+09:00",
+  "endTime": "2026-05-29T18:30:00.0000000+09:00",
+  "elapsedSec": 240,
+  "elapsedNote": "작업자 기록 18:26~18:30. Gradle 빌드 8.2초는 별도(buildElapsedSec).",
+  "tokens": {
+    "captured": true,
+    "source": "Cursor Settings → Usage (May 29, 2026 06:26 PM)",
+    "inputTokens": "N/A",
+    "outputTokens": "N/A",
+    "totalTokens": 1228000,
+    "totalTokensDisplay": "122.8만",
+    "costUSD": 0.38,
+    "billingType": "free",
+    "billingStatus": "Included",
+    "costNote": "Usage 표시 금액. Included = 무료 한도 포함, 추가 청구 아님.",
+    "splitNote": "Cursor Usage는 요청별 총 토큰만 표시. 입·출력 분리 없음.",
+    "entries": [
+      {
+        "time": "2026-05-29T18:26:00+09:00",
+        "type": "free",
+        "model": "auto",
+        "tokens": 1228000,
+        "tokensDisplay": "122.8만",
+        "costUSD": 0.38,
+        "status": "Included"
+      }
+    ]
+  },
+  "inputTokens": "N/A",
+  "outputTokens": "N/A",
+  "totalTokens": 1228000,
+  "ktFileCount": 9,
+  "ktLineCount": 748,
+  "changedFileCountFromV1": 8,
+  "changedFilesFromV1": [
+    "projects/weather-cursor/app/build.gradle.kts",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/MainActivity.kt",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/WeatherData.kt",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/WeatherViewModel.kt",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/ui/components/CityTabBar.kt",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/ui/components/HourlyCard.kt",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/ui/components/WeatherHeader.kt"
+  ],
+  "buildSuccess": true,
+  "buildCheckedAt": "2026-05-29T18:30:00.0000000+09:00",
+  "buildElapsedSec": 8.2,
+  "screenshotSuccess": true,
+  "screenshotPath": "C:\\proj\\weather-ai-compare\\screenshots\\v2\\v2-cursor.png",
+  "requirements": {
+    "koreanFixed": true,
+    "hourlyForecast": true,
+    "extraDetails": true,
+    "refresh": true,
+    "favorite": true,
+    "fiveDayForecastPreserved": true,
+    "v1FeaturesPreserved": true
+  }
+}

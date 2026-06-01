@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WeatherNow v4 실제 API 연동 비교</title>
+<link rel="stylesheet" href="report_common.css?v=20260529-02">
+</head>
+<body id="top">
+<div class="wrap">
+  <header class="rh">
+    <div class="rh-eyebrow">AI CODING TOOL COMPARISON · V4</div>
+    <h1 class="rh-title">WeatherNow v4 실제 API 연동 비교</h1>
+    <p class="rh-sub">목 데이터를 제거하고 Open-Meteo 실시간 API로 교체하는 동일 요구사항을 각 AI가 어떻게 해석·구현했는지 비교한 결과입니다.</p>
+    <div class="rh-meta">
+      <span class="ai-pill"><span class="dot claude"></span>Claude</span><span class="ai-pill"><span class="dot codex"></span>Codex</span><span class="ai-pill"><span class="dot gemini"></span>Gemini</span><span class="ai-pill"><span class="dot cursor"></span>Cursor</span>
+      <span class="tag-sm">baseline: weather-v3</span>
+      <span class="tag-sm">result: weather-v4</span>
+      <span class="tag-sm">generated: 2026-06-01</span>
+    </div>
+  </header>
+  <nav class="toc">
+    <a href="index.html">전체 요약</a><a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#approach">구현 접근</a><a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
+  </nav>
+  <section class="card" id="overview">
+    <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
+    <p class="lead">동일한 요구사항(Open-Meteo API 연동)을 주었을 때 각 AI가 어떤 HTTP 라이브러리와 아키텍처를 자율적으로 선택하는지를 관찰했습니다.</p>
+    <div class="callout-grid"><div class="callout"><div class="callout-k">비교 초점</div><div class="callout-v">목 데이터를 실제 API로 교체하는 단일 목표에서 각 AI가 HTTP 라이브러리·아키텍처 패턴을 어떻게 다르게 결정하는지를 봅니다. 실기기에서 세 앱 모두 실데이터 수신이 확인됐습니다.</div></div><div class="callout"><div class="callout-k">핵심 해석</div><div class="callout-v">Claude와 Codex는 stdlib만으로 구현한 반면 Gemini는 Retrofit 스택을 선택했습니다. Gemini는 V3 스마트 기능(온도 배경·인사이트 카드)이 V4에서도 그대로 동작했고, Claude는 WeatherRepository 계층 분리 패턴을 적용했습니다.</div></div><div class="callout"><div class="callout-k">주목할 차이</div><div class="callout-v">동일한 API에서 풍속(Codex 1.6 vs Claude·Gemini 5.7 m/s)과 대기질(Codex 수치 64 vs Gemini 미세먼지 좋음) 표시가 달랐습니다. 같은 데이터도 필드 매핑에 따라 결과가 달라집니다.</div></div></div>
+    <div class="metric-grid"><div class="metric"><div class="metric-k">가장 빠른 실행</div><div class="metric-v">Gemini · 426초</div></div><div class="metric"><div class="metric-k">최저 토큰</div><div class="metric-v">Codex · 92,991</div></div><div class="metric"><div class="metric-k">최대 코드량</div><div class="metric-v">Codex · 890줄</div></div></div>
+  </section>
+  <section class="card" id="prompt">
+    <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
+    <p class="prompt-meta">prompt_v4.txt · Open-Meteo 실시간 API 연동</p>
+    <pre class="prompt-pre">You are upgrading the existing WeatherNow Android app in this directory.
+
+This is V4 of an AI comparison experiment. You previously built and improved this app through V1, V2, and V3.
+Read the existing code first, then upgrade it in place.
+
+Goal:
+Replace all mock data with real live weather data from the Open-Meteo API (https://api.open-meteo.com).
+Open-Meteo is free and requires no API key.
+
+Requirements:
+1. Fetch real weather data for 서울, 부산, 제주 from Open-Meteo.
+2. Preserve all features from V1/V2/V3 (city switching, current weather, 5-day forecast, hourly forecast, extra details, refresh, favorites, and any smart feature from V3).
+3. Show a loading state while fetching data.
+4. Show a user-visible error message if the network call fails.
+5. Add INTERNET permission to AndroidManifest.xml.
+6. Ensure ./gradlew assembleDebug succeeds.
+
+City coordinates for Open-Meteo:
+- 서울: latitude 37.5665, longitude 126.9780
+- 부산: latitude 35.1796, longitude 129.0756
+- 제주: latitude 33.4996, longitude 126.5312
+
+WMO weather code reference (Open-Meteo uses these for weather conditions):
+0=맑음 / 1=구름조금 / 2=구름많음 / 3=흐림 / 45,48=안개 / 51–55=이슬비 / 61–65=비 / 71–75=눈 / 80–82=소나기 / 95,96,99=뇌우
+
+After implementation:
+- Run ./gradlew assembleDebug.
+- Briefly summarize what changed.
+- Confirm the build passed.</pre>
+    <div class="note-box">HTTP 라이브러리·파싱 방법·아키텍처 패턴은 명시하지 않았습니다. 각 AI가 자율적으로 선택한 구현 방식을 비교하는 것이 이번 단계의 핵심입니다.</div>
+    <div class="tbl-wrap"><table><thead><tr><th>구분</th><th>한글 해석</th></tr></thead><tbody><tr><td class="col-label">요약</td><td>v3 기능을 유지한 채 목 데이터를 Open-Meteo 실시간 API로 교체하라는 요구사항입니다.</td></tr><tr><td class="col-label">핵심 요구</td><td>6가지 요건(3개 도시 실데이터, v3 기능 보존, 로딩 상태, 에러 상태, INTERNET 권한, 빌드 성공)을 명시했습니다.</td></tr><tr><td class="col-label">평가 관점</td><td>같은 요구사항에서 HTTP 라이브러리 선택·레이어 분리 방식·에러 처리 UI가 AI마다 어떻게 달라지는지를 비교합니다.</td></tr></tbody></table></div>
+  </section>
+  <section class="card" id="summary">
+    <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
+    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th><th class="th-cursor">Cursor</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6</td><td>gpt-5.5</td><td>gemini-3-flash-preview</td><td style="color:#888;">사용량 한도 초과</td></tr><tr><td class="col-label">소요 시간</td><td>536초</td><td>437초</td><td>426초</td><td>—</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>5,262,416 (캐시 포함)</td><td>92,991</td><td>2,065,397</td><td>—</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>6개 / 736줄</td><td>6개 / 890줄</td><td>6개 / 716줄</td><td>—</td></tr><tr><td class="col-label">v3 대비 증가</td><td>+156줄 (+27%)</td><td>+154줄 (+21%)</td><td>+198줄 (+38%)</td><td>—</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>성공</td><td>성공</td><td>성공</td><td>—</td></tr><tr><td class="col-label">HTTP 라이브러리</td><td>java.net.URL (표준)</td><td>java.net.HttpURLConnection (표준)</td><td>Retrofit + Gson + OkHttp</td><td>—</td></tr><tr><td class="col-label">신규 의존성</td><td>없음</td><td>없음</td><td>3개 추가</td><td>—</td></tr><tr><td class="col-label">아키텍처 선택</td><td>WeatherRepository 분리</td><td>ViewModel 내부 통합</td><td>WeatherApiService 인터페이스</td><td>—</td></tr><tr><td class="col-label">병렬 API 호출</td><td>async 병렬 (날씨+대기질)</td><td>async awaitAll</td><td>순차 (Retrofit suspend)</td><td>—</td></tr></tbody></table></div>
+  </section>
+
+  <section class="card" id="approach">
+    <div class="sh"><span class="sh-num">04</span><h2>구현 접근 비교</h2></div>
+    <p class="lead">동일한 프롬프트에서 HTTP 통신 레이어를 어떻게 구성했는지 AI마다 방향이 명확히 달랐습니다.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>라이브러리 선택</th><th>레이어 구조</th><th>에러/로딩 처리</th><th>특이점</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>java.net.URL + org.json.JSONObject (stdlib 전용)</td><td>WeatherRepository 클래스 신규 분리. ViewModel은 Repository만 호출.</td><td>error: String? 상태 + 재시도 버튼. 기존 데이터 있으면 상단 진행 바 표시.</td><td>build.gradle에 의존성 추가 없이 구현. Open-Meteo 날씨 + 대기질 API async 병렬 호출.</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>java.net.HttpURLConnection (stdlib 전용)</td><td>WeatherViewModel 내부에서 직접 HTTP 호출. Repository 미분리.</td><td>LoadingCard Composable + ErrorBanner Composable 신규 추가.</td><td>async awaitAll로 병렬 처리. isBusy 상태로 로딩/에러 통합 관리.</td></tr><tr class="row-hl"><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>Retrofit 2 + Gson + OkHttp (3개 신규 추가)</td><td>WeatherApiService 인터페이스 신규 파일로 분리. Retrofit Service 패턴.</td><td>로딩 스피너 + 에러 메시지 UI. WeatherIcon 이모지 확장 (안개, 이슬비, 소나기 추가).</td><td>libs.versions.toml + build.gradle 양쪽 수정. 가장 많은 파일 변경(7개).</td></tr><tr><td class="col-label"><span class="dot cursor"></span> Cursor</td><td colspan="4" style="text-align:center;color:#888;">사용량 한도 초과로 미진행</td></tr></tbody></table></div>
+    <div class="note-box"><strong>라이브러리 선택 관찰:</strong> Claude와 Codex는 외부 라이브러리 없이 Android 기본 내장 클래스로 구현했습니다. Gemini는 업계 표준 Retrofit 스택을 선택했으며, 이는 팀 환경에서 유지보수성 측면에서 다른 접근입니다. 두 방향 모두 빌드는 성공했습니다.</div>
+  </section>
+
+  <section class="card" id="tokens">
+    <div class="sh"><span class="sh-num">05</span><h2>토큰 사용량</h2></div>
+    <div class="token-cards"><div class="token-card"><div class="tc-head"><span class="dot claude"></span><span class="tc-name">Claude</span><span class="tc-model">claude-sonnet-4-6</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 처리 토큰</span><span class="kv-v">5,262,416</span></div><div class="kv-row"><span class="kv-k">신규 입력 토큰</span><span class="kv-v">112</span></div><div class="kv-row"><span class="kv-k">캐시 생성 토큰</span><span class="kv-v">184,656</span></div><div class="kv-row"><span class="kv-k">캐시 재사용 토큰</span><span class="kv-v">4,943,426</span></div><div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">134,222</span></div></div><p class="tc-note">캐시 재사용 비율이 94%로 매우 높습니다. Claude Code는 프롬프트 캐싱을 적극 활용해 컨텍스트 재사용 비용을 최소화합니다. 실제 비용은 캐시 읽기 토큰 수로는 직접 산정하기 어렵습니다.</p></div><div class="token-card"><div class="tc-head"><span class="dot codex"></span><span class="tc-name">Codex</span><span class="tc-model">gpt-5.5</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">92,991</span></div></div><p class="tc-note">Codex exec 최종 출력 'tokens used: 92,991' 기준. 세 AI 중 가장 낮은 토큰 사용량입니다. 입·출력 분리 미제공.</p></div><div class="token-card"><div class="tc-head"><span class="dot gemini"></span><span class="tc-name">Gemini</span><span class="tc-model">gemini-3-flash-preview</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 처리 토큰</span><span class="kv-v">2,065,397</span></div><div class="kv-row"><span class="kv-k">입력 토큰 합산</span><span class="kv-v">2,036,455</span></div><div class="kv-row"><span class="kv-k">출력 토큰 합산</span><span class="kv-v">20,351</span></div></div><p class="tc-note">Gemini CLI session JSONL 기준 전체 턴 합산. 각 턴에서 컨텍스트가 반복 포함되므로 절대값보다 상대 비교로 해석하는 편이 적절합니다.</p></div><div class="token-card"><div class="tc-head"><span class="dot cursor"></span><span class="tc-name">Cursor</span><span class="tc-model">auto (Cursor Agent)</span></div><div class="kv-list"><div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">—</span></div><div class="kv-row"><span class="kv-k">예상 비용</span><span class="kv-v">—</span></div></div><p class="tc-note">사용량 한도 초과로 V4 미진행.</p></div></div>
+    <div class="note-box">각 AI의 토큰 집계 방식이 다릅니다. Claude는 캐시 토큰까지 포함한 전체 처리량, Codex는 신규 소비 토큰만, Gemini는 전체 턴 합산(컨텍스트 반복 포함)입니다. 직접 비교보다 규모 파악 용도로 해석하는 것이 적절합니다.</div>
+  </section>
+  <section class="card" id="screens">
+    <div class="sh"><span class="sh-num">06</span><h2>실행 화면</h2></div>
+    <p class="lead">실제 기기(ADB)에서 캡처한 화면입니다. 모든 앱이 Open-Meteo API에서 실시간 날씨 데이터를 수신하고 있습니다 (서울 28°C 흐림 · 2026-06-01 14:10 기준).</p>
+    <div class="screen-set"><div class="screen-ai"><div class="screen-ai-head"><span class="dot claude"></span>Claude</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v4/claude/01-top.png" alt="Claude 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 · 예보</div><img src="../screenshots/v4/claude/02-middle.png" alt="Claude 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 5일 예보</div><img src="../screenshots/v4/claude/03-bottom.png" alt="Claude 하단 5일 예보"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot codex"></span>Codex</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v4/codex/01-top.png" alt="Codex 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 · 시간별 예보</div><img src="../screenshots/v4/codex/02-middle.png" alt="Codex 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 5일 예보</div><img src="../screenshots/v4/codex/03-bottom.png" alt="Codex 하단 5일 예보"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot gemini"></span>Gemini</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v4/gemini/01-top.png" alt="Gemini 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 · 시간별·상세</div><img src="../screenshots/v4/gemini/02-middle.png" alt="Gemini 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 5일 예보</div><img src="../screenshots/v4/gemini/03-bottom.png" alt="Gemini 하단 5일 예보"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot cursor"></span>Cursor</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">미진행</div><div style="padding:12px;background:#1c1c1e;border-radius:6px;color:#666;font-size:12px;">사용량 한도 초과로 미진행</div></div></div></div></div>
+  </section>
+  <section class="card" id="observations">
+    <div class="sh"><span class="sh-num">07</span><h2>구현 관찰 — 실기기 확인</h2></div>
+    <p class="lead">실제 기기에서 확인한 V4 동작 결과입니다 (서울 기준 · 2026-06-01 14:10).</p>
+    <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>화면에서 확인된 실데이터</th><th>특이 관찰</th><th>V3 기능 유지</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>서울 28°C 흐림 · 체감 29°C · 습도 41% · 풍속 5.7m/s · 강수확률 0% · 자외선 6 · 대기질 나쁨 · 5일 예보(화 구름조금 29°/15°)</td><td>회색 그라디언트 배경 유지. 6개 타일 그리드로 상세정보 표시. 날씨·대기질 API 병렬 호출로 대기질 정보 표시됨.</td><td>즐겨찾기(☆) · 시간별 예보 · 5일 예보 · 새로고침 모두 동작</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>서울 28°C 흐림 · 체감 30°C · 습도 41% · 풍속 1.6m/s · 강수확률 0% · 자외선 7 · 대기질 나쁨(64)</td><td>풍속이 Claude(5.7m/s)와 다름 — 다른 필드(wind_speed_10m vs wind_gusts?) 매핑 가능성. AQI를 수치(64)까지 표시하는 점이 독특. 다크 네이비 테마 유지.</td><td>즐겨찾기(☆ 즐겨찾기) · 새로고침 버튼 · 마지막 업데이트 시각 표시</td></tr><tr class="row-hl"><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>서울 28°C 흐림 · 체감 29°C · 습도 41% · 풍속 5.7m/s · 강수 0% · 자외선 6 · 미세먼지 좋음</td><td>V3 스마트 기능이 V4에서도 그대로 동작: 온도 기반 주황 배경(28°C) + 인사이트 카드("하늘에 구름이 많네요. 실내 활동을 즐기기에 좋은 날이에요. ☕"). 대기질을 Claude/Codex와 다른 API 엔드포인트에서 "미세먼지 좋음"으로 표시.</td><td>V3 인사이트 카드 · 온도별 배경 · 즐겨찾기(♡) · 새로고침 모두 동작</td></tr><tr><td class="col-label"><span class="dot cursor"></span> Cursor</td><td colspan="3" style="text-align:center;color:#888;">사용량 한도 초과로 미진행</td></tr></tbody></table></div>
+    <div class="note-box"><strong>풍속 불일치 관찰:</strong> Codex는 1.6m/s, Claude·Gemini는 5.7m/s를 표시합니다. Open-Meteo API는 <code>wind_speed_10m</code>(현재 풍속)과 <code>wind_gusts_10m</code>(돌풍) 두 필드를 제공하는데, AI마다 다른 필드를 매핑한 것으로 보입니다. <strong>대기질 불일치:</strong> Claude·Codex는 "나쁨"이지만 Gemini는 "좋음"으로 표시 — 서로 다른 API(날씨 API vs 대기질 전용 API)를 사용하거나 다른 지표(AQI vs PM2.5)를 표시하고 있습니다.</div>
+  </section>
+  <section class="card" id="code">
+    <div class="sh"><span class="sh-num">08</span><h2>코드 요약</h2></div>
+    <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>Kotlin 파일</th><th>Kotlin 라인</th><th>v3 대비</th><th>변경 파일 수</th><th>신규 파일</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>6개</td><td>736줄</td><td>+156줄 (+27%)</td><td>6개</td><td>WeatherRepository.kt</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>6개</td><td>890줄</td><td>+154줄 (+21%)</td><td>5개</td><td>없음</td></tr><tr class="row-hl"><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>6개</td><td>716줄</td><td>+198줄 (+38%)</td><td>7개</td><td>WeatherApiService.kt</td></tr><tr><td class="col-label"><span class="dot cursor"></span> Cursor</td><td colspan="5" style="text-align:center;color:#888;">사용량 한도 초과로 미진행</td></tr></tbody></table></div>
+    <div class="note-box">v3 기준 라인 수: Claude 580줄, Codex 736줄, Gemini 518줄 (git HEAD 기준). Codex가 v3에서 이미 가장 많은 코드량을 보유했고, v4에서도 890줄로 세 AI 중 최대입니다.</div>
+  </section>
+</div>
+</body>
+</html>

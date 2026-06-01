@@ -1,0 +1,72 @@
+{
+  "ai": "cursor",
+  "phase": "v3",
+  "model": "auto (Cursor Agent)",
+  "projectDir": "C:\\proj\\weather-ai-compare\\projects\\weather-cursor",
+  "smartFeature": "Smart Comfort Index (스마트 쾌적 지수)",
+  "smartFeatureDescription": "기온·강수·자외선·대기질·습도·풍속을 종합해 0~100 쾌적 지수를 계산하고, 활동·복장 추천 카드와 온도 기반 배경 그라데이션을 표시",
+  "startTime": "2026-06-01T09:17:00.0000000+09:00",
+  "endTime": "2026-06-01T09:28:00.0000000+09:00",
+  "elapsedSec": 660,
+  "elapsedNote": "Cursor Usage 첫·마지막 요청 시각(09:17~09:28) 기준. Gradle 빌드 19초는 별도(buildElapsedSec).",
+  "tokens": {
+    "captured": true,
+    "source": "Cursor Settings → Usage (Jun 1, 2026)",
+    "inputTokens": "N/A",
+    "outputTokens": "N/A",
+    "totalTokens": 1877000,
+    "totalTokensDisplay": "187.7만",
+    "costUSD": 0.48,
+    "billingType": "free",
+    "billingStatus": "Included",
+    "costNote": "Usage 표시 금액. Included = 무료 한도 포함, 추가 청구 아님.",
+    "splitNote": "Cursor Usage는 요청별 총 토큰만 표시. 입·출력 분리 없음.",
+    "entries": [
+      {
+        "time": "2026-06-01T09:17:00+09:00",
+        "type": "free",
+        "model": "auto",
+        "tokens": 123000,
+        "tokensDisplay": "12.3만",
+        "costUSD": 0.06,
+        "status": "Included"
+      },
+      {
+        "time": "2026-06-01T09:21:00+09:00",
+        "type": "free",
+        "model": "auto",
+        "tokens": 251000,
+        "tokensDisplay": "25.1만",
+        "costUSD": 0.09,
+        "status": "Included"
+      },
+      {
+        "time": "2026-06-01T09:28:00+09:00",
+        "type": "free",
+        "model": "auto",
+        "tokens": 1503000,
+        "tokensDisplay": "150.3만",
+        "costUSD": 0.33,
+        "status": "Included"
+      }
+    ]
+  },
+  "inputTokens": "N/A",
+  "outputTokens": "N/A",
+  "totalTokens": 1877000,
+  "ktFileCount": 11,
+  "ktLineCount": 986,
+  "changedFileCountFromV2": 4,
+  "changedFilesFromV2": [
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/SmartComfort.kt",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/WeatherViewModel.kt",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/ui/WeatherScreen.kt",
+    "projects/weather-cursor/app/src/main/java/com/example/weathernow/ui/components/SmartInsightCard.kt"
+  ],
+  "buildSuccess": true,
+  "buildCheckedAt": "2026-06-01T09:28:00.0000000+09:00",
+  "buildElapsedSec": 19,
+  "screenshotSuccess": true,
+  "screenshotPath": "C:\\proj\\weather-ai-compare\\screenshots\\v3\\v3-cursor.png",
+  "v1v2FeaturesPreserved": true
+}

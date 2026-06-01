@@ -359,7 +359,8 @@ body {
     <a class="nav-link" href="report.html">V1 초기 생성</a>
     <a class="nav-link" href="report_v2.html">V2 기능 개선</a>
     <a class="nav-link" href="report_v3.html">V3 자율 혁신</a>
-    <a class="nav-link" href="code-rules.html">코드 품질 가이드</a>
+    <a class="nav-link" href="report_v4.html">V4 실제 API</a>
+    <a class="nav-link" href="report_v5.html">V5 단위 테스트</a>
     <a class="nav-link" href="report_human.html">직접 구현 vs AI</a>
   </div>
 </nav>
@@ -374,7 +375,7 @@ body {
       <span class="hero-badge x">OpenAI Codex</span>
       <span class="hero-badge g">Gemini CLI</span>
       <span class="hero-badge" style="color:#111827;border-color:rgba(17,24,39,.25);">Cursor Agent</span>
-      <span class="hero-badge">목 데이터 기반</span>
+      <span class="hero-badge">V1–V3 목 데이터 · V4 실 API · V5 단위 테스트</span>
     </div>
   </div>
 </header>
@@ -382,24 +383,24 @@ body {
 <div class="stat-bar">
   <div class="stat-inner">
     <div class="stat-item">
-      <div class="stat-n">217초</div>
-      <div class="stat-l">Gemini 평균 생성시간</div>
+      <div class="stat-n">5단계</div>
+      <div class="stat-l">V1 → V2 → V3 → V4 → V5</div>
     </div>
     <div class="stat-item">
       <div class="stat-n">Gemini</div>
-      <div class="stat-l">V3 화면 변화 확인된 AI</div>
+      <div class="stat-l">전 단계 최단 · 426~318초</div>
     </div>
     <div class="stat-item">
-      <div class="stat-n">3단계</div>
-      <div class="stat-l">실험 구성</div>
+      <div class="stat-n">Codex</div>
+      <div class="stat-l">V4 최저 토큰 92,991</div>
     </div>
     <div class="stat-item">
-      <div class="stat-n">×12.5</div>
-      <div class="stat-l">사람 vs AI 속도차</div>
+      <div class="stat-n">×14.4</div>
+      <div class="stat-l">사람 vs AI(Gemini) 속도차</div>
     </div>
     <div class="stat-item">
-      <div class="stat-n">$0.35</div>
-      <div class="stat-l">Gemini V3 비용 최저</div>
+      <div class="stat-n">Gemini</div>
+      <div class="stat-l">V3·V4 스마트 기능 유일 유지</div>
     </div>
     <div class="stat-item">
       <div class="stat-n">−178줄</div>
@@ -413,7 +414,7 @@ body {
   <!-- 종합 요약 -->
   <div class="verdict reveal">
     <p class="verdict-text">
-      속도는 <strong>Gemini가 전 단계 압도적으로 빨랐고</strong>(평균 217초), V3에서 스크린샷으로 변화가 확인된 건 <strong>Gemini만</strong>이었습니다. 코드 규칙 기준으로는 <strong>Codex가 private·순수 함수·computed UiState를 모두 갖춘 유일한 AI</strong>였고, Codex는 V3에서 유일하게 코드를 줄이며 리팩터링했습니다.
+      속도는 <strong>Gemini가 전 단계 압도적으로 빨랐고</strong>(평균 217초), V3에서 스크린샷으로 체감 변화가 확인된 건 <strong>Gemini와 Cursor</strong>였습니다. V4 실제 API 연동에서 <strong>Gemini는 V3 스마트 기능(온도 배경·인사이트 카드)을 V4에서도 그대로 유지</strong>한 유일한 AI였습니다. V5 단위 테스트에서는 <strong>Codex가 MockK 없이 URLStreamHandlerFactory로 JVM URL을 가로채는 독창적 방법</strong>을 선택했고, Claude의 V4 Clean Architecture 분리 설계가 V5에서 가장 간결한 테스트(140줄)를 만들어냈습니다. <strong>V4 설계 결정이 V5 테스트 복잡도를 직접 결정한 것이 핵심 관찰입니다.</strong>
     </p>
     <div class="verdict-badge">
       <div class="vb-label">코드 품질 1위</div>
@@ -424,19 +425,19 @@ body {
   <!-- 직접 구현 vs AI -->
   <div class="human-banner reveal">
     <div>
-      <div class="hb-tag">직접 구현 — Phase 1·2 완료</div>
-      <h2 class="hb-title">Phase 2까지 누적 2시간 — AI는 같은 작업을 7분 47초에 완성</h2>
-      <p class="hb-desc">Phase 1 ×12.5 → Phase 2 ×21.6로 배율이 더 커졌습니다. AI는 기존 코드 캐시로 Phase 2가 더 빨라진 반면, 사람은 기존 코드 파악 시간이 추가됩니다.</p>
+      <div class="hb-tag">직접 구현 — Phase 1·2·3 완료</div>
+      <h2 class="hb-title">Phase 3까지 누적 2시간 36분 — AI(Gemini)보다 ×14.4 느렸습니다</h2>
+      <p class="hb-desc">Phase 1(×12.5) → Phase 2(×21.6) → Phase 3(×11.6). Phase 3에서 배율이 좁혀진 점이 흥미롭습니다. 스마트 기능("지금 나갈까?" 외출 어드바이저)을 35분 57초에 구현했습니다.</p>
       <a class="hb-link" href="report_human.html">비교 보고서 보기</a>
     </div>
     <div class="hb-nums">
       <div class="hb-num">
-        <div class="hb-n">2:00:15</div>
-        <div class="hb-k">누적 (Phase 1+2)</div>
+        <div class="hb-n">2:36:12</div>
+        <div class="hb-k">누적 (Phase 1+2+3)</div>
       </div>
       <div class="hb-vs">vs</div>
       <div class="hb-num">
-        <div class="hb-n dim">467초</div>
+        <div class="hb-n dim">652초</div>
         <div class="hb-k">Gemini 누적</div>
       </div>
     </div>
@@ -466,7 +467,7 @@ body {
           <div class="phase-n">02</div>
           <h3 class="phase-title">기존 코드 위에 기능 추가</h3>
           <p class="phase-desc">V1 결과물을 유지한 채 시간별 예보, 상세 날씨 정보, 새로고침, 즐겨찾기를 추가했습니다. AI가 자기 코드를 얼마나 잘 이해하는지 확인했습니다.</p>
-          <div class="phase-result">세 AI 모두 기능 충족 · Gemini 149.4초 최단</div>
+          <div class="phase-result">네 AI 모두 기능 충족 · Gemini 149.4초 최단</div>
           <a class="phase-link" href="report_v2.html">V2 보고서 보기</a>
         </div>
       </article>
@@ -478,6 +479,28 @@ body {
           <p class="phase-desc">명세 없이 AI가 직접 스마트 기능을 정해 추가했습니다. 창의성과 실행력의 차이가 가장 극명하게 드러난 단계입니다.</p>
           <div class="phase-result">Gemini 인사이트 카드 + 온도 기반 배경 가장 두드러짐</div>
           <a class="phase-link" href="report_v3.html">V3 보고서 보기</a>
+        </div>
+      </article>
+      <article class="phase-card">
+        <div class="phase-shot"><img src="../screenshots/v4/gemini/01-top.png" alt="V4" loading="lazy"></div>
+        <div class="phase-body">
+          <div class="phase-n">04</div>
+          <h3 class="phase-title">실제 API 연동</h3>
+          <p class="phase-desc">목 데이터를 Open-Meteo 실시간 API로 교체했습니다. 같은 요구사항에서 AI마다 HTTP 라이브러리와 아키텍처 선택이 달랐고, 실기기에서 실데이터 수신을 확인했습니다.</p>
+          <div class="phase-result">Claude·Codex stdlib 전용 · Gemini Retrofit · V3 스마트 기능 Gemini만 V4에서도 유지</div>
+          <a class="phase-link" href="report_v4.html">V4 보고서 보기</a>
+        </div>
+      </article>
+      <article class="phase-card">
+        <div class="phase-shot" style="background:#1a1a2e;display:flex;align-items:center;justify-content:center;min-height:160px;">
+          <span style="font-size:40px;">🧪</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-n">05</div>
+          <h3 class="phase-title">단위 테스트 작성</h3>
+          <p class="phase-desc">V4 앱에 단위 테스트를 추가했습니다. 같은 요구사항에서 AI마다 모킹 전략이 완전히 달랐습니다. 특히 V4 아키텍처 선택이 V5 테스트 복잡도를 직접 결정했습니다.</p>
+          <div class="phase-result">세 AI 모두 5/5 통과 · Codex URLStreamHandler 독창 접근 · Gemini 최단 231초</div>
+          <a class="phase-link" href="report_v5.html">V5 보고서 보기</a>
         </div>
       </article>
     </div>
@@ -520,14 +543,21 @@ body {
             <td class="mono">360.6초</td>
             <td class="mono">315초</td>
             <td class="mono win">149.4초 — 최단</td>
-            <td class="mono">V2 미진행</td>
+            <td class="mono">240초</td>
           </tr>
           <tr>
             <td class="rk">V3 생성 시간</td>
             <td class="mono">412.5초</td>
             <td class="mono">280초</td>
             <td class="mono win">185.2초 — 최단</td>
-            <td class="mono">V3 미진행</td>
+            <td class="mono">660초</td>
+          </tr>
+          <tr>
+            <td class="rk">V4 생성 시간</td>
+            <td class="mono">536초</td>
+            <td class="mono">437초</td>
+            <td class="mono win">426초 — 최단</td>
+            <td class="mono" style="color:var(--muted);">한도 초과</td>
           </tr>
           <tr>
             <td class="rk">V1 토큰 합계</td>
@@ -541,14 +571,21 @@ body {
             <td>1,043,992</td>
             <td>1,615,940</td>
             <td class="win">642,641 — 최저</td>
-            <td style="color:var(--muted);">—</td>
+            <td>1,228,000 <span style="font-size:12px;color:var(--muted);">(Included)</span></td>
           </tr>
           <tr>
             <td class="rk">V3 실행 비용</td>
             <td class="mono">$0.95</td>
             <td class="mono">$0.45</td>
             <td class="mono win">$0.35 — 최저</td>
-            <td style="color:var(--muted);">—</td>
+            <td class="mono">$0.48 <span style="font-size:12px;color:var(--muted);">(Included)</span></td>
+          </tr>
+          <tr>
+            <td class="rk">V4 토큰 합계</td>
+            <td>5,262,416 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
+            <td class="win">92,991 — 최저</td>
+            <td>2,065,397</td>
+            <td style="color:var(--muted);">한도 초과</td>
           </tr>
           <tr>
             <td class="rk">V1 코드량</td>
@@ -562,7 +599,49 @@ body {
             <td>5파일 · 612줄</td>
             <td class="win">6파일 · 558줄 ↓</td>
             <td>5파일 · 542줄</td>
-            <td style="color:var(--muted);">—</td>
+            <td>11파일 · 986줄</td>
+          </tr>
+          <tr>
+            <td class="rk">V4 코드량</td>
+            <td>6파일 · 736줄</td>
+            <td class="win">6파일 · 890줄 — 최다</td>
+            <td>6파일 · 716줄</td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V4 HTTP 라이브러리</td>
+            <td>java.net.URL (stdlib)</td>
+            <td>java.net.HttpURLConnection (stdlib)</td>
+            <td>Retrofit + Gson + OkHttp</td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V5 테스트 시간</td>
+            <td class="mono">428초</td>
+            <td class="mono">256초</td>
+            <td class="mono win">231초 — 최단</td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V5 토큰 합계</td>
+            <td>1,689,609 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
+            <td class="win">73,606 — 최저</td>
+            <td>3,745,259 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V5 테스트 결과</td>
+            <td><span class="badge ok">5/5 통과</span></td>
+            <td><span class="badge warn">자가수정 후 5/5</span></td>
+            <td><span class="badge ok">5/5 통과</span></td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V5 모킹 전략</td>
+            <td>MockK (mockkObject)</td>
+            <td>URLStreamHandlerFactory (직접 구현)</td>
+            <td>MockK + Turbine</td>
+            <td style="color:var(--muted);">한도 초과</td>
           </tr>
           <tr>
             <td class="rk">자동 빌드</td>
@@ -577,13 +656,6 @@ body {
             <td><span class="badge warn">V1 오류→V2 수정</span></td>
             <td><span class="badge ok">정상</span></td>
             <td><span class="badge ok">정상</span></td>
-          </tr>
-          <tr>
-            <td class="rk">코드 패턴 순위</td>
-            <td>3위</td>
-            <td class="win">1위</td>
-            <td>2위</td>
-            <td style="color:var(--muted);">분석 예정</td>
           </tr>
         </tbody>
       </table>
@@ -687,28 +759,28 @@ body {
         <div class="growth-head">
           <div class="ai-dot" style="background:#111827;"></div>
           <span class="growth-name">Cursor</span>
-          <span style="font-size:12px;color:var(--muted);margin-left:auto;">V1만 진행</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:auto;">총 +<strong>108%</strong> 전 단계 최다</span>
         </div>
         <div class="growth-body">
           <div class="growth-row">
             <span class="growth-label">V1</span>
-            <div class="growth-track"><div class="growth-fill" style="width:64%"></div></div>
+            <div class="growth-track"><div class="growth-fill" style="width:48%"></div></div>
             <span class="growth-val">473줄</span>
             <span class="growth-diff"></span>
           </div>
           <div class="growth-row">
             <span class="growth-label">V2</span>
-            <div class="growth-track"></div>
-            <span class="growth-val" style="color:var(--muted);">미진행</span>
-            <span class="growth-diff"></span>
+            <div class="growth-track"><div class="growth-fill" style="width:76%"></div></div>
+            <span class="growth-val">748줄</span>
+            <span class="growth-diff">+275</span>
           </div>
           <div class="growth-row">
             <span class="growth-label">V3</span>
-            <div class="growth-track"></div>
-            <span class="growth-val" style="color:var(--muted);">미진행</span>
-            <span class="growth-diff"></span>
+            <div class="growth-track"><div class="growth-fill" style="width:100%"></div></div>
+            <span class="growth-val">986줄</span>
+            <span class="growth-diff">+238</span>
           </div>
-          <p class="growth-note">IDE 에이전트 방식으로 V1만 진행. 7개 파일로 네 AI 중 파일 수 최다.</p>
+          <p class="growth-note">전 단계 코드량 최다. V3에서 쾌적 지수 엔진(SmartComfort.kt) 신규 추가로 11파일·986줄 달성.</p>
         </div>
       </div>
     </div>
@@ -768,14 +840,14 @@ body {
         <div class="ai-card-head">
           <div class="ai-dot" style="background:#111827;"></div>
           <span class="ai-name">Cursor</span>
-          <span class="ai-model">V1만 진행</span>
+          <span class="ai-model">Smart Comfort Index</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">IDE 에이전트 방식. 라이트 청록 테마. 7파일 473줄로 가장 많은 코드. APK 자동 빌드 성공. V2·V3는 미진행.</p>
+          <p class="ai-summary">기온·강수·자외선·대기질·습도·풍속 6요소로 쾌적 지수(0~100) 산출. 도시 전환 시 점수·배경색·활동·복장 팁 즉시 변경.</p>
           <div class="ai-tags">
+            <span class="ai-tag good">화면 변화 즉시 확인</span>
             <span class="ai-tag good">APK 자동 빌드</span>
-            <span class="ai-tag good">한국어 정상</span>
-            <span class="ai-tag warn">V1만 비교 가능</span>
+            <span class="ai-tag good">6요소 복합 분석</span>
           </div>
         </div>
       </div>
@@ -803,42 +875,34 @@ body {
         <tbody>
           <tr>
             <td class="rk">private Composable</td>
-            <td>❌</td><td>✅</td><td>❌</td><td style="color:var(--muted);">—</td>
+            <td>❌</td><td>✅</td><td>❌</td><td>❌</td>
           </tr>
           <tr>
             <td class="rk">순수 함수 설계<br><span style="font-size:11px;color:var(--muted);font-weight:400;">UiState + callbacks</span></td>
-            <td>❌</td><td>✅</td><td>❌</td><td style="color:var(--muted);">—</td>
+            <td>❌</td><td>✅</td><td>❌</td><td>✅</td>
           </tr>
           <tr>
             <td class="rk">원자적 상태 업데이트<br><span style="font-size:11px;color:var(--muted);font-weight:400;">update{} 사용</span></td>
-            <td>❌</td><td>❌</td><td>✅</td><td style="color:var(--muted);">—</td>
+            <td>❌</td><td>❌</td><td>✅</td><td>❌</td>
           </tr>
           <tr>
             <td class="rk">computed UiState</td>
-            <td>❌</td><td>✅</td><td>❌</td><td style="color:var(--muted);">—</td>
+            <td>❌</td><td>✅</td><td>❌</td><td>✅</td>
           </tr>
           <tr>
             <td class="rk">LazyColumn 성능</td>
-            <td>❌</td><td>❌</td><td>✅</td><td style="color:var(--muted);">—</td>
+            <td>❌</td><td>❌</td><td>✅</td><td>❌</td>
           </tr>
           <tr>
             <td class="rk">레이어 분리 구조</td>
-            <td>✅</td><td>❌</td><td>❌</td><td style="color:var(--muted);">—</td>
+            <td>✅</td><td>❌</td><td>❌</td><td>❌</td>
           </tr>
           <tr>
             <td class="rk">lifecycle 안전<br><span style="font-size:11px;color:var(--muted);font-weight:400;">collectAsStateWithLifecycle</span></td>
-            <td>✅</td><td>✅</td><td>⚠️ 누수 있음</td><td style="color:var(--muted);">—</td>
+            <td>✅</td><td>✅</td><td>⚠️ 누수 있음</td><td>✅</td>
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="guide-promo">
-      <div>
-        <div class="gp-label">코드 분석 가이드</div>
-        <div class="gp-title">패턴 상세 비교 · Before/After 코드 · 팀 도입 체크리스트</div>
-        <div class="gp-desc">18가지 패턴 분석 · AI별 주의사항 · 커밋 전 체크리스트 11항목</div>
-      </div>
-      <a class="gp-btn" href="code-rules.html">가이드 보기</a>
     </div>
   </section>
 
@@ -901,11 +965,11 @@ body {
           <span class="ai-model">auto (Cursor Agent)</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">IDE 에이전트 방식으로 V1만 진행. 라이트 청록 테마. APK 자동 빌드 성공. V2·V3는 미진행이라 패턴 분석 제외.</p>
+          <p class="ai-summary">IDE 에이전트 방식으로 V1~V3 진행. 라이트 청록 테마. 전 단계 코드량 최다(V3 11파일·986줄). V3 쾌적 지수 카드가 화면에서 즉시 확인됨. V4는 사용량 한도 초과로 미진행.</p>
           <div class="ai-tags">
             <span class="ai-tag good">APK 자동 빌드</span>
-            <span class="ai-tag good">한국어 정상</span>
-            <span class="ai-tag warn">V1만 비교 가능</span>
+            <span class="ai-tag good">전 단계 코드량 최다</span>
+            <span class="ai-tag warn">V4 한도 초과</span>
           </div>
         </div>
       </div>
@@ -915,7 +979,7 @@ body {
 </div>
 
 <footer class="footer">
-  WeatherNow AI 비교 실험 · 2026-05-28 · Claude Code / Codex CLI / Gemini CLI
+  WeatherNow AI 비교 실험 · 2026-05-28~06-01 · Claude Code / OpenAI Codex / Gemini CLI / Cursor Agent
 </footer>
 
 <script>

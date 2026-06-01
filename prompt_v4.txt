@@ -1,0 +1,29 @@
+You are upgrading the existing WeatherNow Android app in this directory.
+
+This is V4 of an AI comparison experiment. You previously built and improved this app through V1, V2, and V3.
+Read the existing code first, then upgrade it in place.
+
+Goal:
+Replace all mock data with real live weather data from the Open-Meteo API (https://api.open-meteo.com).
+Open-Meteo is free and requires no API key.
+
+Requirements:
+1. Fetch real weather data for 서울, 부산, 제주 from Open-Meteo.
+2. Preserve all features from V1/V2/V3 (city switching, current weather, 5-day forecast, hourly forecast, extra details, refresh, favorites, and any smart feature from V3).
+3. Show a loading state while fetching data.
+4. Show a user-visible error message if the network call fails.
+5. Add INTERNET permission to AndroidManifest.xml.
+6. Ensure ./gradlew assembleDebug succeeds.
+
+City coordinates for Open-Meteo:
+- 서울: latitude 37.5665, longitude 126.9780
+- 부산: latitude 35.1796, longitude 129.0756
+- 제주: latitude 33.4996, longitude 126.5312
+
+WMO weather code reference (Open-Meteo uses these for weather conditions):
+0=맑음 / 1=구름조금 / 2=구름많음 / 3=흐림 / 45,48=안개 / 51–55=이슬비 / 61–65=비 / 71–75=눈 / 80–82=소나기 / 95,96,99=뇌우
+
+After implementation:
+- Run ./gradlew assembleDebug.
+- Briefly summarize what changed.
+- Confirm the build passed.

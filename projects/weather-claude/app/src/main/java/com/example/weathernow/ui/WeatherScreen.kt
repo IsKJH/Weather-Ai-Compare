@@ -26,9 +26,14 @@ import com.example.weathernow.viewmodel.WeatherViewModel
 
 fun conditionEmoji(condition: String): String = when (condition) {
     "맑음" -> "☀️"
+    "구름조금" -> "⛅"
+    "구름많음" -> "🌥️"
     "구름" -> "⛅"
     "흐림" -> "☁️"
+    "안개" -> "🌫️"
+    "이슬비" -> "🌦️"
     "비" -> "🌧️"
+    "소나기" -> "🌧️"
     "눈" -> "❄️"
     "뇌우" -> "⛈️"
     else -> "🌤️"
@@ -36,9 +41,14 @@ fun conditionEmoji(condition: String): String = when (condition) {
 
 fun conditionGradient(condition: String): List<Color> = when (condition) {
     "맑음" -> listOf(Color(0xFF1565C0), Color(0xFF42A5F5))
+    "구름조금" -> listOf(Color(0xFF1E88E5), Color(0xFF64B5F6))
+    "구름많음" -> listOf(Color(0xFF455A64), Color(0xFF78909C))
     "구름" -> listOf(Color(0xFF546E7A), Color(0xFF90A4AE))
     "흐림" -> listOf(Color(0xFF37474F), Color(0xFF78909C))
+    "안개" -> listOf(Color(0xFF607D8B), Color(0xFFB0BEC5))
+    "이슬비" -> listOf(Color(0xFF283593), Color(0xFF7986CB))
     "비" -> listOf(Color(0xFF1A237E), Color(0xFF5C6BC0))
+    "소나기" -> listOf(Color(0xFF1A237E), Color(0xFF5C6BC0))
     "눈" -> listOf(Color(0xFF4DD0E1), Color(0xFFE0F7FA))
     "뇌우" -> listOf(Color(0xFF212121), Color(0xFF424242))
     else -> listOf(Color(0xFF1565C0), Color(0xFF42A5F5))
@@ -48,7 +58,7 @@ fun conditionGradient(condition: String): List<Color> = when (condition) {
 fun WeatherScreen(viewModel: WeatherViewModel, modifier: Modifier = Modifier) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val weather = uiState.weatherData
-    val gradient = conditionGradient(weather.condition)
+    val gradient = conditionGradient(weather?.condition ?: "맑음")
     val isFavorite = uiState.favoriteCityIndex == uiState.selectedIndex
 
     Box(
@@ -56,108 +66,165 @@ fun WeatherScreen(viewModel: WeatherViewModel, modifier: Modifier = Modifier) {
             .fillMaxSize()
             .background(Brush.verticalGradient(gradient))
     ) {
-        if (uiState.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                color = Color.White,
-                strokeWidth = 3.dp
-            )
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(32.dp))
-
-                CityTabRow(
-                    cities = uiState.cities,
-                    selectedIndex = uiState.selectedIndex,
-                    favoriteCityIndex = uiState.favoriteCityIndex,
-                    onSelect = viewModel::selectCity
+        when {
+            uiState.isLoading && weather == null -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = Color.White,
+                    strokeWidth = 3.dp
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                LastUpdatedRow(
-                    lastUpdated = uiState.lastUpdated,
-                    onRefresh = viewModel::refresh
+            }
+            uiState.error != null && weather == null -> {
+                ErrorContent(
+                    error = uiState.error!!,
+                    onRetry = viewModel::refresh,
+                    modifier = Modifier.align(Alignment.Center)
                 )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+            }
+            weather != null -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    CityTabRow(
+                        cities = uiState.cities,
+                        selectedIndex = uiState.selectedIndex,
+                        favoriteCityIndex = uiState.favoriteCityIndex,
+                        onSelect = viewModel::selectCity
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    LastUpdatedRow(
+                        lastUpdated = uiState.lastUpdated,
+                        onRefresh = viewModel::refresh
+                    )
+
+                    if (uiState.isLoading) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        LinearProgressIndicator(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(2.dp),
+                            color = Color.White.copy(alpha = 0.8f),
+                            trackColor = Color.White.copy(alpha = 0.2f)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = weather.city,
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.White
+                        )
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            text = if (isFavorite) "⭐" else "☆",
+                            fontSize = 22.sp,
+                            modifier = Modifier.clickable { viewModel.toggleFavorite() }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
                     Text(
-                        text = weather.city,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Medium,
+                        text = conditionEmoji(weather.condition),
+                        fontSize = 64.sp
+                    )
+
+                    Text(
+                        text = "${weather.currentTemp}°C",
+                        fontSize = 68.sp,
+                        fontWeight = FontWeight.Thin,
                         color = Color.White
                     )
-                    Spacer(Modifier.width(10.dp))
+
                     Text(
-                        text = if (isFavorite) "⭐" else "☆",
-                        fontSize = 22.sp,
-                        modifier = Modifier.clickable { viewModel.toggleFavorite() }
+                        text = weather.condition,
+                        fontSize = 18.sp,
+                        color = Color.White.copy(alpha = 0.9f)
                     )
+
+                    Spacer(modifier = Modifier.height(28.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        DetailCard(Modifier.weight(1f), "체감온도", "${weather.feelsLike}°C", "🌡️")
+                        DetailCard(Modifier.weight(1f), "습도", "${weather.humidity}%", "💧")
+                        DetailCard(Modifier.weight(1f), "풍속", "${weather.windSpeed}m/s", "💨")
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        DetailCard(Modifier.weight(1f), "강수확률", "${weather.precipitationProbability}%", "🌂")
+                        DetailCard(Modifier.weight(1f), "자외선 지수", "${weather.uvIndex}", "🔆")
+                        DetailCard(Modifier.weight(1f), "대기질", weather.airQuality, "🌿")
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    HourlyForecastCard(hourlyForecast = weather.hourlyForecast)
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    ForecastCard(forecast = weather.forecast)
+
+                    if (uiState.error != null) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "⚠️ 갱신 실패: ${uiState.error}",
+                            fontSize = 12.sp,
+                            color = Color.White.copy(alpha = 0.7f),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = conditionEmoji(weather.condition),
-                    fontSize = 64.sp
-                )
-
-                Text(
-                    text = "${weather.currentTemp}°C",
-                    fontSize = 68.sp,
-                    fontWeight = FontWeight.Thin,
-                    color = Color.White
-                )
-
-                Text(
-                    text = weather.condition,
-                    fontSize = 18.sp,
-                    color = Color.White.copy(alpha = 0.9f)
-                )
-
-                Spacer(modifier = Modifier.height(28.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    DetailCard(Modifier.weight(1f), "체감온도", "${weather.feelsLike}°C", "🌡️")
-                    DetailCard(Modifier.weight(1f), "습도", "${weather.humidity}%", "💧")
-                    DetailCard(Modifier.weight(1f), "풍속", "${weather.windSpeed}m/s", "💨")
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    DetailCard(Modifier.weight(1f), "강수확률", "${weather.precipitationProbability}%", "🌂")
-                    DetailCard(Modifier.weight(1f), "자외선 지수", "${weather.uvIndex}", "🔆")
-                    DetailCard(Modifier.weight(1f), "대기질", weather.airQuality, "🌿")
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                HourlyForecastCard(hourlyForecast = weather.hourlyForecast)
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ForecastCard(forecast = weather.forecast)
-
-                Spacer(modifier = Modifier.height(32.dp))
             }
+        }
+    }
+}
+
+@Composable
+fun ErrorContent(error: String, onRetry: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.padding(horizontal = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(text = "⚠️", fontSize = 48.sp)
+        Text(
+            text = error,
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            fontSize = 14.sp
+        )
+        Button(
+            onClick = onRetry,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White.copy(alpha = 0.3f)
+            )
+        ) {
+            Text("다시 시도", color = Color.White)
         }
     }
 }
