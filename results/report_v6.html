@@ -33,8 +33,9 @@
     </div>
     <div class="metric-grid">
       <div class="metric"><div class="metric-k">버그 발견율</div><div class="metric-v">전원 5/5 (100%)</div></div>
-      <div class="metric"><div class="metric-k">빌드+테스트 통과</div><div class="metric-v">Codex (유일)</div></div>
-      <div class="metric"><div class="metric-k">Codex 토큰</div><div class="metric-v">62,909</div></div>
+      <div class="metric"><div class="metric-k">가장 빠른 실행</div><div class="metric-v">Gemini · 194초</div></div>
+      <div class="metric"><div class="metric-k">최저 토큰</div><div class="metric-v">Codex · 62,909</div></div>
+      <div class="metric"><div class="metric-k">git diff 미사용 발견</div><div class="metric-v">Gemini (유일)</div></div>
     </div>
   </section>
 
@@ -81,24 +82,26 @@ Do not ask for hints. Read the code carefully and reason from first principles.<
     <div class="sh"><span class="sh-num">04</span><h2>종합 비교</h2></div>
     <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody>
       <tr><td class="col-label">모델</td><td>claude-sonnet-4-6</td><td>gpt-5.5</td><td>gemini-3-flash-preview</td></tr>
+      <tr><td class="col-label">소요 시간</td><td>506초</td><td>~480초</td><td><strong>194초</strong></td></tr>
+      <tr><td class="col-label">총 토큰</td><td>1,862,799 (캐시 포함)</td><td><strong>62,909</strong></td><td>3,654,494 (컨텍스트 반복 포함)</td></tr>
       <tr class="row-hl"><td class="col-label">버그 발견</td><td>5 / 5 ✅</td><td>5 / 5 ✅</td><td>5 / 5 ✅</td></tr>
+      <tr class="row-hl"><td class="col-label">git diff 사용</td><td><strong>첫 행동으로 사용</strong></td><td>파일 읽은 후 교차 확인</td><td><strong>미사용 (코드 직독만)</strong></td></tr>
       <tr><td class="col-label">빌드 검증</td><td>성공 ✅</td><td>성공 ✅</td><td>실패 ❌ (JAVA_HOME 미설정)</td></tr>
-      <tr class="row-hl"><td class="col-label">단위 테스트 실행</td><td>미실행</td><td><strong>자체 실행 · 전체 통과</strong> ✅</td><td>미실행</td></tr>
+      <tr><td class="col-label">단위 테스트 실행</td><td>미실행</td><td><strong>자체 실행 · 전체 통과</strong> ✅</td><td>미실행</td></tr>
       <tr><td class="col-label">도구 오류</td><td>없음</td><td>없음</td><td>replace 실패 1회 (회복)</td></tr>
-      <tr><td class="col-label">사용 토큰</td><td>미집계</td><td>62,909</td><td>미집계</td></tr>
       <tr><td class="col-label">버그 위치 파일 수</td><td>2개 파일</td><td>1개 파일</td><td>1개 파일</td></tr>
-      <tr><td class="col-label">첫 시도 수정</td><td>전부 ✅</td><td>전부 ✅</td><td>전부 ✅ (도구 오류 1회 후 회복)</td></tr>
     </tbody></table></div>
   </section>
 
   <section class="card" id="approach">
     <div class="sh"><span class="sh-num">05</span><h2>디버깅 접근 방식 비교</h2></div>
     <p class="lead">같은 목표(5개 버그 발견)에 대해 각 AI가 어떤 순서와 방법으로 코드를 읽고 진단했는지 비교합니다.</p>
-    <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>첫 번째 행동</th><th>진단 방법</th><th>수정 순서</th><th>검증 방법</th></tr></thead><tbody>
-      <tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>git diff로 변경 이력 확인</td><td>diff 각 hunk를 의미 기준으로 해석 → 버그 추론</td><td>파일별 순차 수정 (ViewModel → Repository)</td><td>./gradlew assembleDebug</td></tr>
-      <tr class="row-hl"><td class="col-label"><span class="dot codex"></span> Codex</td><td>모든 .kt 파일 목록 + 전체 읽기</td><td>전체 코드 이해 후 git diff로 의심 지점 좁히기</td><td>논리적 의존 순서로 수정</td><td>assembleDebug + <strong>testDebugUnitTest (자체 실행)</strong> · JAVA_HOME 직접 해결</td></tr>
-      <tr><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>WeatherViewModel.kt 직독</td><td>코드 흐름 추적으로 이상 패턴 식별</td><td>발견 즉시 수정 (1개 replace 오류 후 회복)</td><td>./gradlew 실패 → 정적 분석 + V5 단위 테스트 교차 검증으로 대체</td></tr>
+    <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>첫 번째 행동</th><th>git diff 사용</th><th>진단 방법</th><th>검증 방법</th></tr></thead><tbody>
+      <tr><td class="col-label"><span class="dot claude"></span> Claude</td><td><strong>git diff 즉시 실행</strong></td><td class="col-label" style="color:#e05c1a;">첫 행동으로 사용</td><td>diff hunk를 의미 기준으로 해석 → 버그 위치 직접 확인</td><td>assembleDebug 성공</td></tr>
+      <tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>모든 .kt 파일 목록 + 전체 읽기</td><td style="color:#e0a01a;">파일 읽은 후 교차 확인용</td><td>전체 코드 이해 → git diff로 의심 지점 좁히기</td><td>assembleDebug + <strong>testDebugUnitTest (자체 실행)</strong> · JAVA_HOME 직접 해결</td></tr>
+      <tr class="row-hl"><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>WeatherViewModel.kt 직독</td><td style="color:#0b8a5e;"><strong>미사용</strong></td><td><strong>코드 흐름만으로 이상 패턴 식별</strong> — git 이력 참조 없음</td><td>./gradlew 실패 → 정적 분석 + V5 단위 테스트 교차 검증으로 대체</td></tr>
     </tbody></table></div>
+    <div class="note-box" style="border-left-color:#e05c1a"><strong>git diff 사용의 의미:</strong> Claude는 첫 행동으로 <code>git diff</code>를 실행했습니다. git diff는 "무엇이 바뀌었는지"를 직접 보여주므로 버그 위치를 사실상 즉시 알 수 있습니다. 이것은 실전에서 유효한 개발자 습관이지만, "코드를 읽고 버그를 추론하는 능력"을 측정하는 이 실험 맥락에서는 다른 AI와 동일선상에서 비교하기 어렵습니다. Gemini는 git 이력 없이 순수하게 코드 흐름만으로 5개 전부를 발견했습니다.</div>
     <div class="note-box"><strong>Codex의 자발적 단위 테스트 실행:</strong> 프롬프트는 "빌드 통과"만 요구했지만, Codex는 V5에서 본인이 직접 작성한 단위 테스트가 있다는 것을 인지하고 자체적으로 <code>testDebugUnitTest</code>까지 실행했습니다. "코드가 컴파일된다"와 "기능이 올바르다"를 구분한 것입니다.</div>
   </section>
 
@@ -108,33 +111,39 @@ Do not ask for hints. Read the code carefully and reason from first principles.<
       <div class="token-card">
         <div class="tc-head"><span class="dot claude"></span><span class="tc-name">Claude</span><span class="tc-model">claude-sonnet-4-6</span></div>
         <div class="kv-list">
-          <div class="kv-row hl"><span class="kv-k">빌드 결과</span><span class="kv-v">BUILD SUCCESSFUL (1m 57s)</span></div>
-          <div class="kv-row"><span class="kv-k">총 토큰</span><span class="kv-v">미집계</span></div>
-          <div class="kv-row"><span class="kv-k">버그 발견</span><span class="kv-v">5 / 5</span></div>
+          <div class="kv-row hl"><span class="kv-k">총 처리 토큰</span><span class="kv-v">1,862,799</span></div>
+          <div class="kv-row"><span class="kv-k">신규 입력 토큰</span><span class="kv-v">43</span></div>
+          <div class="kv-row"><span class="kv-k">캐시 생성 토큰</span><span class="kv-v">171,419</span></div>
+          <div class="kv-row"><span class="kv-k">캐시 재사용 토큰</span><span class="kv-v">1,625,720</span></div>
+          <div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">65,617</span></div>
+          <div class="kv-row"><span class="kv-k">소요 시간</span><span class="kv-v">506초</span></div>
         </div>
-        <p class="tc-note">--print 모드로 실행해 토큰 집계가 제공되지 않았습니다. git diff를 가장 먼저 확인하는 접근으로 빠르게 버그를 특정했습니다.</p>
+        <p class="tc-note">캐시 재사용 비율 87%. git diff를 첫 행동으로 실행해 변경 내용을 직접 확인한 뒤 수정했습니다. 빌드 성공.</p>
       </div>
       <div class="token-card">
         <div class="tc-head"><span class="dot codex"></span><span class="tc-name">Codex</span><span class="tc-model">gpt-5.5</span></div>
         <div class="kv-list">
           <div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">62,909</span></div>
+          <div class="kv-row"><span class="kv-k">소요 시간</span><span class="kv-v">~480초</span></div>
           <div class="kv-row"><span class="kv-k">빌드 결과</span><span class="kv-v">BUILD SUCCESSFUL</span></div>
           <div class="kv-row"><span class="kv-k">단위 테스트</span><span class="kv-v">전체 통과 (자체 실행)</span></div>
-          <div class="kv-row"><span class="kv-k">버그 발견</span><span class="kv-v">5 / 5</span></div>
         </div>
-        <p class="tc-note">Codex exec 최종 출력 'tokens used: 62,909'. 전체 .kt 파일을 읽고 단위 테스트까지 실행한 가장 철저한 검증임에도 토큰 효율이 높습니다.</p>
+        <p class="tc-note">Codex exec 최종 출력 'tokens used: 62,909'. 세 AI 중 토큰 효율이 압도적으로 높습니다. 전체 파일 읽기 + 단위 테스트까지 실행했음에도 가장 적은 토큰 사용.</p>
       </div>
       <div class="token-card">
         <div class="tc-head"><span class="dot gemini"></span><span class="tc-name">Gemini</span><span class="tc-model">gemini-3-flash-preview</span></div>
         <div class="kv-list">
-          <div class="kv-row hl"><span class="kv-k">빌드 결과</span><span class="kv-v">미검증 (JAVA_HOME 미설정)</span></div>
-          <div class="kv-row"><span class="kv-k">총 토큰</span><span class="kv-v">미집계</span></div>
-          <div class="kv-row"><span class="kv-k">도구 오류</span><span class="kv-v">replace 1회 실패 후 회복</span></div>
-          <div class="kv-row"><span class="kv-k">버그 발견</span><span class="kv-v">5 / 5</span></div>
+          <div class="kv-row hl"><span class="kv-k">총 처리 토큰</span><span class="kv-v">3,654,494</span></div>
+          <div class="kv-row"><span class="kv-k">입력 토큰 합산</span><span class="kv-v">1,954,283</span></div>
+          <div class="kv-row"><span class="kv-k">출력 토큰 합산</span><span class="kv-v">7,451</span></div>
+          <div class="kv-row"><span class="kv-k">캐시 토큰</span><span class="kv-v">1,648,221</span></div>
+          <div class="kv-row"><span class="kv-k">사고(thoughts) 토큰</span><span class="kv-v">44,539</span></div>
+          <div class="kv-row"><span class="kv-k">소요 시간</span><span class="kv-v">194초 (최단)</span></div>
         </div>
-        <p class="tc-note">JAVA_HOME 문제 발생 시 우회 경로를 탐색하지 않고 정적 분석으로 대체했습니다. Codex는 동일 환경에서 Android Studio JBR 경로를 스스로 찾아 해결했습니다.</p>
+        <p class="tc-note">Gemini CLI session JSONL 기준 전체 턴 합산. 컨텍스트 반복 포함이라 절대값보다 상대 비교로 해석. git diff 없이 코드 직독만으로 5개 전부 발견. 빌드 미검증(JAVA_HOME).</p>
       </div>
     </div>
+    <div class="note-box">Claude의 토큰이 많아 보이지만 캐시 재사용 비율이 87%입니다. Codex는 단순 집계 토큰(62,909)으로 세 AI 중 가장 경제적입니다. Gemini 수치는 매 턴마다 컨텍스트가 반복 포함되므로 단순 비교보다 규모 파악 용도로 해석하는 것이 적절합니다.</div>
   </section>
 
   <section class="card" id="observations">
@@ -153,12 +162,17 @@ Do not ask for hints. Read the code carefully and reason from first principles.<
     <div class="sh"><span class="sh-num">08</span><h2>최종 평가</h2></div>
     <p class="lead">버그 탐지 능력은 세 AI가 동등합니다. 차이는 <strong>"얼마나 발견했는가"가 아니라 "발견 후 어떻게 검증했는가"</strong>에 있습니다.</p>
     <div class="tbl-wrap"><table><thead><tr><th>평가 기준</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th></tr></thead><tbody>
-      <tr><td class="col-label">버그 탐지</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td></tr>
-      <tr><td class="col-label">수정 정확성</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td></tr>
-      <tr class="row-hl"><td class="col-label">검증 품질</td><td>⭐⭐ (빌드만)</td><td>⭐⭐⭐ (빌드 + 유닛 테스트)</td><td>⭐ (정적 분석만)</td></tr>
+      <tr><td class="col-label">버그 탐지 (결과)</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐</td></tr>
+      <tr class="row-hl"><td class="col-label">코드 읽기 능력 (과정)</td><td>⭐⭐ (git diff 보조)</td><td>⭐⭐⭐ (전체 파일 독해 후 diff)</td><td>⭐⭐⭐ (git diff 없이 직독)</td></tr>
+      <tr><td class="col-label">검증 품질</td><td>⭐⭐ (빌드만)</td><td>⭐⭐⭐ (빌드 + 단위 테스트)</td><td>⭐ (정적 분석만)</td></tr>
+      <tr><td class="col-label">토큰 효율</td><td>⭐⭐ (캐시 87%)</td><td>⭐⭐⭐ (62,909 최소)</td><td>⭐ (컨텍스트 반복 포함)</td></tr>
+      <tr><td class="col-label">속도</td><td>⭐⭐ (506초)</td><td>⭐⭐ (~480초)</td><td>⭐⭐⭐ (194초)</td></tr>
       <tr><td class="col-label">장애물 대응</td><td>⭐⭐⭐ (문제 없음)</td><td>⭐⭐⭐ (JAVA_HOME 자체 해결)</td><td>⭐ (JAVA_HOME 포기)</td></tr>
       <tr><td class="col-label">자율 범위 확장</td><td>⭐⭐ (요구사항 준수)</td><td>⭐⭐⭐ (단위 테스트 자체 실행)</td><td>⭐⭐ (교차 검증 시도)</td></tr>
     </tbody></table></div>
+    <div class="note-box" style="margin-top:16px;border-left-color:#e05c1a">
+      <strong>git diff 없이 찾아야 진짜 디버깅 능력:</strong> Claude는 첫 행동으로 <code>git diff</code>를 실행해 변경된 줄을 직접 확인했습니다. 이는 실무에서 유효한 방법이지만, "코드를 읽고 버그를 추론하는 능력" 측정에서는 Gemini(코드 직독만으로 5/5 발견, 194초)와 Codex(전체 파일 독해 후 diff 교차 확인)가 더 순수한 진단 능력을 보여줬습니다.
+    </div>
     <div class="note-box" style="margin-top:16px">
       <strong>V1~V6 종합 관찰:</strong> 단순 구현(V1~V3)에서는 Gemini·Cursor가 체감 기능에서 앞섰고, 아키텍처 설계(V4)에서는 Claude가 유지보수성을 먼저 고려했습니다. 단위 테스트(V5)에서는 Claude의 V4 설계 선택이 가장 단순한 테스트 코드를 만들었고, 디버깅(V6)에서는 탐지 능력은 동등하지만 Codex가 검증 깊이에서 앞섰습니다. <strong>각 AI의 강점이 단계마다 다르게 드러난다는 점이 이 실험의 핵심 발견입니다.</strong>
     </div>
