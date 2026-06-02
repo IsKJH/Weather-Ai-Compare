@@ -249,6 +249,28 @@
       </div>
     </div>
 
+    <h3 style="margin:20px 0 12px;font-size:1rem;color:var(--fg2)">실기기 알림 스크린샷</h3>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="ai-card-head claude"><span class="dot claude"></span> Claude</div>
+        <div class="ai-card-body" style="padding:0">
+          <img src="../screenshots/v8/claude-notification.png" alt="Claude 알림 스크린샷" style="width:100%;border-radius:0 0 8px 8px;display:block">
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head codex"><span class="dot codex"></span> Codex</div>
+        <div class="ai-card-body" style="padding:0">
+          <img src="../screenshots/v8/codex-notification.png" alt="Codex 알림 스크린샷" style="width:100%;border-radius:0 0 8px 8px;display:block">
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head gemini"><span class="dot gemini"></span> Gemini</div>
+        <div class="ai-card-body" style="padding:0">
+          <img src="../screenshots/v8/gemini-notification.png" alt="Gemini 알림 스크린샷" style="width:100%;border-radius:0 0 8px 8px;display:block">
+        </div>
+      </div>
+    </div>
+
     <div class="insight" style="margin-top:20px">
       <span class="insight-icon">🔧</span>
       <div><strong>Gemini — 테스트 중 자가 발견한 버그 4개:</strong> 빌드는 통과했지만 실기기 설치 시 <code>ClassNotFoundException</code> 발생. 원인: ① <code>kotlin-android</code> 플러그인 누락 ② <code>doWork()</code> non-suspend 선언 ③ AGP 9.2.1 등 실험적 버전 사용 ④ <code>gradle.properties</code>에 <code>android.useAndroidX=true</code> 누락. Gemini가 직접 모두 수정한 뒤 알림 발송 성공.</div>
