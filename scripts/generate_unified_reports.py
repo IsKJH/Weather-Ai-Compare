@@ -5,8 +5,13 @@ from pathlib import Path
 
 
 ROOT = Path(r"C:\proj\weather-ai-compare")
-AIS = ["claude", "codex", "gemini"]
-AI_LABELS = {"claude": "Claude", "codex": "Codex", "gemini": "Gemini"}
+AIS = ["claude", "codex", "gemini", "cursor"]
+AI_LABELS = {"claude": "Claude", "codex": "Codex", "gemini": "Gemini", "cursor": "Cursor"}
+
+
+def active_ais(data: dict) -> list[str]:
+    results = data.get("results", {})
+    return [ai for ai in AIS if ai in results]
 ASSET_VERSION = "20260528-02"
 SCREEN_LABELS = {
     "01-top": "상단 현재 날씨",
@@ -24,7 +29,12 @@ PHASES = {
         "prompt_file": "prompt.txt",
         "baseline": "없음",
         "result": "weather-v1",
-        "screens": {"claude": "../screenshots/v1/v1-claude.png", "codex": "../screenshots/v1/v1-codex.png", "gemini": "../screenshots/v1/v1-gemini.png"},
+        "screens": {
+            "claude": "../screenshots/v1/v1-claude.png",
+            "codex": "../screenshots/v1/v1-codex.png",
+            "gemini": "../screenshots/v1/v1-gemini.png",
+            "cursor": "../screenshots/v1/v1-cursor.png",
+        },
     },
     "v2": {
         "json": "report_v2.json",
@@ -161,6 +171,12 @@ PLAN_USAGE_NOTES = {
         "interpretation": "따라서 이 실험의 토큰 수를 Pro 한도 대비 퍼센트로 산정하기보다, CLI/계정의 quota 상태와 요청 제한 도달 여부를 함께 기록하는 편이 정확합니다.",
         "source": "https://google-gemini.github.io/gemini-cli/docs/quota-and-pricing.html",
     },
+    "cursor": {
+        "plan": "Cursor Free / Pro",
+        "basis": "Cursor Usage는 요청별 총 토큰과 환산 비용을 표시하며, Included는 구독·무료 한도에 포함된 사용을 뜻합니다. 입·출력 토큰 분리는 대시보드에 없을 수 있습니다.",
+        "interpretation": "IDE Agent 대화형 세션이므로 CLI와 달리 작업 구간별 토큰을 수동으로 합산합니다. Cost가 Included이면 추가 청구가 아닙니다.",
+        "source": "https://cursor.com/docs/account/pricing",
+    },
 }
 
 CSS = """
@@ -207,6 +223,7 @@ body {
 .dot.claude { background:#C2622A; }
 .dot.codex { background:#0D8A68; }
 .dot.gemini { background:#1A56DB; }
+.dot.cursor { background:#111827; }
 .toc { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:18px; }
 .toc a {
   text-decoration:none;
@@ -253,7 +270,8 @@ td.col-label { font-weight:700; color:#374151; white-space:nowrap; width:150px; 
 .th-claude { border-top:3px solid #C2622A; }
 .th-codex { border-top:3px solid #0D8A68; }
 .th-gemini { border-top:3px solid #1A56DB; }
-.metric-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0 4px; }
+.th-cursor { border-top:3px solid #111827; }
+.metric-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:16px 0 4px; }
 .index-hero {
   background:#fff;
   border:1px solid #DCDCDC;
@@ -407,7 +425,7 @@ def fmt(value) -> str:
 
 
 def token_total(tokens: dict):
-    return tokens.get("grandTotal") or tokens.get("total")
+    return tokens.get("grandTotal") or tokens.get("total") or tokens.get("totalTokens")
 
 
 def token_rows(tokens: dict):
@@ -433,7 +451,12 @@ def token_rows(tokens: dict):
     if "auxModelTotal" in tokens:
         rows.append(("보조 모델 토큰", fmt(tokens.get("auxModelTotal")), False))
     if "costUSD" in tokens:
-        rows.append(("예상 비용", f"${fmt(tokens.get('costUSD'))}", False))
+        cost = f"${fmt(tokens.get('costUSD'))}"
+        if tokens.get("billingStatus"):
+            cost += f" ({tokens.get('billingStatus')})"
+        rows.append(("예상 비용", cost, False))
+    if "billingStatus" in tokens and "costUSD" not in tokens:
+        rows.append(("청구 상태", esc(tokens.get("billingStatus")), False))
     if "mainModel" in tokens:
         rows.append(("메인 모델 토큰", fmt(tokens["mainModel"].get("total")), False))
     if "routerModel" in tokens:
@@ -458,8 +481,9 @@ def table(headers, rows, highlights=None) -> str:
     return f'<div class="tbl-wrap"><table><thead><tr>{th}</tr></thead><tbody>{"".join(body)}</tbody></table></div>'
 
 
-def ai_table(rows, highlights=None) -> str:
-    headers = [("항목", None), ("Claude", "th-claude"), ("Codex", "th-codex"), ("Gemini", "th-gemini")]
+def ai_table(rows, highlights=None, ais=None) -> str:
+    ais = ais or AIS
+    headers = [("항목", None)] + [(AI_LABELS[ai], f"th-{ai}") for ai in ais]
     return table(headers, rows, highlights)
 
 
@@ -483,39 +507,41 @@ def normalize_screenshot(phase: str, result: dict) -> str:
 
 def phase_rows(phase: str, data: dict):
     results = data["results"]
+    ais = active_ais(data)
     rows = [
-        ["모델", *[esc(results[ai].get("model")) for ai in AIS]],
-        ["소요 시간", *[f"{fmt(results[ai].get('elapsedSec'))}초" if results[ai].get("elapsedSec") is not None else "-" for ai in AIS]],
-        ["총 사용 토큰", *[fmt(token_total(results[ai].get("tokens", {}))) for ai in AIS]],
-        ["Kotlin 파일/라인", *[f"{fmt(results[ai].get('code', {}).get('ktFiles'))}개 / {fmt(results[ai].get('code', {}).get('ktLines'))}줄" for ai in AIS]],
-        ["빌드", *[normalize_build(results[ai]) for ai in AIS]],
-        ["스크린샷", *[normalize_screenshot(phase, results[ai]) for ai in AIS]],
+        ["모델", *[esc(results[ai].get("model")) for ai in ais]],
+        ["소요 시간", *[f"{fmt(results[ai].get('elapsedSec'))}초" if results[ai].get("elapsedSec") is not None else "-" for ai in ais]],
+        ["총 사용 토큰", *[fmt(token_total(results[ai].get("tokens", {}))) for ai in ais]],
+        ["Kotlin 파일/라인", *[f"{fmt(results[ai].get('code', {}).get('ktFiles'))}개 / {fmt(results[ai].get('code', {}).get('ktLines'))}줄" for ai in ais]],
+        ["빌드", *[normalize_build(results[ai]) for ai in ais]],
+        ["스크린샷", *[normalize_screenshot(phase, results[ai]) for ai in ais]],
     ]
     if phase == "v1":
         rows.extend([
-            ["UI 테마", *[esc(results[ai].get("ui", {}).get("theme")) for ai in AIS]],
-            ["한국어 표시", *[esc(results[ai].get("ui", {}).get("korean")) for ai in AIS]],
+            ["UI 테마", *[esc(results[ai].get("ui", {}).get("theme")) for ai in ais]],
+            ["한국어 표시", *[esc(results[ai].get("ui", {}).get("korean")) for ai in ais]],
         ])
     if phase == "v2":
         rows.extend([
-            ["요구사항 충족", *[f"{results[ai].get('requirements', {}).get('completedCount')}/{results[ai].get('requirements', {}).get('totalCount')}" for ai in AIS]],
-            ["v1 대비 변경 파일", *[f"{fmt(results[ai].get('code', {}).get('changedFileCountFromV1'))}개" for ai in AIS]],
-            ["UI 테마", *[esc(results[ai].get("ui", {}).get("theme")) for ai in AIS]],
+            ["요구사항 충족", *[f"{results[ai].get('requirements', {}).get('completedCount')}/{results[ai].get('requirements', {}).get('totalCount')}" for ai in ais]],
+            ["v1 대비 변경 파일", *[f"{fmt(results[ai].get('code', {}).get('changedFileCountFromV1'))}개" for ai in ais]],
+            ["UI 테마", *[esc(results[ai].get("ui", {}).get("theme")) for ai in ais]],
         ])
     if phase == "v3":
         rows.extend([
-            ["자율 추가 기능", *[esc(results[ai].get("smartFeature")) for ai in AIS]],
-            ["실제 체감 변화", *[esc(V3_EVIDENCE[ai]["visible"]) for ai in AIS]],
-            ["평균 점수", *[f"{sum(results[ai].get('scores', [])) / len(results[ai].get('scores', [])):.1f}/10" if results[ai].get("scores") else "-" for ai in AIS]],
+            ["자율 추가 기능", *[esc(results[ai].get("smartFeature")) for ai in ais]],
+            ["실제 체감 변화", *[esc(V3_EVIDENCE[ai]["visible"]) for ai in ais]],
+            ["평균 점수", *[f"{sum(results[ai].get('scores', [])) / len(results[ai].get('scores', [])):.1f}/10" if results[ai].get("scores") else "-" for ai in ais]],
         ])
     return rows
 
 
 def top_metrics(data: dict):
     results = data["results"]
-    totals = {ai: token_total(results[ai].get("tokens", {})) for ai in AIS}
-    elapsed = {ai: results[ai].get("elapsedSec") for ai in AIS if results[ai].get("elapsedSec") is not None}
-    lines = {ai: results[ai].get("code", {}).get("ktLines") for ai in AIS if isinstance(results[ai].get("code", {}).get("ktLines"), int)}
+    ais = active_ais(data)
+    totals = {ai: token_total(results[ai].get("tokens", {})) for ai in ais}
+    elapsed = {ai: results[ai].get("elapsedSec") for ai in ais if results[ai].get("elapsedSec") is not None}
+    lines = {ai: results[ai].get("code", {}).get("ktLines") for ai in ais if isinstance(results[ai].get("code", {}).get("ktLines"), int)}
     fastest = min(elapsed, key=elapsed.get) if elapsed else None
     lowest = min({k: v for k, v in totals.items() if v is not None}, key=lambda k: totals[k])
     most_code = max(lines, key=lines.get) if lines else None
@@ -529,7 +555,7 @@ def top_metrics(data: dict):
 
 def token_cards(data: dict):
     cards = []
-    for ai in AIS:
+    for ai in active_ais(data):
         result = data["results"][ai]
         rows = ""
         for label, value, highlight in token_rows(result.get("tokens", {})):
@@ -554,7 +580,7 @@ def prompt_interpretation(phase: str):
 
 def plan_usage_section(data: dict):
     rows = []
-    for ai in AIS:
+    for ai in active_ais(data):
         result = data["results"][ai]
         tokens = token_total(result.get("tokens", {}))
         note = PLAN_USAGE_NOTES[ai]
@@ -586,8 +612,9 @@ def index_summary_rows():
     for phase in ["v1", "v2", "v3"]:
         data = data_by_phase[phase]
         results = data["results"]
-        elapsed = {ai: results[ai].get("elapsedSec") for ai in AIS if results[ai].get("elapsedSec") is not None}
-        totals = {ai: token_total(results[ai].get("tokens", {})) for ai in AIS}
+        ais = active_ais(data)
+        elapsed = {ai: results[ai].get("elapsedSec") for ai in ais if results[ai].get("elapsedSec") is not None}
+        totals = {ai: token_total(results[ai].get("tokens", {})) for ai in ais}
         fastest = min(elapsed, key=elapsed.get) if elapsed else None
         lowest = min({k: v for k, v in totals.items() if v is not None}, key=lambda k: totals[k])
         rows.append([
@@ -624,9 +651,10 @@ def phase_cards():
     return '<div class="phase-grid">' + "".join(cards) + "</div>"
 
 
-def screenshots(phase: str):
+def screenshots(phase: str, data: dict | None = None):
     groups = []
-    for ai in AIS:
+    ais = active_ais(data) if data else AIS
+    for ai in ais:
         shots = []
         for name, label in SCREEN_LABELS.items():
             src = f"../screenshots/{phase}/{ai}/{name}.png"
@@ -652,7 +680,7 @@ def insight_section(phase: str):
 
 def v3_evidence_section(num: int):
     rows = []
-    for ai in AIS:
+    for ai in [a for a in AIS if a in V3_EVIDENCE]:
         item = V3_EVIDENCE[ai]
         rows.append([
             f'<span class="dot {ai}"></span> {AI_LABELS[ai]}',
@@ -673,7 +701,7 @@ def v3_evidence_section(num: int):
 
 def observations(phase: str, data: dict):
     rows = []
-    for ai in AIS:
+    for ai in active_ais(data):
         result = data["results"][ai]
         if phase in {"v1", "v2"}:
             ui = result.get("ui", {})
@@ -703,8 +731,9 @@ def observations(phase: str, data: dict):
 
 def code_summary(phase: str, data: dict):
     rows = []
+    ais = active_ais(data)
     if phase == "v3":
-        for ai in AIS:
+        for ai in ais:
             code = data["results"][ai].get("code", {})
             recorded = len(code.get("changedFiles", []))
             rows.append([
@@ -716,7 +745,7 @@ def code_summary(phase: str, data: dict):
             ])
         return table([("AI", None), ("Kotlin 파일", None), ("Kotlin 라인", None), ("변경 파일", None), ("현재 확인 근거", None)], rows, highlights={2})
 
-    for ai in AIS:
+    for ai in ais:
         code = data["results"][ai].get("code", {})
         changed = code.get("changedFileCountFromV1")
         changed_text = f"{fmt(changed)}개" if changed is not None else f"{len(code.get('changedFiles', []))}개"
@@ -729,7 +758,7 @@ def code_summary(phase: str, data: dict):
     base = table([("AI", None), ("Kotlin 파일", None), ("Kotlin 라인", None), ("변경 파일", None)], rows)
     if phase == "v2":
         details = []
-        for ai in AIS:
+        for ai in ais:
             diff = data["results"][ai].get("code", {}).get("diffStatFromV1")
             if diff:
                 details.append(f'<div class="code-card"><div class="cc-head"><span class="dot {ai}"></span><span class="cc-name">{AI_LABELS[ai]} diff</span></div><pre class="diff">{esc(diff)}</pre></div>')
@@ -741,13 +770,14 @@ def criteria_section(phase: str, data: dict, num: int):
     criteria = data.get("criteria") or []
     if not criteria:
         return ""
+    ais = active_ais(data)
     items = "".join(f"<li>{esc(item)}</li>" for item in criteria)
     req_rows = []
     if phase == "v3":
         title = "평가 기준"
         items += '<li>아래 점수는 최초 정리 자료의 점수이며, 실제 체감 변화는 별도 근거 표에서 보정해 해석합니다.</li>'
         for idx, label in enumerate(criteria):
-            req_rows.append([label, *[f"{data['results'][ai].get('scores', [])[idx]}/10" if idx < len(data["results"][ai].get("scores", [])) else "-" for ai in AIS]])
+            req_rows.append([label, *[f"{data['results'][ai].get('scores', [])[idx]}/10" if idx < len(data["results"][ai].get("scores", [])) else "-" for ai in ais]])
     else:
         title = "요구사항 체크"
         req_map = [
@@ -759,12 +789,12 @@ def criteria_section(phase: str, data: dict, num: int):
             ("5일 예보 보존", "fiveDayForecastPreserved"),
         ]
         for label, key in req_map:
-            req_rows.append([label, *["충족" if data["results"][ai].get("requirements", {}).get(key) else "미충족" for ai in AIS]])
+            req_rows.append([label, *["충족" if data["results"][ai].get("requirements", {}).get(key) else "미충족" for ai in ais]])
     return f"""
   <section class="card" id="criteria">
     <div class="sh"><span class="sh-num">{num:02d}</span><h2>{title}</h2></div>
     <ul class="crit-list">{items}</ul>
-    {ai_table(req_rows)}
+    {ai_table(req_rows, ais=ais)}
   </section>
 """
 
@@ -795,9 +825,7 @@ def render(phase: str):
     <h1 class="rh-title">{esc(phase_info["title"])}</h1>
     <p class="rh-sub">{esc(phase_info["summary"])}</p>
     <div class="rh-meta">
-      <span class="ai-pill"><span class="dot claude"></span>Claude</span>
-      <span class="ai-pill"><span class="dot codex"></span>Codex</span>
-      <span class="ai-pill"><span class="dot gemini"></span>Gemini</span>
+      {''.join(f'<span class="ai-pill"><span class="dot {ai}"></span>{AI_LABELS[ai]}</span>' for ai in active_ais(data))}
       <span class="tag-sm">baseline: {esc(phase_info["baseline"])}</span>
       <span class="tag-sm">result: {esc(phase_info["result"])}</span>
       <span class="tag-sm">generated: {esc(generated)}</span>
@@ -821,7 +849,7 @@ def render(phase: str):
   </section>
   <section class="card" id="summary">
     <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
-    {ai_table(phase_rows(phase, data), highlights={2, 4, 5})}
+    {ai_table(phase_rows(phase, data), highlights={2, 4, 5}, ais=active_ais(data))}
   </section>
 {criteria_html}
 {evidence_html}
@@ -835,7 +863,7 @@ def render(phase: str):
   <section class="card" id="screens">
     <div class="sh"><span class="sh-num">{5 + section_offset:02d}</span><h2>실행 화면</h2></div>
     <p class="lead">각 앱을 실제 기기에 설치한 뒤 상단, 중간, 하단 스크롤 위치를 동일한 방식으로 캡처했습니다.</p>
-    {screenshots(phase)}
+    {screenshots(phase, data)}
   </section>
   <section class="card" id="observations">
     <div class="sh"><span class="sh-num">{6 + section_offset:02d}</span><h2>구현 관찰</h2></div>
@@ -873,8 +901,8 @@ def render_index():
     <div class="index-topline">
       <div>
         <div class="hero-kicker">WeatherNow AI 비교 실험</div>
-        <h1 class="hero-title">같은 날씨 앱 과제를 세 AI에게 맡기면 무엇이 달라질까</h1>
-        <p class="hero-copy">Claude, Codex, Gemini가 만든 Android 앱을 v1 초기 생성, v2 기능 개선, v3 자율 혁신 단계로 비교했습니다. 이 페이지는 팀 공유용 요약이며, 세부 근거는 각 단계 보고서에 남겼습니다.</p>
+        <h1 class="hero-title">같은 날씨 앱 과제를 여러 AI에게 맡기면 무엇이 달라질까</h1>
+        <p class="hero-copy">Claude, Codex, Gemini CLI와 Cursor Agent가 만든 Android 앱을 v1 초기 생성, v2 기능 개선, v3 자율 혁신 단계로 비교했습니다. v1에는 Cursor 결과가 포함됩니다. 이 페이지는 팀 공유용 요약이며, 세부 근거는 각 단계 보고서에 남겼습니다.</p>
       </div>
       <div class="report-links">
         <a class="report-link" href="report.html">V1 초기 생성</a>
