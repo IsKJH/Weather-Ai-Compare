@@ -36,7 +36,7 @@ class WeatherApplication : Application() {
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "WeatherUpdateWork",
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
         )
     }

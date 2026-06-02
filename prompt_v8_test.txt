@@ -1,0 +1,86 @@
+This is a verification step for your V8 WorkManager implementation.
+
+You already implemented WorkManager background notifications in V8. Now you must
+verify that the notification actually appears on the connected Android device.
+
+Setup:
+- A real Android device is connected via USB (Samsung Galaxy)
+- ADB is available at: C:\Users\mojis\AppData\Local\Android\Sdk\platform-tools\adb.exe
+- Your working directory is the project root (same as always)
+
+Goal:
+Prove that your WorkManager sends a real notification to the device when a
+favorite city is set. Take a screenshot as evidence.
+
+Steps to follow:
+
+STEP 1 — Build and install
+  Run: ./gradlew assembleDebug
+  Then install: adb install -r app/build/outputs/apk/debug/app-debug.apk
+
+STEP 2 — Read your own code
+  Read your Room Entity, DAO, and Worker classes to understand:
+  - Your package name (com.example.weathernow.claude / .codex / .gemini)
+  - Your database file name (check Room.databaseBuilder call)
+  - Your favorite city table name and column names
+  - How cityIndex maps to Seoul (likely index 0)
+
+STEP 3 — Set Seoul as the favorite city in the database
+  Option A (recommended — UI approach):
+    Launch the app:
+      adb shell am start -n "<package>/com.example.weathernow.MainActivity"
+    Dump the UI layout to find the favorite (star) button:
+      adb shell uiautomator dump /sdcard/ui.xml
+      adb pull /sdcard/ui.xml ui_dump.xml
+    Read ui_dump.xml to find the star/favorite button bounds, then tap it:
+      adb shell input tap <x> <y>
+    Wait 2 seconds for the Room write to complete.
+
+  Option B (direct DB write — only if Option A fails):
+    Stop the app: adb shell am force-stop <package>
+    Pull the database (all 3 files for WAL mode):
+      adb exec-out "run-as <package> cat databases/<db-name>" > /tmp/fav.db
+      adb exec-out "run-as <package> cat databases/<db-name>-wal" > /tmp/fav.db-wal
+      adb exec-out "run-as <package> cat databases/<db-name>-shm" > /tmp/fav.db-shm
+    Use Python sqlite3 to insert the favorite:
+      python -c "
+      import sqlite3
+      conn = sqlite3.connect('/tmp/fav.db')
+      conn.execute('INSERT OR REPLACE INTO <table> VALUES (1, 0)')
+      conn.commit(); conn.close()
+      "
+    Push back: adb push /tmp/fav.db <device-path> (use run-as to write back)
+    Restart the app.
+
+STEP 4 — Grant permissions and disable battery optimization
+  adb shell pm grant <package> android.permission.POST_NOTIFICATIONS
+  adb shell am set-standby-bucket <package> active
+  adb shell dumpsys deviceidle whitelist +<package>
+
+STEP 5 — Trigger the WorkManager job immediately
+  Wait 3 seconds after app launch for WorkManager to register its job.
+  Find the job ID:
+    adb shell dumpsys jobscheduler | grep <package>
+    Look for: JOB #u0a???/<number>
+  Force-run it:
+    adb shell cmd jobscheduler run -f <package> <job-id>
+  Wait 15 seconds.
+  Check logcat for Worker result:
+    adb logcat -d -t 300 | grep -E "WM-WorkerWrapper|WeatherWork"
+
+STEP 6 — Screenshot
+  adb shell screencap -p /sdcard/v8_notification.png
+  adb pull /sdcard/v8_notification.png
+
+STEP 7 — Save screenshot to the project
+  Save the pulled screenshot to:
+    C:\proj\weather-ai-compare\screenshots\v8\<ai-name>-notification.png
+  where <ai-name> is claude, codex, or gemini.
+
+STEP 8 — Report your findings
+  Answer these questions:
+  1. Did the notification appear on screen? (yes / no)
+  2. What did the logcat show for WM-WorkerWrapper? (SUCCESS / RETRY / FAILURE / nothing)
+  3. If the notification did NOT appear, what was the root cause and how did you fix it?
+     Then re-run from STEP 5.
+  4. Confirm the screenshot is saved.

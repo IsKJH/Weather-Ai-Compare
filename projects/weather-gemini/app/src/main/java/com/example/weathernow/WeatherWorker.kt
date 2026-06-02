@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import android.util.Log
 import com.example.weathernow.data.WeatherDatabase
 
 class WeatherWorker(
@@ -12,36 +13,32 @@ class WeatherWorker(
     workerParams: WorkerParameters
 ) : CoroutineWorker(appContext, workerParams) {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
+        Log.d("WeatherWorker", "doWork started")
         return try {
             val database = WeatherDatabase.getDatabase(applicationContext)
             val favoriteCityDao = database.favoriteCityDao()
             
-            // Blocking call in CoroutineWorker is fine if we use runBlocking or just call suspend functions directly
-            // Actually CoroutineWorker.doWork is a suspend function.
-            // Wait, the return type of doWork() in CoroutineWorker is suspend fun doWork(): Result
-            // But let me check the signature. 
-            // In WorkManager 2.9.0, it is: open suspend fun doWork(): Result
-            
-            // I need to run this in a coroutine scope.
-            
-            kotlinx.coroutines.runBlocking {
-                val favoriteCity = favoriteCityDao.getFavoriteCity()
-                if (favoriteCity?.cityName != null) {
-                    val cityName = favoriteCity.cityName
-                    val city = cities.find { it.name == cityName }
-                    if (city != null) {
-                        val apiService = WeatherApiService.create()
-                        val response = apiService.getForecast(city.latitude, city.longitude)
-                        val condition = mapWeatherCode(response.current.weather_code)
-                        
-                        showNotification(cityName, condition)
-                    }
+            val favoriteCity = favoriteCityDao.getFavoriteCity()
+            Log.d("WeatherWorker", "Favorite city from DB: ${favoriteCity?.cityName}")
+            if (favoriteCity?.cityName != null) {
+                val cityName = favoriteCity.cityName
+                val city = cities.find { it.name == cityName }
+                Log.d("WeatherWorker", "Matching city found: ${city?.name}")
+                if (city != null) {
+                    val apiService = WeatherApiService.create()
+                    val response = apiService.getForecast(city.latitude, city.longitude)
+                    val condition = mapWeatherCode(response.current.weather_code)
+                    Log.d("WeatherWorker", "Weather condition: ${condition}")
+                    
+                    showNotification(cityName, condition)
+                    Log.d("WeatherWorker", "Notification shown")
                 }
             }
             
             Result.success()
         } catch (e: Exception) {
+            Log.e("WeatherWorker", "Error in doWork", e)
             Result.retry()
         }
     }
@@ -52,7 +49,7 @@ class WeatherWorker(
 
         val builder = NotificationCompat.Builder(applicationContext, "weather_notifications")
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle("${cityName} 날씨 알림")
+            .setContentTitle("GEMINI ${cityName} 날씨 알림")
             .setContentText("현재 날씨: ${condition}")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)

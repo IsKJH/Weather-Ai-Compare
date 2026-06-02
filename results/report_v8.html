@@ -12,7 +12,7 @@
   <header class="rh">
     <div class="rh-eyebrow">AI CODING TOOL COMPARISON · V8</div>
     <h1 class="rh-title">V8 — WorkManager 백그라운드 알림</h1>
-    <p class="rh-sub">V7 Room DB에 저장된 즐겨찾기 도시에 대해 15분마다 날씨 알림을 보내는 WorkManager 시스템을 추가했습니다. 세 AI 모두 빌드에 성공했지만 Worker 구현 패턴과 권한 처리 방식에서 뚜렷한 차이가 나타났습니다.</p>
+    <p class="rh-sub">V7 Room DB에 저장된 즐겨찾기 도시에 대해 15분마다 날씨 알림을 보내는 WorkManager 시스템을 추가했습니다. 세 AI 모두 빌드·실기기 알림 발송에 성공했지만 Worker 구현 패턴과 권한 처리 방식에서 뚜렷한 차이가 나타났습니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span>
       <span class="ai-pill"><span class="dot codex"></span>Codex</span>
@@ -27,6 +27,7 @@
     <a href="#overview">개요</a>
     <a href="#result">결과 비교</a>
     <a href="#worker">Worker 구현</a>
+    <a href="#device-test">실기기 검증</a>
     <a href="#tokens">토큰 · 시간</a>
     <a href="#verdict">최종 평가</a>
   </nav>
@@ -36,7 +37,7 @@
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
     <div class="metric-grid">
       <div class="metric">
-        <div class="metric-k">빌드 성공</div>
+        <div class="metric-k">실기기 알림 확인</div>
         <div class="metric-v">전원 3/3</div>
       </div>
       <div class="metric">
@@ -48,8 +49,8 @@
         <div class="metric-v">Codex 74,945</div>
       </div>
       <div class="metric">
-        <div class="metric-k">테스트 무수정</div>
-        <div class="metric-v">전원 3/3</div>
+        <div class="metric-k">Gemini 버그 자가 수정</div>
+        <div class="metric-v">4개 발견·해결</div>
       </div>
     </div>
     <div class="callout-grid" style="margin-top:16px">
@@ -210,9 +211,58 @@
     </div>
   </section>
 
-  <!-- 04 토큰 · 시간 -->
+  <!-- 04 실기기 검증 -->
+  <section class="card" id="device-test">
+    <div class="sh"><span class="sh-num">04</span><h2>실기기 알림 검증</h2></div>
+    <p style="color:var(--fg2);margin-bottom:16px">각 AI가 직접 ADB로 기기에 설치 → Room DB에 즐겨찾기 설정 → WorkManager 강제 트리거 → 알림 스크린샷 순서로 자가 검증했습니다.</p>
+
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="ai-card-head claude"><span class="dot claude"></span> Claude</div>
+        <div class="ai-card-body">
+          <div class="ai-stat hl"><span class="ai-stat-k">알림 수신</span><span class="ai-stat-v"><span class="badge ok">성공</span></span></div>
+          <div class="ai-stat"><span class="ai-stat-k">알림 내용</span><span class="ai-stat-v">서울 날씨 · 구름조금 28°C</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">데이터</span><span class="ai-stat-v">실 API (Open-Meteo)</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">Worker 결과</span><span class="ai-stat-v">SUCCESS</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">검증 소요</span><span class="ai-stat-v">1,073초</span></div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head codex"><span class="dot codex"></span> Codex</div>
+        <div class="ai-card-body">
+          <div class="ai-stat hl"><span class="ai-stat-k">알림 수신</span><span class="ai-stat-v"><span class="badge ok">성공</span></span></div>
+          <div class="ai-stat"><span class="ai-stat-k">알림 내용</span><span class="ai-stat-v">서울 현재 날씨 · 맑음</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">데이터</span><span class="ai-stat-v">목 데이터 (mockConditionForCity)</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">Worker 결과</span><span class="ai-stat-v">SUCCESS</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">검증 소요</span><span class="ai-stat-v">1,410초</span></div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-head gemini"><span class="dot gemini"></span> Gemini</div>
+        <div class="ai-card-body">
+          <div class="ai-stat hl"><span class="ai-stat-k">알림 수신</span><span class="ai-stat-v"><span class="badge ok">성공 (버그 수정 후)</span></span></div>
+          <div class="ai-stat"><span class="ai-stat-k">알림 내용</span><span class="ai-stat-v">GEMINI 서울 날씨 알림 · 대체로 맑음</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">데이터</span><span class="ai-stat-v">실 API (Open-Meteo)</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">Worker 결과</span><span class="ai-stat-v">SUCCESS</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">검증 소요</span><span class="ai-stat-v">2,823초 (rate limit 포함)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight" style="margin-top:20px">
+      <span class="insight-icon">🔧</span>
+      <div><strong>Gemini — 테스트 중 자가 발견한 버그 4개:</strong> 빌드는 통과했지만 실기기 설치 시 <code>ClassNotFoundException</code> 발생. 원인: ① <code>kotlin-android</code> 플러그인 누락 ② <code>doWork()</code> non-suspend 선언 ③ AGP 9.2.1 등 실험적 버전 사용 ④ <code>gradle.properties</code>에 <code>android.useAndroidX=true</code> 누락. Gemini가 직접 모두 수정한 뒤 알림 발송 성공.</div>
+    </div>
+
+    <div class="insight" style="margin-top:12px">
+      <span class="insight-icon">📌</span>
+      <div><strong>assembleDebug 통과 ≠ 실동작 보장:</strong> Gemini의 V8 구현은 빌드 성공했지만 실기기에서는 즉시 크래시했습니다. <code>assembleDebug</code>는 컴파일 오류만 잡고 런타임 클래스 로딩 문제는 테스트 없이 통과합니다. 실기기 검증이 필수적인 이유입니다.</div>
+    </div>
+  </section>
+
+  <!-- 05 토큰 · 시간 -->
   <section class="card" id="tokens">
-    <div class="sh"><span class="sh-num">04</span><h2>토큰 · 소요 시간</h2></div>
+    <div class="sh"><span class="sh-num">05</span><h2>토큰 · 소요 시간</h2></div>
     <div class="ai-grid">
       <div class="ai-card">
         <div class="ai-card-head claude">
@@ -285,7 +335,7 @@
 
   <!-- 05 최종 평가 -->
   <section class="card" id="verdict">
-    <div class="sh"><span class="sh-num">05</span><h2>최종 평가</h2></div>
+    <div class="sh"><span class="sh-num">06</span><h2>최종 평가</h2></div>
     <div class="score-grid">
       <div class="score-cell">
         <div class="score-label"><span class="dot claude"></span> Claude</div>
