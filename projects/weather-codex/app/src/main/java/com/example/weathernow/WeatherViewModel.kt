@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weathernow.data.FavoriteCityRepository
+import com.example.weathernow.data.NoOpFavoriteCityRepository
 import java.net.HttpURLConnection
 import java.net.URL
 import java.time.LocalDate
@@ -36,13 +38,16 @@ data class WeatherUiState(
     val isSelectedCityFavorite: Boolean = selectedCityIndex == favoriteCityIndex
 }
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel(
+    private val favoriteCityRepository: FavoriteCityRepository = NoOpFavoriteCityRepository
+) : ViewModel() {
     private val repository = OpenMeteoWeatherRepository()
 
     var uiState by mutableStateOf(WeatherUiState())
         private set
 
     init {
+        loadFavoriteCity()
         loadWeather(isRefresh = false)
     }
 
@@ -53,9 +58,13 @@ class WeatherViewModel : ViewModel() {
     }
 
     fun toggleFavorite() {
+        val favoriteCityIndex = if (uiState.isSelectedCityFavorite) null else uiState.selectedCityIndex
         uiState = uiState.copy(
-            favoriteCityIndex = if (uiState.isSelectedCityFavorite) null else uiState.selectedCityIndex
+            favoriteCityIndex = favoriteCityIndex
         )
+        viewModelScope.launch {
+            favoriteCityRepository.saveFavoriteCityIndex(favoriteCityIndex)
+        }
     }
 
     fun refresh() {
@@ -89,6 +98,14 @@ class WeatherViewModel : ViewModel() {
                     errorMessage = "날씨 정보를 불러오지 못했습니다. ${error.message ?: "네트워크 상태를 확인해 주세요."}"
                 )
             }
+        }
+    }
+
+    private fun loadFavoriteCity() {
+        viewModelScope.launch {
+            val favoriteCityIndex = favoriteCityRepository.loadFavoriteCityIndex()
+                ?.takeIf { it in uiState.cities.indices }
+            uiState = uiState.copy(favoriteCityIndex = favoriteCityIndex)
         }
     }
 }

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.weathernow.data.CITIES
 import com.example.weathernow.data.WeatherData
 import com.example.weathernow.data.WeatherRepository
+import com.example.weathernow.data.db.FavoriteCityDao
+import com.example.weathernow.data.db.FavoriteCityEntity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,13 +28,16 @@ data class WeatherUiState(
 private fun currentTimeString(): String =
     LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel(
+    private val favoriteCityDao: FavoriteCityDao? = null
+) : ViewModel() {
     private val _uiState = MutableStateFlow(WeatherUiState())
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
     private var fetchJob: Job? = null
 
     init {
+        loadSavedFavorite()
         fetchWeather(0)
     }
 
@@ -46,10 +51,27 @@ class WeatherViewModel : ViewModel() {
         val newFavorite = if (current.favoriteCityIndex == current.selectedIndex) null
                          else current.selectedIndex
         _uiState.value = current.copy(favoriteCityIndex = newFavorite)
+        viewModelScope.launch {
+            if (newFavorite != null) {
+                favoriteCityDao?.upsert(FavoriteCityEntity(cityIndex = newFavorite))
+            } else {
+                favoriteCityDao?.clear()
+            }
+        }
     }
 
     fun refresh() {
         fetchWeather(_uiState.value.selectedIndex)
+    }
+
+    private fun loadSavedFavorite() {
+        favoriteCityDao ?: return
+        viewModelScope.launch {
+            val saved = favoriteCityDao.get()
+            if (saved != null) {
+                _uiState.value = _uiState.value.copy(favoriteCityIndex = saved.cityIndex)
+            }
+        }
     }
 
     private fun fetchWeather(cityIndex: Int) {

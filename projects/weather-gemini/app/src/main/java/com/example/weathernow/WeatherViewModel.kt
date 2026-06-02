@@ -2,6 +2,8 @@
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weathernow.data.FavoriteCity
+import com.example.weathernow.data.FavoriteCityDao
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,14 +22,22 @@ data class WeatherUiState(
     val smartInsight: String = ""
 )
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel(private val favoriteCityDao: FavoriteCityDao) : ViewModel() {
     private val apiService = WeatherApiService.create()
     
     private val _uiState = MutableStateFlow(WeatherUiState())
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
     init {
-        selectCity("서울")
+        loadFavoriteCityAndDefault()
+    }
+
+    private fun loadFavoriteCityAndDefault() {
+        viewModelScope.launch {
+            val savedFavorite = favoriteCityDao.getFavoriteCity()?.cityName
+            _uiState.update { it.copy(favoriteCity = savedFavorite) }
+            selectCity(savedFavorite ?: "서울")
+        }
     }
 
     fun selectCity(cityName: String) {
@@ -135,8 +145,15 @@ class WeatherViewModel : ViewModel() {
     }
 
     fun toggleFavorite(city: String) {
-        _uiState.update {
-            it.copy(favoriteCity = if (it.favoriteCity == city) null else city)
+        viewModelScope.launch {
+            val isCurrentFavorite = _uiState.value.favoriteCity == city
+            if (isCurrentFavorite) {
+                favoriteCityDao.deleteFavoriteCity()
+                _uiState.update { it.copy(favoriteCity = null) }
+            } else {
+                favoriteCityDao.setFavoriteCity(FavoriteCity(id = 1, cityName = city))
+                _uiState.update { it.copy(favoriteCity = city) }
+            }
         }
     }
 

@@ -1,0 +1,28 @@
+You are upgrading the existing WeatherNow Android app in this directory.
+
+This is V7 of an AI comparison experiment. The app was built through V1–V6:
+- V1–V3: Mock data, feature additions, smart features
+- V4: Real Open-Meteo API integration
+- V5: Unit tests added
+- V6: Bug fixes
+
+Read the existing code first, then add persistence in place.
+
+Goal:
+Add persistent storage using Room database so that the user's favorite city is remembered across app restarts.
+
+Requirements:
+1. Add Room database to persist the favorite city.
+   - When the user marks a city as favorite, the choice must survive app restart.
+   - When the user unmarks a favorite, that change must also persist.
+   - On app start, load the saved favorite city from Room and restore it to the UI state.
+2. Use Room only — do NOT use SharedPreferences or DataStore.
+3. You may design the schema however you see fit (single-row table, key-value entity, etc.).
+4. Preserve all existing features from V1–V6 (city switching, current weather, forecast, refresh, etc.).
+5. Do not modify or delete existing unit tests. If existing tests break due to your changes, fix them. Adding new tests is optional.
+6. Ensure ./gradlew assembleDebug succeeds.
+
+After implementation:
+- Run ./gradlew assembleDebug.
+- Summarize: what Room entity/DAO/database class you created, and how you connected it to the ViewModel or Repository.
+- Confirm the build passed.
