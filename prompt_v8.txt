@@ -1,0 +1,36 @@
+You are upgrading the existing WeatherNow Android app in this directory.
+
+This is V8 of an AI comparison experiment. The app was built through V1–V7:
+- V1–V3: Mock data, feature additions, smart features
+- V4: Real Open-Meteo API integration
+- V5: Unit tests added
+- V6: Bug fixes
+- V7: Room database for favorite city persistence
+
+Read the existing code first, then add background notifications.
+
+Goal:
+Add a background weather notification system using WorkManager that periodically notifies
+the user about weather for their saved favorite city.
+
+Requirements:
+1. Use WorkManager to schedule a periodic background task.
+   - The worker should run every 15 minutes (WorkManager minimum interval).
+   - The worker should read the favorite city from Room (added in V7).
+   - If a favorite city is set, send an Android notification showing the city name
+     and current weather condition.
+   - If no favorite city is set, skip the notification.
+2. Create a proper Android Notification Channel (required for Android 8.0+).
+3. Handle the POST_NOTIFICATIONS runtime permission for Android 13+ (API 33+).
+4. Schedule the WorkManager periodic task when the app starts
+   (in Application class or MainActivity — your choice).
+5. Use the existing mock weather data or real Open-Meteo API — your choice.
+6. Do not modify or delete existing unit tests. If existing tests break due to your
+   changes, fix them by adding constructor parameters or mocks — do not change test logic.
+7. Ensure ./gradlew assembleDebug succeeds.
+
+After implementation:
+- Run ./gradlew assembleDebug.
+- Summarize: what Worker class you created, how you connected it to Room, how you handle
+  Android 13+ permissions, and how WorkManager is scheduled.
+- Confirm the build passed.

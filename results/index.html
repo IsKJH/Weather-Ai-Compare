@@ -363,6 +363,7 @@ body {
     <a class="nav-link" href="report_v5.html">V5 단위 테스트</a>
     <a class="nav-link" href="report_v6.html">V6 버그 디버깅</a>
     <a class="nav-link" href="report_v7.html">V7 Room DB</a>
+    <a class="nav-link" href="report_v8.html">V8 WorkManager</a>
     <a class="nav-link" href="report_human.html">직접 구현 vs AI</a>
   </div>
 </nav>
@@ -377,7 +378,7 @@ body {
       <span class="hero-badge x">OpenAI Codex</span>
       <span class="hero-badge g">Gemini CLI</span>
       <span class="hero-badge" style="color:#111827;border-color:rgba(17,24,39,.25);">Cursor Agent</span>
-      <span class="hero-badge">V1–V3 목 데이터 · V4 실 API · V5 단위 테스트 · V6 버그 디버깅 · V7 Room DB</span>
+      <span class="hero-badge">V1–V3 목 데이터 · V4 실 API · V5 단위 테스트 · V6 버그 디버깅 · V7 Room DB · V8 WorkManager</span>
     </div>
   </div>
 </header>
@@ -385,8 +386,8 @@ body {
 <div class="stat-bar">
   <div class="stat-inner">
     <div class="stat-item">
-      <div class="stat-n">7단계</div>
-      <div class="stat-l">V1 → V2 → V3 → V4 → V5 → V6 → V7</div>
+      <div class="stat-n">8단계</div>
+      <div class="stat-l">V1 → V2 → V3 → V4 → V5 → V6 → V7 → V8</div>
     </div>
     <div class="stat-item">
       <div class="stat-n">Gemini</div>
@@ -415,7 +416,7 @@ body {
 
   <!-- 종합 요약 -->
   <div class="card reveal" style="margin-bottom:12px;padding:24px 30px;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">종합 요약 — V1 → V7</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">종합 요약 — V1 → V8</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
       <div style="border:1px solid var(--border);border-left:3px solid var(--gemini);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--gemini);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">속도 · 구현력</div>
@@ -535,6 +536,18 @@ body {
           <p class="phase-desc">즐겨찾기 도시를 앱 재시작 후에도 기억하도록 Room DB를 추가했습니다. 세 AI 모두 빌드 성공했지만 기존 단위 테스트 호환 전략이 각각 달랐습니다.</p>
           <div class="phase-result">전원 빌드 성공 · Codex Repository 인터페이스 설계 · Gemini 기존 테스트 수정</div>
           <a class="phase-link" href="report_v7.html">V7 보고서 보기</a>
+        </div>
+      </article>
+      <article class="phase-card">
+        <div class="phase-shot" style="background:#1a1a2e;display:flex;align-items:center;justify-content:center;min-height:160px;">
+          <span style="font-size:40px;">🔔</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-n">08</div>
+          <h3 class="phase-title">WorkManager 백그라운드 알림</h3>
+          <p class="phase-desc">V7 Room DB에 저장된 즐겨찾기 도시에 대해 15분마다 날씨 알림을 발송하는 WorkManager 시스템을 추가했습니다. Worker 구현 패턴과 권한 처리 방식에서 차이가 드러났습니다.</p>
+          <div class="phase-result">전원 빌드 성공 · Codex 이중 권한 방어 + BigTextStyle · Gemini runBlocking 안티패턴</div>
+          <a class="phase-link" href="report_v8.html">V8 보고서 보기</a>
         </div>
       </article>
     </div>
@@ -703,6 +716,20 @@ body {
             <td><span class="badge ok">DAO nullable</span></td>
             <td><span class="badge ok">Repository 인터페이스</span></td>
             <td><span class="badge warn">테스트 직접 수정</span></td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V8 생성 시간</td>
+            <td class="mono">457초</td>
+            <td class="mono win">410초 — 최단</td>
+            <td class="mono">582초</td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V8 Worker 패턴</td>
+            <td><span class="badge ok">suspend 정석</span></td>
+            <td><span class="badge ok">suspend + 이중 권한</span></td>
+            <td><span class="badge warn">runBlocking 안티패턴</span></td>
             <td style="color:var(--muted);">한도 초과</td>
           </tr>
           <tr>
