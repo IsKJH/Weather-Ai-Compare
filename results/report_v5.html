@@ -20,7 +20,7 @@
     </div>
   </header>
   <nav class="toc">
-    <a href="index.html">전체 요약</a><a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#approach">모킹 전략</a><a href="#tokens">토큰</a><a href="#results">테스트 결과</a><a href="#observations">관찰</a><a href="#code">코드</a>
+    <a href="index.html">전체 요약</a><a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#approach">모킹 전략</a><a href="#tokens">토큰</a><a href="#results">테스트 결과</a><a href="#insights">인사이트</a>
   </nav>
 
   <section class="card" id="overview">
@@ -67,7 +67,6 @@ After implementation:
 - Report how many tests passed, how many failed.
 - Briefly describe what each test covers.
 - Confirm the test run result.</pre>
-    <div class="note-box">모킹 방법(MockK vs 직접 구현)과 Turbine 사용 여부는 AI의 자율 선택 사항으로 남겼습니다. 각 프로젝트의 아키텍처가 다르므로 같은 요구사항에서도 접근 방식이 달라질 것이라고 예상했습니다.</div>
   </section>
 
   <section class="card" id="summary">
@@ -122,49 +121,45 @@ After implementation:
         </tr>
       </tbody>
     </table></div>
-    <div class="note-box"><strong>아키텍처가 테스트 전략을 결정했습니다:</strong> Claude는 V4에서 WeatherRepository를 object로 분리해뒀기 때문에 MockK 한 줄로 테스트가 가능했습니다. Codex는 V4에서 ViewModel 안에 HTTP 로직을 통합했기 때문에 MockK 진입점이 없었고, 그 결과 JVM URL 인터셉터라는 독창적인 우회 방법을 선택했습니다. <strong>V4 설계 결정이 V5 테스트 복잡도를 직접 결정한 것입니다.</strong></div>
+    <div class="insight">
+      <span class="insight-icon">🏗️</span>
+      <div><strong>V4 아키텍처 결정이 V5 테스트 복잡도를 직접 결정했습니다.</strong> Claude의 WeatherRepository 분리 → MockK 한 줄(140줄). Codex의 ViewModel 통합 → MockK 진입점 없음 → URL 레벨 우회(245줄). <strong>설계 결정의 영향이 다음 단계로 전파된 핵심 사례입니다.</strong></div>
+    </div>
   </section>
 
   <section class="card" id="tokens">
     <div class="sh"><span class="sh-num">05</span><h2>토큰 사용량</h2></div>
-    <div class="token-cards">
-      <div class="token-card">
-        <div class="tc-head"><span class="dot claude"></span><span class="tc-name">Claude</span><span class="tc-model">claude-sonnet-4-6</span></div>
-        <div class="kv-list">
-          <div class="kv-row hl"><span class="kv-k">총 처리 토큰</span><span class="kv-v">1,689,609</span></div>
-          <div class="kv-row"><span class="kv-k">신규 입력 토큰</span><span class="kv-v">53</span></div>
-          <div class="kv-row"><span class="kv-k">캐시 생성 토큰</span><span class="kv-v">135,788</span></div>
-          <div class="kv-row"><span class="kv-k">캐시 재사용 토큰</span><span class="kv-v">1,522,076</span></div>
-          <div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">31,692</span></div>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="ai-card-head claude"><span class="dot claude"></span> Claude <span class="ai-card-model">claude-sonnet-4-6</span></div>
+        <div class="ai-card-body">
+          <div class="ai-stat hl"><span class="ai-stat-k">총 처리 토큰</span><span class="ai-stat-v">1,689,609</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">신규 입력</span><span class="ai-stat-v">53</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">캐시 생성</span><span class="ai-stat-v">135,788</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">캐시 재사용</span><span class="ai-stat-v">1,522,076 (90%)</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">출력</span><span class="ai-stat-v">31,692</span></div>
         </div>
-        <p class="tc-note">캐시 재사용 비율 90%. 프로젝트 컨텍스트를 거의 캐시에서 읽어 신규 입력이 53토큰에 불과합니다.</p>
       </div>
-      <div class="token-card">
-        <div class="tc-head"><span class="dot codex"></span><span class="tc-name">Codex</span><span class="tc-model">gpt-5.5</span></div>
-        <div class="kv-list">
-          <div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">73,606</span></div>
+      <div class="ai-card">
+        <div class="ai-card-head codex"><span class="dot codex"></span> Codex <span class="ai-card-model">gpt-5.5</span></div>
+        <div class="ai-card-body">
+          <div class="ai-stat hl"><span class="ai-stat-k">총 사용 토큰</span><span class="ai-stat-v">73,606 🏆</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">V4 대비</span><span class="ai-stat-v">92,991 → 73,606</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">집계 방식</span><span class="ai-stat-v">신규 소비 기준</span></div>
         </div>
-        <p class="tc-note">Codex CLI 세션 보고값. V4(92,991) 대비 낮습니다. 테스트 작성이 API 연동보다 맥락 소비가 적음을 보여줍니다.</p>
       </div>
-      <div class="token-card">
-        <div class="tc-head"><span class="dot gemini"></span><span class="tc-name">Gemini</span><span class="tc-model">gemini-3-flash-preview</span></div>
-        <div class="kv-list">
-          <div class="kv-row hl"><span class="kv-k">총 처리 토큰</span><span class="kv-v">3,745,259</span></div>
-          <div class="kv-row"><span class="kv-k">입력 토큰</span><span class="kv-v">2,017,559</span></div>
-          <div class="kv-row"><span class="kv-k">캐시 토큰</span><span class="kv-v">1,709,633</span></div>
-          <div class="kv-row"><span class="kv-k">출력 토큰</span><span class="kv-v">5,936</span></div>
-          <div class="kv-row"><span class="kv-k">사고 토큰</span><span class="kv-v">12,131</span></div>
+      <div class="ai-card">
+        <div class="ai-card-head gemini"><span class="dot gemini"></span> Gemini <span class="ai-card-model">gemini-3-flash-preview</span></div>
+        <div class="ai-card-body">
+          <div class="ai-stat hl"><span class="ai-stat-k">총 처리 토큰</span><span class="ai-stat-v">3,745,259</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">입력 합산</span><span class="ai-stat-v">2,017,559</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">캐시</span><span class="ai-stat-v">1,709,633</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">사고 토큰</span><span class="ai-stat-v">12,131</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">출력</span><span class="ai-stat-v">5,936</span></div>
         </div>
-        <p class="tc-note">전체 턴 합산 (컨텍스트 반복 포함). thinking 토큰이 별도 집계됩니다. 출력 토큰(5,936)이 세 AI 중 가장 적습니다.</p>
-      </div>
-      <div class="token-card">
-        <div class="tc-head"><span class="dot cursor"></span><span class="tc-name">Cursor</span><span class="tc-model">—</span></div>
-        <div class="kv-list">
-          <div class="kv-row hl"><span class="kv-k">총 사용 토큰</span><span class="kv-v">—</span></div>
-        </div>
-        <p class="tc-note">사용량 한도 초과로 미진행.</p>
       </div>
     </div>
+    <div class="note-box" style="margin-top:12px">Cursor는 V5 사용량 한도 초과로 미진행. 각 AI의 토큰 집계 방식이 다릅니다 (Claude 캐시 포함 전체 / Codex 신규 소비 / Gemini 턴별 누적). 절대값보다 규모 파악 용도로 해석하세요.</div>
   </section>
 
   <section class="card" id="results">
@@ -193,47 +188,20 @@ After implementation:
     <div class="note-box"><strong>Codex 자가수정 과정:</strong> 1차 실행에서 selectCity, toggleFavorite, networkFailure 3개 테스트가 <code>TimeoutCancellationException</code>으로 실패했습니다. Codex는 원인을 <code>StandardTestDispatcher</code>에서 <code>awaitLoaded()</code>가 blocking하는 문제로 스스로 진단하고, <code>UnconfinedTestDispatcher</code> + <code>Dispatchers.Default.limitedParallelism(1)</code> 조합으로 자가 수정해 전부 통과시켰습니다.</div>
   </section>
 
-  <section class="card" id="observations">
-    <div class="sh"><span class="sh-num">07</span><h2>관찰 및 인사이트</h2></div>
-    <div class="tbl-wrap"><table>
-      <thead><tr><th>관찰 항목</th><th>내용</th></tr></thead>
-      <tbody>
-        <tr class="row-hl">
-          <td class="col-label">V4 아키텍처 → V5 테스트 복잡도</td>
-          <td>Claude의 V4 WeatherRepository 분리 설계가 V5에서 간결한 테스트(140줄)를 가능하게 했습니다. Codex의 V4 통합 설계는 MockK 진입점이 없어 URLStreamHandlerFactory라는 우회책이 필요했고 결과적으로 245줄의 가장 긴 테스트 코드가 됐습니다. 설계 결정의 영향이 다음 단계로 전파된 사례입니다.</td>
-        </tr>
-        <tr>
-          <td class="col-label">Codex의 독창적 접근</td>
-          <td>MockK 없이 <code>URL.setURLStreamHandlerFactory()</code>로 JVM의 https:// 핸들러 자체를 교체했습니다. 외부 라이브러리 의존 없이 프로덕션 코드를 건드리지 않고 HTTP 계층을 완전히 격리한 방법입니다. 단, 자가수정이 필요했던 유일한 AI이기도 합니다.</td>
-        </tr>
-        <tr>
-          <td class="col-label">Gemini의 추가 선택 — Turbine</td>
-          <td>프롬프트에서 "Turbine optional"로 제시했을 때 Gemini만 Turbine을 채택했습니다. Flow 방출 시퀀스를 검증할 수 있어 테스트 표현력이 높아지지만, 의존성이 추가됩니다. 나머지 두 AI는 선택하지 않았습니다.</td>
-        </tr>
-        <tr class="row-hl">
-          <td class="col-label">Dispatcher 선택의 차이</td>
-          <td>Claude·Gemini는 StandardTestDispatcher(코루틴 실행을 수동 제어)를 선택한 반면, Codex는 자가수정 과정에서 UnconfinedTestDispatcher(즉시 실행)로 전환했습니다. Codex의 ViewModel이 <code>mutableStateOf</code> (Compose State)를 사용해 Flow 기반의 두 AI와 상태 관찰 방식이 달랐기 때문입니다.</td>
-        </tr>
-        <tr>
-          <td class="col-label">실행 시간과 자가수정</td>
-          <td>Gemini(231초)가 가장 빠르게 완료했고 Codex(256초)가 뒤를 이었습니다. Codex는 자가수정 과정에서 시간이 추가됐음에도 Claude(428초)보다 빠릅니다. Claude는 캐시 활용도가 높았지만 더 많은 검증 단계를 거쳤습니다.</td>
-        </tr>
-      </tbody>
-    </table></div>
-  </section>
-
-  <section class="card" id="code">
-    <div class="sh"><span class="sh-num">08</span><h2>코드 요약</h2></div>
-    <div class="tbl-wrap"><table>
-      <thead><tr><th>AI</th><th>테스트 파일</th><th>테스트 코드 라인</th><th>추가 의존성 수</th><th>프로덕션 코드 수정</th></tr></thead>
-      <tbody>
-        <tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>viewmodel/WeatherViewModelTest.kt</td><td>140줄</td><td>3개 (JUnit4, coroutines-test, MockK)</td><td>없음 (libs.versions.toml + build.gradle.kts만 수정)</td></tr>
-        <tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>WeatherViewModelTest.kt</td><td>245줄</td><td>3개 (JUnit4, coroutines-test, org.json)</td><td>없음 (build.gradle.kts만 수정)</td></tr>
-        <tr class="row-hl"><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>WeatherViewModelTest.kt</td><td>199줄</td><td>4개 (JUnit4, coroutines-test, MockK, Turbine)</td><td>없음 (libs.versions.toml + build.gradle.kts만 수정)</td></tr>
-        <tr><td class="col-label"><span class="dot cursor"></span> Cursor</td><td colspan="4" style="text-align:center;color:#888;">사용량 한도 초과로 미진행</td></tr>
-      </tbody>
-    </table></div>
-    <div class="note-box">세 AI 모두 프로덕션 코드를 수정하지 않았습니다. Gradle 설정 파일과 테스트 파일만 추가·수정했습니다. Codex가 가장 많은 테스트 코드를 작성했고(245줄), Claude가 가장 적었습니다(140줄).</div>
+  <section class="card" id="insights">
+    <div class="sh"><span class="sh-num">07</span><h2>핵심 인사이트</h2></div>
+    <div class="insight">
+      <span class="insight-icon">🏗️</span>
+      <div><strong>V4 아키텍처 결정이 V5 테스트 복잡도를 직접 결정했습니다.</strong> Claude의 WeatherRepository 분리 → MockK 한 줄로 테스트 가능(140줄). Codex의 ViewModel 통합 → MockK 진입점 없음 → <code>URLStreamHandlerFactory</code> JVM 레벨 우회 필요(245줄). <strong>좋은 설계는 다음 단계 비용을 줄입니다.</strong></div>
+    </div>
+    <div class="insight">
+      <span class="insight-icon">⚡</span>
+      <div><strong>Codex는 혼자서 실패를 고쳤습니다.</strong> 1차 실행에서 3개 테스트가 <code>TimeoutCancellationException</code>으로 실패했고, 원인을 <code>StandardTestDispatcher</code>의 blocking 문제로 직접 진단해 <code>UnconfinedTestDispatcher</code>로 자가 수정해 전부 통과시켰습니다. 이 과정에서도 Claude(428초)보다 빠른 256초를 기록했습니다.</div>
+    </div>
+    <div class="insight">
+      <span class="insight-icon">📦</span>
+      <div><strong>Gemini만 Turbine을 선택했습니다.</strong> 프롬프트에서 "optional"로 제시했는데 Gemini만 채택. Flow 방출 시퀀스를 검증하는 표현력 높은 테스트가 가능하지만, 나머지 두 AI는 추가 의존성 없이도 충분하다고 판단했습니다.</div>
+    </div>
   </section>
 </div>
 </body>

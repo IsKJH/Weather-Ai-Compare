@@ -20,7 +20,7 @@
     </div>
   </header>
   <nav class="toc">
-    <a href="index.html">전체 요약</a><a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#criteria">요구사항</a><a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
+    <a href="index.html">전체 요약</a><a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#observations">관찰</a><a href="#code">코드</a>
   </nav>
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
@@ -117,20 +117,11 @@ After implementation:
 - Run ./gradlew assembleDebug.
 - Briefly summarize what changed.
 - Mention whether the build passed.</pre>
-    <div class="note-box">아래 표는 원문 프롬프트를 보고서 독자가 빠르게 이해할 수 있도록 한글로 풀어쓴 해석입니다.</div>
-    <div class="tbl-wrap"><table><thead><tr><th>구분</th><th>한글 해석</th></tr></thead><tbody><tr><td class="col-label">요약</td><td>v1 앱을 새로 만들지 않고 기존 코드 위에서 기능을 확장하라고 지시한 프롬프트입니다.</td></tr><tr><td class="col-label">핵심 요구</td><td>시간별 예보, 강수확률, 자외선 지수, 대기질, 새로고침, 마지막 업데이트, 로딩 상태, 즐겨찾기를 추가해야 했습니다.</td></tr><tr><td class="col-label">평가 관점</td><td>기존 코드 이해력, 요구사항 보존, 기능 추가 안정성, 작은 화면에서의 UI 완성도를 비교하기 위한 입력입니다.</td></tr></tbody></table></div>
   </section>
   <section class="card" id="summary">
     <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
     <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th><th class="th-cursor">Cursor</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6 (Claude Code CLI v2.1.153)</td><td>gpt-5.5 (OpenAI Codex CLI v0.134.0)</td><td>gemini-3.1-flash-lite + gemini-3-flash (Gemini CLI v0.43.0)</td><td>auto (Cursor Agent)</td></tr><tr><td class="col-label">소요 시간</td><td>360.6초</td><td>315초</td><td>149.4초</td><td>240초</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>1,043,992</td><td>1,615,940</td><td>642,641</td><td>1,228,000</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>5개 / 580줄</td><td>6개 / 736줄</td><td>5개 / 518줄</td><td>9개 / 748줄</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>성공</td><td>성공</td><td>성공</td><td>성공</td></tr><tr><td class="col-label">요구사항 충족</td><td>6/6</td><td>6/6</td><td>6/6</td><td>6/6</td></tr><tr><td class="col-label">v1 대비 변경 파일</td><td>3개</td><td>6개</td><td>4개</td><td>8개</td></tr><tr><td class="col-label">UI 테마</td><td>밝은 블루 그라디언트, v1 감성 유지</td><td>다크 네이비 대시보드</td><td>블루 그라디언트, 모바일 앱 액션 중심</td><td>라이트 청록(teal) 그라디언트, v1 감성 유지</td></tr></tbody></table></div>
   </section>
-
-  <section class="card" id="criteria">
-    <div class="sh"><span class="sh-num">04</span><h2>요구사항 체크</h2></div>
-    <ul class="crit-list"><li>기존 프로젝트를 새로 만들지 않고 개선</li><li>한국어 깨짐 수정</li><li>시간별 예보 추가</li><li>강수확률/자외선/대기질 추가</li><li>새로고침/마지막 업데이트/loading 상태 추가</li><li>즐겨찾기 상태 추가</li><li>빌드 및 실제 기기 스크린샷 성공</li><li>토큰 사용량과 소요 시간 비교</li></ul>
-    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th><th class="th-cursor">Cursor</th></tr></thead><tbody><tr><td class="col-label">한국어 복구</td><td>충족</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">시간별 예보</td><td>충족</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">상세 날씨</td><td>충족</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">새로고침</td><td>충족</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">즐겨찾기</td><td>충족</td><td>충족</td><td>충족</td><td>충족</td></tr><tr><td class="col-label">5일 예보 보존</td><td>충족</td><td>충족</td><td>충족</td><td>충족</td></tr></tbody></table></div>
-  </section>
-
 
   <section class="card" id="tokens">
     <div class="sh"><span class="sh-num">05</span><h2>토큰 사용량</h2></div>

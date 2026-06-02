@@ -413,13 +413,21 @@ body {
 <div class="wrap">
 
   <!-- 종합 요약 -->
-  <div class="verdict reveal">
-    <p class="verdict-text">
-      속도는 <strong>Gemini가 전 단계 압도적으로 빨랐고</strong>(평균 217초), V3에서 스크린샷으로 체감 변화가 확인된 건 <strong>Gemini와 Cursor</strong>였습니다. V4 실제 API 연동에서 <strong>Gemini는 V3 스마트 기능(온도 배경·인사이트 카드)을 V4에서도 그대로 유지</strong>한 유일한 AI였습니다. V5 단위 테스트에서는 <strong>Codex가 MockK 없이 URLStreamHandlerFactory로 JVM URL을 가로채는 독창적 방법</strong>을 선택했고, Claude의 V4 Clean Architecture 분리 설계가 V5에서 가장 간결한 테스트(140줄)를 만들어냈습니다. <strong>V4 설계 결정이 V5 테스트 복잡도를 직접 결정한 것이 핵심 관찰입니다.</strong>
-    </p>
-    <div class="verdict-badge">
-      <div class="vb-label">코드 품질 1위</div>
-      <div class="vb-value">Codex</div>
+  <div class="card reveal" style="margin-bottom:12px;padding:24px 30px;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">종합 요약 — V1 → V6</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <div style="border:1px solid var(--border);border-left:3px solid var(--gemini);border-radius:6px;padding:14px 16px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gemini);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">속도 · 구현력</div>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Gemini가 전 단계 최단</strong>(평균 217초). V3 스마트 기능(인사이트 카드·온도 배경)을 V4에서도 유일하게 유지했습니다.</p>
+      </div>
+      <div style="border:1px solid var(--border);border-left:3px solid var(--claude);border-radius:6px;padding:14px 16px;">
+        <div style="font-size:11px;font-weight:700;color:var(--claude);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">아키텍처 · 설계</div>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Claude의 V4 Repository 분리</strong>가 V5 테스트를 140줄로 압축. <strong>V4 설계 결정이 V5 복잡도를 직접 결정</strong>한 핵심 사례.</p>
+      </div>
+      <div style="border:1px solid var(--border);border-left:3px solid var(--codex);border-radius:6px;padding:14px 16px;">
+        <div style="font-size:11px;font-weight:700;color:var(--codex);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">코드 품질 · 검증</div>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Codex가 코드 품질 1위.</strong> V5에서 URLStreamHandlerFactory 독창적 접근, V6에서 유일하게 단위 테스트까지 자체 실행해 검증했습니다.</p>
+      </div>
     </div>
   </div>
 
