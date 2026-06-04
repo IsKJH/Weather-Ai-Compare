@@ -113,10 +113,10 @@
   <nav class="toc">
     <a href="index.html">전체 요약</a>
     <a href="#overview">실험 개요</a>
-    <a href="#phase1">Phase 1 결과</a>
+    <a href="#v1">V1 결과</a>
     <a href="#structure">코드 구조</a>
-    <a href="#phase2">Phase 2</a>
-    <a href="#phase3">Phase 3</a>
+    <a href="#v2">V2</a>
+    <a href="#v3">V3</a>
     <a href="#conclusion">종합</a>
   </nav>
 
@@ -127,21 +127,21 @@
     <div class="callout-grid">
       <div class="callout">
         <div class="callout-k">비교 초점</div>
-        <div class="callout-v">각 Phase를 완성하는 데 실제로 걸리는 시간 — AI 생성 시간과 손 코딩 시간을 Phase별로 누적 비교합니다.</div>
+        <div class="callout-v">각 단계를 완성하는 데 실제로 걸리는 시간 — AI 생성 시간과 손 코딩 시간을 단계별로 누적 비교합니다.</div>
       </div>
       <div class="callout">
         <div class="callout-k">언어 차이 참고</div>
         <div class="callout-v">Flutter는 프로젝트 세팅(pubspec, build_runner)이 Android보다 약간 더 걸립니다. 단순 숫자 비교 시 이 점을 감안해야 합니다.</div>
       </div>
       <div class="callout">
-        <div class="callout-k">Phase 구성</div>
+        <div class="callout-k">단계 구성</div>
         <div class="callout-v">V1(기본 날씨) → V2(시간별 예보·즐겨찾기·새로고침) → V3(자유 스마트 기능 1개) 3단계로 진행합니다.</div>
       </div>
     </div>
     <div class="metric-grid" style="margin-top:18px;">
       <div class="metric">
         <div class="metric-k">진행 상태</div>
-        <div class="metric-v">Phase 1·2·3 완료</div>
+        <div class="metric-v">V1·V2·V3 완료</div>
       </div>
       <div class="metric">
         <div class="metric-k">누적 구현 시간</div>
@@ -154,11 +154,11 @@
     </div>
   </section>
 
-  <!-- ── Phase 1 결과 ── -->
-  <section class="card" id="phase1">
+  <!-- ── V1 결과 ── -->
+  <section class="card" id="v1">
     <div class="sh">
       <span class="sh-num">02</span>
-      <h2>Phase 1 — 기본 날씨 앱</h2>
+      <h2>V1 — 기본 날씨 앱</h2>
       <span class="phase-status done" style="margin-left:auto;">완료</span>
     </div>
     <p class="lead">도시 전환(서울·부산·제주), 현재 날씨, 5일 예보를 구현하는 V1 명세 기준입니다.</p>
@@ -206,7 +206,7 @@
         <span class="diff-bar-num">×1.0 기준</span>
       </div>
     </div>
-    <div class="note-box">언어 차이 고려: Flutter는 Android보다 초기 세팅(pubspec.yaml, build_runner 설정, Riverpod 세팅)에 약 10~15분이 추가됩니다. 순수 화면 구현만 따지면 실제 차이는 약 ×10 수준으로 추정됩니다. Codex V1은 실행 환경 차이로 Phase 1 시간이 기록되지 않았습니다(전체 실험 대시보드의 측정 시간과 다를 수 있음).</div>
+    <div class="note-box">언어 차이 고려: Flutter는 Android보다 초기 세팅(pubspec.yaml, build_runner 설정, Riverpod 세팅)에 약 10~15분이 추가됩니다. 순수 화면 구현만 따지면 실제 차이는 약 ×10 수준으로 추정됩니다. Codex V1은 실행 환경 차이로 V1 시간이 기록되지 않았습니다(전체 실험 대시보드의 측정 시간과 다를 수 있음).</div>
 
     <h3 style="font-size:14px;font-weight:850;color:#555;margin:20px 0 10px;">코드량 비교</h3>
     <div class="tbl-wrap">
@@ -336,7 +336,7 @@
     <div class="insight-grid">
       <div class="insight purple">
         <div class="insight-k">Human 선택: Clean Architecture</div>
-        <div class="insight-v">도메인/데이터/프레젠테이션 레이어 분리. 규모가 커질 때 유지보수 유리하지만 초기 보일러플레이트가 많아 Phase 1 구현 시간이 늘어났습니다.</div>
+        <div class="insight-v">도메인/데이터/프레젠테이션 레이어 분리. 규모가 커질 때 유지보수 유리하지만 초기 보일러플레이트가 많아 V1 구현 시간이 늘어났습니다.</div>
       </div>
       <div class="insight orange">
         <div class="insight-k">AI 선택: MVVM</div>
@@ -368,11 +368,11 @@
     </div>
   </section>
 
-  <!-- ── Phase 2 결과 ── -->
-  <section class="card" id="phase2">
+  <!-- ── V2 결과 ── -->
+  <section class="card" id="v2">
     <div class="sh">
       <span class="sh-num">04</span>
-      <h2>Phase 2 — 기능 확장</h2>
+      <h2>V2 — 기능 확장</h2>
       <span class="phase-status done" style="margin-left:auto;">완료</span>
     </div>
     <p class="lead">시간별 예보, 강수확률·UV·대기질, 새로고침, 즐겨찾기를 추가하는 V2 명세 기준입니다.</p>
@@ -425,9 +425,9 @@
         <span class="diff-bar-num">×1.0 기준</span>
       </div>
     </div>
-    <div class="note-box">Phase 1(×12.5)보다 Phase 2(×21.6) 배율이 더 커졌습니다. AI는 기존 코드를 캐시로 활용해 V2에서 오히려 더 빨라졌지만(Gemini 318초→149초), 사람은 기존 코드를 파악하고 추가 기능을 구현하는 시간이 여전히 필요했기 때문입니다.</div>
+    <div class="note-box">V1(×12.5)보다 V2(×21.6) 배율이 더 커졌습니다. AI는 기존 코드를 캐시로 활용해 V2에서 오히려 더 빨라졌지만(Gemini 318초→149초), 사람은 기존 코드를 파악하고 추가 기능을 구현하는 시간이 여전히 필요했기 때문입니다.</div>
 
-    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">Phase 2 코드량 비교</h3>
+    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">V2 코드량 비교</h3>
     <div class="tbl-wrap">
       <table>
         <thead>
@@ -455,7 +455,7 @@
             <td>736줄</td>
           </tr>
           <tr>
-            <td class="col-label">증가량 (Phase 1 대비)</td>
+            <td class="col-label">증가량 (V1 대비)</td>
             <td>+425줄</td>
             <td>+185줄</td>
             <td>+214줄</td>
@@ -473,11 +473,11 @@
     </div>
   </section>
 
-  <!-- ── Phase 3 결과 ── -->
-  <section class="card" id="phase3">
+  <!-- ── V3 결과 ── -->
+  <section class="card" id="v3">
     <div class="sh">
       <span class="sh-num">05</span>
-      <h2>Phase 3 — 자유 기능 추가</h2>
+      <h2>V3 — 자유 기능 추가</h2>
       <span class="phase-status done" style="margin-left:auto;">완료</span>
     </div>
     <p class="lead">선택한 스마트 기능: <strong>"지금 나갈까?" 외출 어드바이저 카드</strong> — 날씨 위험도 점수 기반 이모지(😊/😐/😣) + 한 줄 조언 + 상황별 액션 칩.</p>
@@ -530,9 +530,9 @@
         <span class="diff-bar-num">×1.0 기준</span>
       </div>
     </div>
-    <div class="note-box">Phase 3는 Phase 1(×12.5), Phase 2(×21.6)보다 배율이 줄었습니다(×11.6). Clean Architecture 기반이 이미 갖춰진 상태에서 스마트 기능 로직만 추가했기 때문입니다.</div>
+    <div class="note-box">V3는 V1(×12.5), V2(×21.6)보다 배율이 줄었습니다(×11.6). Clean Architecture 기반이 이미 갖춰진 상태에서 스마트 기능 로직만 추가했기 때문입니다.</div>
 
-    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">Phase 3 구현 내용</h3>
+    <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">V3 구현 내용</h3>
     <div class="tbl-wrap">
       <table>
         <thead>
@@ -565,7 +565,7 @@
           </tr>
           <tr class="row-hl">
             <td class="col-label">코드량 변화</td>
-            <td>12파일 · 1,010줄 (+135줄 from Phase 2)</td>
+            <td>12파일 · 1,010줄 (+135줄 from V2)</td>
             <td>Gemini: 5파일 · 542줄 (+24줄)</td>
           </tr>
         </tbody>
@@ -575,12 +575,12 @@
 
   <!-- ── 종합 (전체 완료) ── -->
   <section class="card" id="conclusion">
-    <div class="sh"><span class="sh-num">06</span><h2>종합 비교 — Phase 1·2·3 완료</h2></div>
+    <div class="sh"><span class="sh-num">06</span><h2>종합 비교 — V1·V2·V3 완료</h2></div>
 
     <div class="verdict-row">
       <div class="verdict-main">
         <h2 class="verdict-title">속도는 AI보다 14.4배 느렸지만, 아키텍처 수준은 AI가 V7에서야 따라잡은 설계를 V1에서 적용했습니다.</h2>
-        <p class="verdict-copy">Phase 1·2·3 합계 9,372초(2시간 36분). AI(Gemini) 누적 652.6초 대비 ×14.4 차이입니다. 그러나 이 시간 안에 <strong>Clean Architecture + Repository 인터페이스 + Riverpod + Freezed</strong>를 조합한 1,010줄의 코드를 직접 설계하고 작성했습니다. AI 도구들은 이 수준의 아키텍처에 도달하는 데 7~9단계가 필요했습니다.</p>
+        <p class="verdict-copy">V1·V2·V3 합계 9,372초(2시간 36분). AI(Gemini) 누적 652.6초 대비 ×14.4 차이입니다. 그러나 이 시간 안에 <strong>Clean Architecture + Repository 인터페이스 + Riverpod + Freezed</strong>를 조합한 1,010줄의 코드를 직접 설계하고 작성했습니다. AI 도구들은 이 수준의 아키텍처에 도달하는 데 7~9단계가 필요했습니다.</p>
       </div>
       <div class="verdict-aside">
         <div class="aside-k">속도 차이</div>
@@ -592,7 +592,7 @@
       <table>
         <thead>
           <tr>
-            <th>Phase</th>
+            <th>단계</th>
             <th class="th-human">Human · Flutter</th>
             <th class="th-gemini">Gemini (최단 AI)</th>
             <th>배율</th>
@@ -601,21 +601,21 @@
         </thead>
         <tbody>
           <tr>
-            <td class="col-label">Phase 1</td>
+            <td class="col-label">V1</td>
             <td><strong>3,984초 (1:06:24)</strong></td>
             <td>318초</td>
             <td>×12.5</td>
             <td>✅ 완료</td>
           </tr>
           <tr>
-            <td class="col-label">Phase 2</td>
+            <td class="col-label">V2</td>
             <td><strong>3,231초 (53:51)</strong></td>
             <td>149.4초</td>
             <td>×21.6</td>
             <td>✅ 완료</td>
           </tr>
           <tr>
-            <td class="col-label">Phase 3</td>
+            <td class="col-label">V3</td>
             <td><strong>2,157초 (35:57)</strong></td>
             <td>185.2초</td>
             <td>×11.6</td>
@@ -634,8 +634,8 @@
 
     <div class="insight-grid" style="margin-top:16px;">
       <div class="insight purple">
-        <div class="insight-k">Phase별 배율 변화</div>
-        <div class="insight-v">×12.5 → ×21.6 → ×11.6. Phase 2에서 가장 벌어졌다가 Phase 3에서 좁혀졌습니다. Clean Architecture 기반이 갖춰진 상태에서 기능을 추가하는 작업은 상대적으로 빨랐습니다.</div>
+        <div class="insight-k">단계별 배율 변화</div>
+        <div class="insight-v">×12.5 → ×21.6 → ×11.6. V2에서 가장 벌어졌다가 V3에서 좁혀졌습니다. Clean Architecture 기반이 갖춰진 상태에서 기능을 추가하는 작업은 상대적으로 빨랐습니다.</div>
       </div>
       <div class="insight orange">
         <div class="insight-k">아키텍처 우위</div>
