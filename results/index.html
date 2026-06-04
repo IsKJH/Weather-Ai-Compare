@@ -457,12 +457,12 @@ body {
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">설계의 파급효과</div>
         <div style="font-size:17px;font-weight:800;margin-bottom:5px">V4가 V5~V8 결정</div>
-        <div style="font-size:13px;opacity:.6;line-height:1.65">Claude Repository 분리 → 테스트 140줄. Codex 통합 → 245줄</div>
+        <div style="font-size:13px;opacity:.6;line-height:1.65">Claude V4에서 Repository 레이어를 분리하자 V5 테스트가 140줄로 끝났습니다. Codex는 ViewModel에 통합했고 V5 테스트에 245줄이 필요했습니다. 설계 하나가 이후 모든 단계의 복잡도를 결정했습니다.</div>
       </div>
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">핵심 발견</div>
         <div style="font-size:17px;font-weight:800;margin-bottom:5px">빌드 ≠ 실동작</div>
-        <div style="font-size:13px;opacity:.6;line-height:1.65">V8 Gemini: assembleDebug 통과 → 실기기 즉시 크래시 → 4개 버그 자가수정</div>
+        <div style="font-size:13px;opacity:.6;line-height:1.65">V8 Gemini는 빌드(assembleDebug)가 성공했지만 실기기에서 즉시 크래시. runBlocking 안티패턴과 플러그인 누락은 컴파일러가 잡지 못합니다. 빌드 성공이 곧 앱 동작 보장이 아닙니다.</div>
       </div>
     </div>
   </div>
@@ -479,15 +479,15 @@ body {
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
       <div style="border:1px solid var(--border);border-left:3px solid var(--gemini);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--gemini);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">속도 · 구현력</div>
-        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Gemini가 전 단계 최단</strong>(평균 217초). V3 스마트 기능(인사이트 카드·온도 배경)을 V4에서도 유일하게 유지했습니다.</p>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Gemini가 전 단계 최단</strong>(평균 217초). V3에서 날씨 데이터를 자연어로 해석해주는 인사이트 카드와 온도 기반 배경색 같은 스마트 기능을 만들었고, V4 실 API 연동 후에도 이 기능들을 유일하게 유지했습니다.</p>
       </div>
       <div style="border:1px solid var(--border);border-left:3px solid var(--claude);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--claude);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">아키텍처 · 설계</div>
-        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Claude의 V4 Repository 분리</strong>가 V5 테스트를 140줄로 압축. <strong>V4 설계 결정이 V5 복잡도를 직접 결정</strong>한 핵심 사례.</p>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Claude의 V4 Repository 분리</strong>가 V5 테스트를 140줄로 압축했습니다. Repository는 API 호출 로직을 ViewModel과 분리해 테스트에서 가짜(mock)로 교체할 수 있게 해주는 레이어입니다. <strong>V4 설계 결정 하나가 V5 복잡도를 직접 결정</strong>한 핵심 사례입니다.</p>
       </div>
       <div style="border:1px solid var(--border);border-left:3px solid var(--codex);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--codex);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">코드 품질 · 검증</div>
-        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Codex가 코드 품질 1위.</strong> V5에서 URLStreamHandlerFactory 독창적 접근, V6에서 유일하게 단위 테스트까지 자체 실행해 검증했습니다.</p>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Codex가 코드 품질 1위.</strong> V5에서 URLStreamHandlerFactory로 네트워크 레이어를 직접 가로채는 독창적인 테스트 방식을 썼습니다. V6 버그 디버깅에서는 세 AI 중 유일하게 수정 후 단위 테스트까지 직접 실행해 검증했습니다.</p>
       </div>
     </div>
   </div>
@@ -526,7 +526,7 @@ body {
         <div class="phase-body">
           <div class="phase-n">01</div>
           <h3 class="phase-title">처음부터 앱 만들기</h3>
-          <p class="phase-desc">동일한 프롬프트에서 각 AI가 어떤 구조와 UI를 선택하는지 비교했습니다. 아키텍처, 파일 분리, 한국어 처리 방식이 모두 달랐습니다.</p>
+          <p class="phase-desc">동일한 프롬프트에서 각 AI가 어떤 구조와 UI를 선택하는지 비교했습니다. 파일 분리 방식, 레이어 구조, 한국어 도시명 처리 방식이 AI마다 달랐습니다. Codex는 한국어 깨짐 버그가 발생해 세 AI 중 유일하게 V1 기능 검증에 실패했습니다.</p>
           <div class="phase-result">Gemini 318초 최단 · Codex 자동 빌드 · Claude 구조 우수</div>
           <a class="phase-link" href="report.html">V1 보고서 보기</a>
         </div>
@@ -536,7 +536,7 @@ body {
         <div class="phase-body">
           <div class="phase-n">02</div>
           <h3 class="phase-title">기존 코드 위에 기능 추가</h3>
-          <p class="phase-desc">V1 결과물을 유지한 채 시간별 예보, 상세 날씨 정보, 새로고침, 즐겨찾기를 추가했습니다. AI가 자기 코드를 얼마나 잘 이해하는지 확인했습니다.</p>
+          <p class="phase-desc">V1 결과물을 건드리지 않고 그 위에 시간별 예보, 상세 날씨 정보, 새로고침, 즐겨찾기 기능을 추가했습니다. AI가 자신이 만든 코드를 다시 읽고 확장하는 능력을 측정했습니다. Codex는 V1 한국어 깨짐도 이 단계에서 자가 수정했습니다.</p>
           <div class="phase-result">네 AI 모두 기능 충족 · Gemini 149.4초 최단</div>
           <a class="phase-link" href="report_v2.html">V2 보고서 보기</a>
         </div>
@@ -546,7 +546,7 @@ body {
         <div class="phase-body">
           <div class="phase-n">03</div>
           <h3 class="phase-title">AI가 스스로 기능 선택</h3>
-          <p class="phase-desc">명세 없이 AI가 직접 스마트 기능을 정해 추가했습니다. 창의성과 실행력의 차이가 가장 극명하게 드러난 단계입니다.</p>
+          <p class="phase-desc">"기능을 하나 더 추가해라. 무엇을 추가할지는 네가 정해라"는 지시만 주었습니다. AI가 직접 기능을 기획하고 구현하는 자율 단계입니다. Gemini가 인사이트 카드·온도 기반 배경색으로 가장 눈에 띄는 결과를 냈고, Codex는 기능 추가 대신 코드를 178줄 줄이는 리팩터링을 선택해 세 AI 중 유일하게 코드량이 감소했습니다.</p>
           <div class="phase-result">Gemini 인사이트 카드 + 온도 기반 배경 가장 두드러짐</div>
           <a class="phase-link" href="report_v3.html">V3 보고서 보기</a>
         </div>
@@ -556,7 +556,7 @@ body {
         <div class="phase-body">
           <div class="phase-n">04</div>
           <h3 class="phase-title">실제 API 연동</h3>
-          <p class="phase-desc">목 데이터를 Open-Meteo 실시간 API로 교체했습니다. 같은 요구사항에서 AI마다 HTTP 라이브러리와 아키텍처 선택이 달랐고, 실기기에서 실데이터 수신을 확인했습니다.</p>
+          <p class="phase-desc">하드코딩된 가짜 날씨 데이터를 Open-Meteo 실시간 API로 교체했습니다. Claude와 Codex는 추가 라이브러리 없이 표준 라이브러리(java.net)를 썼고, Gemini는 Retrofit + OkHttp를 선택해 아키텍처가 갈렸습니다. 이 선택이 V5 테스트 복잡도를 직접 결정했습니다.</p>
           <div class="phase-result">Claude·Codex stdlib 전용 · Gemini Retrofit · V3 스마트 기능 Gemini만 V4에서도 유지</div>
           <a class="phase-link" href="report_v4.html">V4 보고서 보기</a>
         </div>
@@ -568,7 +568,7 @@ body {
         <div class="phase-body">
           <div class="phase-n">05</div>
           <h3 class="phase-title">단위 테스트 작성</h3>
-          <p class="phase-desc">V4 앱에 단위 테스트를 추가했습니다. 같은 요구사항에서 AI마다 모킹 전략이 완전히 달랐습니다. 특히 V4 아키텍처 선택이 V5 테스트 복잡도를 직접 결정했습니다.</p>
+          <p class="phase-desc">V4 앱에 단위 테스트를 추가했습니다. 세 AI 모두 테스트 5개를 통과시켰지만 방법이 달랐습니다. Claude(140줄) vs Codex(245줄)의 차이는 V4 아키텍처에서 비롯됐습니다. Codex는 URLStreamHandlerFactory로 네트워크 레이어를 직접 가로채는 독창적인 방식을 써 이후 V9에서 세 AI 모두의 극찬을 받았습니다.</p>
           <div class="phase-result">세 AI 모두 5/5 통과 · Codex URLStreamHandler 독창 접근 · Gemini 최단 231초</div>
           <a class="phase-link" href="report_v5.html">V5 보고서 보기</a>
         </div>
@@ -580,7 +580,7 @@ body {
         <div class="phase-body">
           <div class="phase-n">06</div>
           <h3 class="phase-title">버그 디버깅</h3>
-          <p class="phase-desc">V4 코드에 동일한 유형의 버그 5개를 심고 "찾아서 고쳐라"는 지시만 주었습니다. 발견율은 세 AI 모두 5/5로 동일했지만 검증 품질과 장애물 대응에서 차이가 드러났습니다.</p>
+          <p class="phase-desc">V4 코드에 의도적으로 버그 5개를 심고 "찾아서 고쳐라"는 지시만 주었습니다. 발견율은 세 AI 모두 5/5로 동일했습니다. 그러나 Codex만 수정 후 단위 테스트를 자체 실행해 결과를 검증했고, Gemini는 JAVA_HOME 환경변수 오류로 빌드 검증 자체를 완료하지 못했습니다.</p>
           <div class="phase-result">전원 5/5 발견 · Codex 단위 테스트 자체 실행 · Gemini 빌드 검증 실패</div>
           <a class="phase-link" href="report_v6.html">V6 보고서 보기</a>
         </div>
@@ -592,7 +592,7 @@ body {
         <div class="phase-body">
           <div class="phase-n">07</div>
           <h3 class="phase-title">Room DB 영속성</h3>
-          <p class="phase-desc">즐겨찾기 도시를 앱 재시작 후에도 기억하도록 Room DB를 추가했습니다. 세 AI 모두 빌드 성공했지만 기존 단위 테스트 호환 전략이 각각 달랐습니다.</p>
+          <p class="phase-desc">즐겨찾기 도시를 앱 재시작 후에도 기억하도록 Room 데이터베이스를 추가했습니다(Room은 Android 공식 SQLite 래퍼 라이브러리). 세 AI 모두 빌드에 성공했지만 기존 V5 단위 테스트를 깨지 않는 방법이 달랐습니다. Gemini는 기존 테스트를 직접 수정했는데, V5에서 "테스트는 건드리지 말라"고 지시한 원칙을 어긴 것이었습니다.</p>
           <div class="phase-result">전원 빌드 성공 · Codex Repository 인터페이스 설계 · Gemini 기존 테스트 수정</div>
           <a class="phase-link" href="report_v7.html">V7 보고서 보기</a>
         </div>
@@ -604,7 +604,7 @@ body {
         <div class="phase-body">
           <div class="phase-n">08</div>
           <h3 class="phase-title">WorkManager 백그라운드 알림</h3>
-          <p class="phase-desc">V7 Room DB에 저장된 즐겨찾기 도시에 대해 15분마다 날씨 알림을 발송하는 WorkManager 시스템을 추가했습니다. Worker 구현 패턴과 권한 처리 방식에서 차이가 드러났습니다.</p>
+          <p class="phase-desc">V7에 저장된 즐겨찾기 도시에 대해 WorkManager로 15분마다 날씨 알림을 발송하는 시스템을 추가했습니다(WorkManager는 Android 공식 백그라운드 작업 라이브러리). Codex는 알림 권한을 두 곳에서 이중으로 확인하는 방어적 코드를 작성했습니다. Gemini는 Worker 내부에서 runBlocking을 사용해 실기기에서 즉시 크래시가 발생했고, 직접 발견해 수정했습니다.</p>
           <div class="phase-result">전원 빌드 성공 · Codex 이중 권한 방어 + BigTextStyle · Gemini runBlocking 안티패턴</div>
           <a class="phase-link" href="report_v8.html">V8 보고서 보기</a>
         </div>
@@ -616,7 +616,7 @@ body {
         <div class="phase-body">
           <div class="phase-n">09</div>
           <h3 class="phase-title">상호 코드 리뷰 (마무리)</h3>
-          <p class="phase-desc">각 AI가 다른 두 AI의 V8 최종 코드를 직접 읽고 평가했습니다. 무엇을 강점으로 보고, 무엇을 문제로 지적했으며, 그것을 자기 코드 개선 계획으로 전환했는지를 기록합니다.</p>
+          <p class="phase-desc">각 AI가 다른 두 AI의 V8 최종 코드를 직접 파일로 읽고 평가했습니다. Claude → Codex에서, Codex → Claude에서, Gemini → Codex에서 각각 다른 것을 배웠습니다. 세 AI 모두가 동시에 가르치고 배우는 순환 학습 고리가 형성된 실험입니다.</p>
           <div class="phase-result">3개 AI 상호 학습 고리 형성 · Codex FakeOpenMeteoServer 전원 최고 평가 · Gemini 샌드박스 제약 발견</div>
           <a class="phase-link" href="report_v9.html">V9 보고서 보기</a>
         </div>
@@ -1119,13 +1119,13 @@ body {
           <span class="ai-model">claude-sonnet-4-6</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">레이어 분리 구조가 가장 체계적. V4 Repository 분리 결정이 V5 테스트를 140줄로 압축. V8까지 runBlocking 없는 정석 구현을 유지. 토큰 사용량은 많지만 캐시 재사용률이 높아 실질 비용은 경쟁력 있음.</p>
+          <p class="ai-summary">레이어 분리 구조가 가장 체계적입니다. V4에서 API 호출을 Repository 레이어로 분리했고, 이 결정 하나로 V5 테스트가 140줄로 끝났습니다. V8까지 코루틴에서 runBlocking을 쓰지 않는 정석 패턴을 유지했습니다. 토큰 사용량은 가장 많지만, 캐시 재사용률이 높아 실질 비용은 경쟁력 있습니다.</p>
           <div class="ai-tags">
             <span class="ai-tag good">구조 · 설계 일관성</span>
             <span class="ai-tag good">지시 이행 최고</span>
             <span class="ai-tag warn">토큰 최다</span>
           </div>
-          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> V4 Repository 설계가 V5~V8에 연쇄 긍정 영향. 기능 추가 속도는 느리지만 코드베이스 안정성은 가장 높음.</div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> V4 Repository 설계가 V5~V8에 연쇄적으로 긍정 영향을 줬습니다. 기능 추가 속도는 가장 느리지만, 그 대신 코드베이스를 오래 건강하게 유지하는 방향을 일관되게 선택했습니다.</div>
         </div>
       </div>
       <div class="ai-card">
@@ -1135,13 +1135,13 @@ body {
           <span class="ai-model">gpt-5.5</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">V1 한국어 깨짐을 V2에서 자가 수정. V3 유일한 코드 감소(-178줄). V5 TimeoutCancellationException 자가진단. V7 Repository 인터페이스(DIP). V8 이중 권한 방어 + BigTextStyle. 전 단계 토큰 효율 1위.</p>
+          <p class="ai-summary">V1 한국어 깨짐을 V2에서 스스로 원인을 찾아 수정했습니다. V3에서는 기능 추가 대신 리팩터링을 선택해 코드를 178줄 줄인 유일한 AI입니다. V5 테스트 실패 시 원인을 스스로 진단하고 수정했으며, V7에서는 DIP(의존성 역전 원칙)를 적용해 Repository 인터페이스를 도입했습니다. 전 단계 토큰 효율 1위.</p>
           <div class="ai-tags">
             <span class="ai-tag good">코드 품질 1위</span>
             <span class="ai-tag good">토큰 효율 최고</span>
             <span class="ai-tag good">자가수정 능력</span>
           </div>
-          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 실패에서 배우는 능력(V2 수정, V5 자가진단)과 설계 지향성(V3 리팩터링, V7 DIP)이 가장 두드러짐. V4 이후 한도 초과된 Cursor를 제외하면 누적 종합 1위.</div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 실패에서 배우는 능력(V2 한국어 수정, V5 테스트 자가진단)과 설계 지향적 선택(V3 리팩터링, V7 DIP)이 가장 두드러집니다. V4 이후 한도를 초과한 Cursor를 제외하면 누적 종합 1위입니다.</div>
         </div>
       </div>
       <div class="ai-card">
@@ -1151,14 +1151,14 @@ body {
           <span class="ai-model">gemini-3-flash</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">V1~V8 전 단계 최단(평균 294초). V3·V4 스마트 기능 화면 즉시 체감. V4 Retrofit 선택(유일 외부 라이브러리). 단 V6 빌드 검증 실패, V7 테스트 수정, V8 runBlocking으로 후반부 품질 일관성 아쉬움.</p>
+          <p class="ai-summary">V1~V8 전 단계 최단(평균 294초)입니다. V3 인사이트 카드, V4 Retrofit 선택 등 사용자가 바로 체감할 수 있는 기능을 가장 적극적으로 추가했습니다. 단 후반부에서 V6 빌드 검증 실패, V7에서 기존 테스트 직접 수정(원칙 위반), V8에서 runBlocking 안티패턴으로 인한 실기기 크래시가 연속으로 발생했습니다.</p>
           <div class="ai-tags">
             <span class="ai-tag good">전 단계 최단</span>
             <span class="ai-tag good">V3 스마트 기능</span>
             <span class="ai-tag bad">V7 원칙 위반</span>
             <span class="ai-tag bad">V8 안티패턴</span>
           </div>
-          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 초반 속도·창의성이 후반 품질 일관성으로 이어지지 못함. V6~V8 연속 품질 이슈는 우연이 아닌 패턴으로 보임.</div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 초반 속도와 창의성이 후반 품질 일관성으로 이어지지 못했습니다. V6, V7, V8에서 연속으로 품질 이슈가 발생한 것은 우연이 아닌 패턴으로 보입니다.</div>
         </div>
       </div>
       <div class="ai-card">
@@ -1168,13 +1168,13 @@ body {
           <span class="ai-model">auto (Cursor Agent)</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">IDE 에이전트 방식으로 V1~V3 진행. V3 Smart Comfort Index(쾌적 지수·외출 팁) 추가로 전 단계 코드량 최다(11파일·986줄). V3 기능이 화면에서 즉시 확인됨. V4 사용량 한도 초과로 비교에서 이탈.</p>
+          <p class="ai-summary">VS Code IDE 안에서 동작하는 에이전트 방식으로 V1~V3를 진행했습니다. V3에서 쾌적 지수(온도·습도·체감온도를 종합해 '지금 나가기 좋은지' 알려주는 기능)를 추가해 전 단계 코드량 최다(11파일·986줄)를 달성했습니다. V4부터 플랜 사용량 한도 초과로 비교에서 이탈했습니다.</p>
           <div class="ai-tags">
             <span class="ai-tag good">APK 자동 빌드</span>
             <span class="ai-tag good">V3 스마트 기능</span>
             <span class="ai-tag warn">V4부터 한도 초과</span>
           </div>
-          <div class="ai-arc"><strong style="color:var(--ink)">V1–V3 아크:</strong> IDE 통합 에이전트 방식의 강점(컨텍스트 풍부, 자동 빌드)이 두드러졌지만, 유료 한도 제한이 장기 실험의 걸림돌이 됨.</div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V3 아크:</strong> IDE에 직접 통합된 에이전트 방식의 강점(풍부한 컨텍스트, 자동 빌드)이 두드러졌습니다. 그러나 유료 플랜 사용량 한도가 장기 실험의 걸림돌이 됐습니다.</div>
         </div>
       </div>
     </div>
@@ -1192,36 +1192,36 @@ body {
       <div class="vbox" style="border-left:3px solid var(--gemini);">
         <div class="vbox-rank" style="color:var(--gemini);">속도 · 1위</div>
         <div class="vbox-name">Gemini</div>
-        <div class="vbox-desc">V1~V8 전 단계 최단. 평균 294초. 특히 V2에서 149초로 Claude(360초) 대비 2.4배 빠름. 프로토타입 속도가 최우선이라면 Gemini.</div>
+        <div class="vbox-desc">V1~V8 전 단계 최단. 평균 294초. 특히 V2에서 149초로 Claude(360초) 대비 2.4배 빠름. 단 후반부 품질 일관성이 아쉬우므로, 프로토타입이나 빠른 시제품 제작에 적합합니다.</div>
       </div>
       <div class="vbox" style="border-left:3px solid var(--codex);">
         <div class="vbox-rank" style="color:var(--codex);">코드 품질 + 토큰 효율 · 1위</div>
         <div class="vbox-name">Codex</div>
-        <div class="vbox-desc">V4 92,991토큰(Claude 5,262,416 대비 57배 절감). V7 Repository 인터페이스, V8 이중 권한 방어. 장기 운용 비용과 코드 품질 모두 우수.</div>
+        <div class="vbox-desc">V4에서 Claude(5,262,416 토큰) 대비 57배 적은 92,991 토큰 사용. V7 DIP(의존성 역전 원칙) Repository 인터페이스, V8 알림 권한 이중 방어. 장기 프로젝트에서 운용 비용과 코드 품질 모두 우수합니다.</div>
       </div>
       <div class="vbox" style="border-left:3px solid var(--claude);">
         <div class="vbox-rank" style="color:var(--claude);">일관성 · 1위</div>
         <div class="vbox-name">Claude</div>
-        <div class="vbox-desc">V4 Repository 설계가 V5~V8에 연쇄 긍정 영향. 지시 이행률 최고. V8에서도 runBlocking 없는 정석 구현. 팀 협업 코드베이스에 적합.</div>
+        <div class="vbox-desc">V4 Repository 설계가 V5~V8에 연쇄 긍정 영향. 지시 이행률 최고. V8에서도 runBlocking 없는 정석 코루틴 구현. 여러 사람이 함께 유지보수해야 하는 팀 협업 코드베이스에 적합합니다.</div>
       </div>
     </div>
 
     <div class="learn-grid">
       <div class="learn-item">
         <div class="learn-n">배운 것 1</div>
-        <p class="learn-body"><strong>V4 아키텍처 결정이 V5~V8 복잡도를 결정했습니다.</strong> Claude의 Repository 분리가 V5 테스트를 140줄로 줄인 반면, Codex의 ViewModel 통합은 245줄이 필요했습니다. AI가 내리는 설계 결정의 파급효과가 생각보다 큽니다.</p>
+        <p class="learn-body"><strong>AI에게 초기 설계를 맡길 때는 테스트 가능성까지 고려해야 합니다.</strong> Claude의 V4 Repository 분리 하나로 V5 테스트가 140줄로 끝났지만, Codex의 ViewModel 통합 구조는 245줄이 필요했습니다. AI가 내리는 아키텍처 결정의 파급효과는 즉시 드러나지 않고 이후 단계에서 누적됩니다.</p>
       </div>
       <div class="learn-item">
         <div class="learn-n">배운 것 2</div>
-        <p class="learn-body"><strong>빌드 통과가 동작 보장이 아닙니다.</strong> Gemini V8은 <code>assembleDebug</code> 성공 후 실기기에서 <code>ClassNotFoundException</code> 즉시 크래시. <code>kotlin-android</code> 플러그인 누락과 <code>runBlocking</code> 안티패턴은 컴파일러가 잡지 못합니다. 실기기 검증이 필수입니다.</p>
+        <p class="learn-body"><strong>AI가 만든 코드는 빌드 성공 후 반드시 실기기에서 확인해야 합니다.</strong> Gemini V8은 <code>assembleDebug</code> 빌드가 성공했지만 실기기에서 즉시 크래시가 발생했습니다. <code>runBlocking</code> 안티패턴(Worker 스레드 차단)과 플러그인 누락은 컴파일러가 잡지 못하는 유형의 오류입니다.</p>
       </div>
       <div class="learn-item">
         <div class="learn-n">배운 것 3</div>
-        <p class="learn-body"><strong>각 AI의 특성은 첫 버전부터 일관됩니다.</strong> Gemini는 V1 최단 → V8 최단. Codex는 V1 자동 빌드 → V8 이중 권한 방어. Claude는 V1 레이어 분리 → V8 정석 패턴. 첫 버전에서 보이는 AI 특성이 이후 단계에도 그대로 나타납니다.</p>
+        <p class="learn-body"><strong>각 AI의 강점과 약점은 첫 버전에서 이미 드러납니다.</strong> Gemini는 V1 최단 → V8 최단으로 속도 패턴이 일관됐고, Codex는 V1 자동 빌드 → V8 이중 권한 방어로 품질 지향성이 유지됐으며, Claude는 V1 레이어 분리 → V8 정석 패턴으로 설계 일관성이 이어졌습니다. AI를 처음 써볼 때 단순한 과제 하나로도 특성 파악이 가능합니다.</p>
       </div>
       <div class="learn-item">
         <div class="learn-n">배운 것 4</div>
-        <p class="learn-body"><strong>AI 능력 평가는 단계별 누적 과제가 필요합니다.</strong> V1 한 번으로는 Codex 한국어 깨짐이 일회성인지 패턴인지 알 수 없습니다. V5 자가수정이나 V8 실기기 크래시 자가진단 같은 사건은 단일 과제에서는 관찰 불가능합니다.</p>
+        <p class="learn-body"><strong>AI 능력을 제대로 평가하려면 단계별 누적 과제가 필요합니다.</strong> V1 한 번만으로는 Codex 한국어 깨짐이 일회성 실수인지 구조적 약점인지 알 수 없습니다. Codex V5 자가수정, Gemini V8 실기기 크래시 자가진단, V9 순환 학습 고리 같은 패턴은 단일 과제에서는 절대 관찰할 수 없습니다.</p>
       </div>
     </div>
   </section>

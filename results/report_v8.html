@@ -12,7 +12,7 @@
   <header class="rh">
     <div class="rh-eyebrow">AI CODING TOOL COMPARISON · V8</div>
     <h1 class="rh-title">V8 — WorkManager 백그라운드 알림</h1>
-    <p class="rh-sub">WorkManager로 즐겨찾기 도시 날씨 알림을 15분마다 발송하고 실기기에서 직접 검증했습니다. Gemini는 빌드를 통과했지만 실기기에서 즉시 크래시해 4개 버그를 직접 발견·수정했습니다.</p>
+    <p class="rh-sub">WorkManager(앱이 꺼진 상태에서도 안드로이드 OS가 주기적으로 실행해주는 백그라운드 작업 스케줄러)로 즐겨찾기 도시 날씨 알림을 15분마다 발송하고, 실기기에서 ADB 설치 → 강제 트리거 → 스크린샷까지 직접 검증했습니다. 핵심 교훈: Gemini는 <code>assembleDebug</code>(빌드 성공)을 통과했지만 실기기에서 즉시 크래시했고, 4개 버그를 스스로 발견·수정한 뒤에야 알림을 수신했습니다. <strong>빌드 성공이 실동작을 보장하지 않는다</strong>는 사실이 이번 실험의 핵심 발견입니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span>
       <span class="ai-pill"><span class="dot codex"></span>Codex</span>
@@ -21,9 +21,9 @@
       <span class="tag-sm">2026-06-02</span>
     </div>
     <div class="rh-tldr">
-      <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">WorkManager로 15분마다 날씨 알림 발송. 실기기에서 알림 수신까지 직접 검증</div></div>
-      <div><div class="rh-tldr-label">핵심 차이점</div><div class="rh-tldr-val">Gemini runBlocking 안티패턴 → <strong>빌드 통과 후 실기기 크래시</strong> → 4개 버그 자가수정. Codex BigTextStyle + 이중 권한 방어</div></div>
-      <div><div class="rh-tldr-label">결론</div><div class="rh-tldr-val">3/3 실기기 알림 성공 &middot; assembleDebug ≠ 실동작 &middot; <strong>Codex MVP</strong></div></div>
+      <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">WorkManager(안드로이드 OS 내장 백그라운드 작업 스케줄러)로 15분마다 날씨 알림 발송. ADB 설치 → WorkManager 강제 트리거 → 실기기 스크린샷까지 자가 검증</div></div>
+      <div><div class="rh-tldr-label">핵심 차이점</div><div class="rh-tldr-val">Gemini <code>runBlocking</code> 안티패턴(CoroutineWorker에서 스레드를 직접 블로킹) → <strong>assembleDebug 빌드 통과 후 실기기 즉시 크래시</strong> → 4개 버그 자가수정 후 재시도 성공. Codex BigTextStyle + 이중 권한 방어로 세부 완성도 최고</div></div>
+      <div><div class="rh-tldr-label">결론</div><div class="rh-tldr-val">3/3 실기기 알림 성공 &middot; <strong>assembleDebug 통과 ≠ 실기기 실동작</strong> &middot; <strong>Codex MVP</strong></div></div>
     </div>
   </header>
 
@@ -61,15 +61,15 @@
     <div class="callout-grid" style="margin-top:16px">
       <div class="callout">
         <div class="callout-k">실험 설계</div>
-        <div class="callout-v">V7에서 Room DB로 저장한 즐겨찾기 도시를 WorkManager가 읽어서 15분마다 안드로이드 알림을 발송합니다. Android 8.0+ 알림 채널, Android 13+ 런타임 권한, 앱 시작 시 스케줄 등록이 필수 조건입니다.</div>
+        <div class="callout-v">WorkManager는 앱이 포그라운드에 없거나 기기가 절전 상태여도 OS가 대신 Worker 코드를 깨워 실행해주는 안드로이드 공식 백그라운드 작업 스케줄러입니다. V7에서 Room DB로 저장한 즐겨찾기 도시를 Worker가 읽어 15분마다 알림을 발송합니다. Android 8.0+ 알림 채널, Android 13+ 런타임 권한, 앱 시작 시 스케줄 등록이 필수 조건입니다.</div>
       </div>
       <div class="callout">
         <div class="callout-k">핵심 관찰 포인트</div>
-        <div class="callout-v">이번에는 V7과 달리 세 AI 모두 기존 테스트를 수정하지 않았습니다. 대신 <strong>Worker 내부의 코루틴 패턴</strong>과 <strong>권한 체크 위치</strong>에서 설계 철학 차이가 드러났습니다.</div>
+        <div class="callout-v">이번에는 V7과 달리 세 AI 모두 기존 테스트를 수정하지 않았습니다. 대신 <strong>Worker 내부의 코루틴 패턴</strong>(올바른 <code>suspend fun doWork()</code> vs. 잘못된 <code>runBlocking</code> 중첩)과 <strong>권한 체크 위치</strong>에서 설계 철학 차이가 드러났습니다. 그리고 빌드 결과만으로는 이 차이를 발견할 수 없다는 점이 중요합니다.</div>
       </div>
       <div class="callout">
         <div class="callout-k">V7 연속성</div>
-        <div class="callout-v">Room에 저장된 즐겨찾기 도시 인덱스를 Worker가 읽어서 알림 내용을 결정합니다. V7의 DAO 접근 방식(Claude nullable, Codex Repository, Gemini direct)이 Worker 구현에도 그대로 이어집니다.</div>
+        <div class="callout-v">Room에 저장된 즐겨찾기 도시 인덱스를 Worker가 읽어서 알림 내용을 결정합니다. V7의 DAO 접근 방식(Claude nullable, Codex Repository 인터페이스, Gemini direct 접근)이 Worker 구현에도 그대로 이어집니다.</div>
       </div>
     </div>
   </section>
@@ -202,7 +202,7 @@
 
     <div class="insight" style="margin-top:20px">
       <span class="insight-icon">⚠️</span>
-      <div><strong>Gemini — runBlocking 안티패턴:</strong> <code>CoroutineWorker.doWork()</code>는 <code>suspend fun</code>으로 선언되어 코루틴 컨텍스트에서 실행됩니다. Gemini는 이를 non-suspend <code>override fun doWork()</code>로 선언하고 내부에서 <code>runBlocking</code>으로 감쌌습니다. 빌드는 통과하지만 Worker 스레드를 블로킹하는 구조로, 배터리 효율과 Doze 모드 동작에서 예기치 않은 결과를 낳을 수 있습니다.</div>
+      <div><strong>Gemini — runBlocking 안티패턴 (그리고 왜 위험한가):</strong> <code>CoroutineWorker</code>는 이미 코루틴 위에서 동작하도록 설계된 클래스입니다. <code>doWork()</code>를 <code>suspend fun</code>으로 선언하면 코루틴 런타임이 스레드를 막지 않고 비동기로 처리합니다. 그런데 Gemini는 <code>override fun doWork()</code>(suspend 없음)로 선언하고 내부에서 <code>runBlocking { ... }</code>으로 감쌌습니다. <code>runBlocking</code>은 코루틴을 현재 스레드에서 완전히 끝날 때까지 <em>블로킹</em>합니다. 결과적으로 WorkManager 스레드 풀의 스레드 하나가 작업이 끝날 때까지 잠겨버립니다. 빌드는 통과하지만 실기기에서 <code>ClassNotFoundException</code>으로 즉시 크래시했고, 배터리 효율·Doze 모드 동작에서도 예기치 않은 결과를 낳을 수 있습니다.</div>
     </div>
 
     <div class="insight" style="margin-top:12px">
@@ -224,7 +224,7 @@
   <!-- 04 실기기 검증 -->
   <section class="card" id="device-test">
     <div class="sh"><span class="sh-num">04</span><h2>실기기 알림 검증</h2></div>
-    <p style="color:var(--fg2);margin-bottom:16px">각 AI가 직접 ADB로 기기에 설치 → Room DB에 즐겨찾기 설정 → WorkManager 강제 트리거 → 알림 스크린샷 순서로 자가 검증했습니다.</p>
+    <p style="color:var(--fg2);margin-bottom:16px">각 AI가 직접 <code>adb install</code>로 기기에 APK를 설치 → Room DB에 즐겨찾기 도시 입력 → <code>adb shell am broadcast</code>로 WorkManager 작업을 즉시 강제 트리거 → 알림 셰이드 스크린샷 순서로 자가 검증했습니다. 15분 주기를 기다리지 않고 즉시 실행할 수 있는 이 강제 트리거 방법이 실기기 검증을 현실적으로 만들어줬습니다. <strong>이 과정을 거쳐야만 assembleDebug가 잡지 못한 런타임 문제를 발견할 수 있습니다.</strong></p>
 
     <div class="ai-grid">
       <div class="ai-card">
@@ -283,12 +283,22 @@
 
     <div class="insight" style="margin-top:20px">
       <span class="insight-icon">🔧</span>
-      <div><strong>Gemini — 테스트 중 자가 발견한 버그 4개:</strong> 빌드는 통과했지만 실기기 설치 시 <code>ClassNotFoundException</code> 발생. 원인: ① <code>kotlin-android</code> 플러그인 누락 ② <code>doWork()</code> non-suspend 선언 ③ AGP 9.2.1 등 실험적 버전 사용 ④ <code>gradle.properties</code>에 <code>android.useAndroidX=true</code> 누락. Gemini가 직접 모두 수정한 뒤 알림 발송 성공.</div>
+      <div>
+        <strong>Gemini — 크래시 → 자가수정 4단계 과정:</strong>
+        <br><br>
+        <strong>1단계 · 빌드 성공 착각:</strong> Gemini의 초기 구현은 <code>assembleDebug</code>를 통과했습니다. 컴파일러가 보기에 문법 오류가 없었기 때문입니다. 그러나 이 시점에 이미 4개의 런타임 시한폭탄이 심어져 있었습니다.
+        <br><br>
+        <strong>2단계 · 실기기 즉시 크래시:</strong> <code>adb install</code> 후 앱을 실행하자마자 <code>ClassNotFoundException</code>이 발생했습니다. 안드로이드 런타임이 Worker 클래스를 찾지 못한 것입니다. <code>assembleDebug</code>는 이 문제를 전혀 잡지 못했습니다.
+        <br><br>
+        <strong>3단계 · 원인 분석 및 수정:</strong> Gemini가 직접 로그를 분석해 4개 원인을 특정했습니다. ① <code>kotlin-android</code> 플러그인이 build.gradle에 누락되어 코틀린 클래스가 제대로 컴파일되지 않음 ② <code>doWork()</code>의 <code>suspend</code> 키워드 누락으로 <code>CoroutineWorker</code> 오버라이드 계약 위반 ③ AGP 9.2.1 등 미출시 실험적 버전 사용으로 런타임 불안정 ④ <code>gradle.properties</code>의 <code>android.useAndroidX=true</code> 누락으로 AndroidX 라이브러리 클래스 로딩 실패. 이 중 ①②④는 <code>assembleDebug</code>가 통과시킨 런타임 버그입니다.
+        <br><br>
+        <strong>4단계 · 재시도 성공:</strong> 4개를 모두 수정한 뒤 재빌드 → 재설치 → WorkManager 강제 트리거 → "GEMINI 서울 날씨 알림 · 대체로 맑음" 알림 수신 성공. 하지만 이 과정이 전체 검증 시간을 2,823초(다른 AI의 약 2~2.7배)로 만들었습니다.
+      </div>
     </div>
 
     <div class="insight" style="margin-top:12px">
       <span class="insight-icon">📌</span>
-      <div><strong>assembleDebug 통과 ≠ 실동작 보장:</strong> Gemini의 V8 구현은 빌드 성공했지만 실기기에서는 즉시 크래시했습니다. <code>assembleDebug</code>는 컴파일 오류만 잡고 런타임 클래스 로딩 문제는 테스트 없이 통과합니다. 실기기 검증이 필수적인 이유입니다.</div>
+      <div><strong>assembleDebug 통과 ≠ 실기기 실동작 보장 — 이번 실험의 핵심 교훈:</strong> <code>assembleDebug</code>는 소스 코드를 DEX 바이트코드로 변환할 때 발생하는 <em>컴파일 오류</em>만 잡습니다. 플러그인 누락, 라이브러리 버전 충돌, 클래스 로딩 실패, API 레벨 불일치 같은 <em>런타임 문제</em>는 기기에서 실제로 실행해봐야만 발견됩니다. Gemini의 V8 사례는 "빌드 성공 = 완성"이라는 착각이 얼마나 위험한지를 보여줍니다. ADB 설치 → WorkManager 강제 트리거 → 스크린샷 확인이라는 실기기 검증 단계가 이 실험에 필수였던 이유입니다.</div>
     </div>
   </section>
 
@@ -385,12 +395,12 @@
 
     <div class="insight" style="margin-top:20px">
       <span class="insight-icon">🏆</span>
-      <div><strong>V8 MVP — Codex:</strong> 속도(410초)·토큰 효율(74,945)·구현 완성도 세 항목 모두에서 앞섰습니다. 특히 권한 이중 방어와 알림 UX(BigTextStyle + 커스텀 아이콘)는 Claude·Gemini에 없는 추가 배려입니다. 목 데이터 선택은 신뢰성과 단순성을 우선한 실용적 판단으로 볼 수 있습니다.</div>
+      <div><strong>V8 MVP — Codex:</strong> 속도(410초)·토큰 효율(74,945)·구현 완성도 세 항목 모두에서 앞섰습니다. <code>CoroutineWorker</code>의 <code>suspend fun doWork()</code> 정석 패턴을 따르면서, 권한 이중 방어(<code>canPostNotifications()</code>를 Worker 내부에서 한 번 더 확인)와 알림 UX(BigTextStyle + 커스텀 벡터 아이콘)는 Claude·Gemini에 없는 추가 배려입니다. 목 데이터 선택은 네트워크 실패와 알림 발송 실패를 분리해 알림 신뢰성을 우선한 실용적 판단입니다.</div>
     </div>
 
     <div class="insight" style="margin-top:12px">
       <span class="insight-icon">📐</span>
-      <div><strong>V7 → V8 일관성:</strong> Codex는 V7의 Repository 인터페이스 패턴을 V8의 Scheduler 분리까지 이어갔습니다. Claude는 V7의 nullable 파라미터 실용주의를 V8에서도 유지했고, Gemini는 V7에서 테스트를 직접 수정한 것처럼 V8에서 코루틴 패턴을 어겼습니다. 두 버전에 걸쳐 각 AI의 설계 철학이 일관되게 나타났습니다.</div>
+      <div><strong>V7 → V8 일관성:</strong> Codex는 V7의 <code>FavoriteCityRepository</code> 인터페이스 패턴을 V8의 <code>WeatherNotificationScheduler</code> 분리까지 이어갔습니다. Claude는 V7의 nullable 파라미터 실용주의를 V8에서도 유지했고, Gemini는 V7에서 테스트를 직접 수정한 것처럼 V8에서 코루틴 패턴을 어겼습니다. 두 버전에 걸쳐 각 AI의 설계 철학이 일관되게 나타났습니다. <strong>한 번의 설계 판단이 버전을 넘어 반복된다</strong>는 점에서, 초기 코드 리뷰에서 패턴을 잡는 것이 중요함을 보여줍니다.</div>
     </div>
   </section>
 

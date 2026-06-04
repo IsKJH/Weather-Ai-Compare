@@ -12,7 +12,7 @@
   <header class="rh">
     <div class="rh-eyebrow">AI CODING TOOL COMPARISON · V9</div>
     <h1 class="rh-title">V9 — 상호 코드 리뷰</h1>
-    <p class="rh-sub">각 AI가 다른 두 AI의 V8 최종 코드를 직접 읽고 평가했습니다. 3개 AI가 서로 다른 강점을 보유하고 정확히 서로에게서 배우는 순환 학습 고리가 형성됐습니다.</p>
+    <p class="rh-sub">각 AI가 다른 두 AI의 V8 최종 코드를 직접 읽고 평가했습니다. 결과: Claude는 Codex에서 Repository 인터페이스 패턴을, Codex는 Claude에서 fetchJob?.cancel() 경쟁 상태 방지를, Gemini는 Codex에서 FakeOpenMeteoServer 테스트 방식을 배웠습니다. 세 AI가 각자 다른 것을 잘하고, 그것을 정확히 서로에게서 배우는 <strong>순환 학습 고리</strong>가 형성된 것입니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span>
       <span class="ai-pill"><span class="dot codex"></span>Codex</span>
@@ -66,7 +66,7 @@
       </div>
       <div class="callout">
         <div class="callout-k">핵심 질문</div>
-        <div class="callout-v">AI는 자기 코드의 부족한 점을 남의 코드에서 발견할 수 있는가? 그리고 그것을 구체적인 개선 계획으로 전환할 수 있는가? V9는 코드 생성 능력이 아닌 <strong>코드 이해·비판·학습</strong> 능력을 측정합니다.</div>
+        <div class="callout-v">AI는 자기 코드의 부족한 점을 남의 코드에서 발견할 수 있는가? 발견했다면 그것을 "다음 버전에서 이렇게 바꾸겠다"는 구체적인 계획으로 전환할 수 있는가? V9는 코드를 새로 짜는 능력이 아니라 <strong>남의 코드를 이해하고, 비판하고, 자기 것으로 흡수하는</strong> 능력을 측정합니다.</div>
       </div>
       <div class="callout">
         <div class="callout-k">특이사항</div>
@@ -192,7 +192,7 @@
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
       <div class="insight">
         <span class="insight-icon">🏆</span>
-        <div><strong>Codex의 FakeOpenMeteoServer 테스트 전략 — 가장 높은 평가 수렴:</strong> Claude는 "가장 낮은 레이어에서 네트워크를 가로채 실제 스택에 가깝게 테스트"로, Gemini는 "네트워크 레이어의 결함을 조기에 발견할 수 있는 강력한 도구"로, Codex 자신도 "1순위 자가 개선 참고 대상"으로 인정. 3개 AI가 동일하게 Codex V5 테스트 전략을 최고 수준으로 평가한 유일한 항목.</div>
+        <div><strong>Codex의 FakeOpenMeteoServer 테스트 전략 — 가장 높은 평가 수렴:</strong> FakeOpenMeteoServer는 실제 네트워크 요청 없이도 HTTP 통신을 흉내내는 테스트용 가짜 서버입니다. Claude는 이를 "가장 낮은 레이어에서 네트워크를 가로채 실제 스택에 가깝게 테스트하는 방식"으로, Gemini는 "네트워크 레이어의 결함을 조기에 발견할 수 있는 강력한 도구"로 평가했습니다. Codex 자신도 "다른 AI의 코드에서 1순위로 배우고 싶은 항목"으로 꼽았습니다. 3개 AI가 동일하게 Codex V5 테스트 전략을 최고 수준으로 평가한 유일한 항목입니다.</div>
       </div>
       <div class="insight">
         <span class="insight-icon">⚠️</span>
@@ -200,7 +200,7 @@
       </div>
       <div class="insight">
         <span class="insight-icon">✨</span>
-        <div><strong>Gemini의 generateInsight() — 창의적 기능 인정:</strong> Claude는 "V3에서 도입해 V8까지 유일하게 유지된 스마트 기능", Codex는 "날씨 데이터를 사용자에게 해석된 형태로 제공하는 것이 경쟁 코드보다 우수". 두 AI가 공통으로 Gemini의 V3 스마트 기능 유지를 강점으로 평가.</div>
+        <div><strong>Gemini의 generateInsight() — 창의적 기능 인정:</strong> generateInsight()는 날씨 데이터를 받아 "기온이 낮고 습도가 높으니 우산을 챙기세요"처럼 사람이 바로 이해할 수 있는 자연어 해석 문구를 생성하는 함수입니다. Claude는 이를 "V3에서 도입해 V8까지 유일하게 유지된 스마트 기능"이라 평가했고, Codex는 "날씨 수치를 해석된 형태로 제공한다는 점이 경쟁 코드보다 우수"라고 인정했습니다. 두 AI 모두 Gemini가 V3 이후 이 기능을 꾸준히 유지한 것을 강점으로 봤습니다.</div>
       </div>
     </div>
 
@@ -258,7 +258,7 @@
 
     <div class="insight" style="margin-top:16px">
       <span class="insight-icon">🔄</span>
-      <div><strong>순환 학습 구조 발견:</strong> Claude → Codex에서 Repository 인터페이스를, Codex → Gemini에서 Retrofit DTO를, Gemini → Claude에서 Repository 패턴을 배웠습니다. 세 AI가 각자 다른 것을 강점으로 보유하고, 그것을 서로에게서 배우는 <strong>완전한 상호 학습 고리</strong>가 형성됐습니다.</div>
+      <div><strong>순환 학습 구조 발견 — "순환 학습 고리"란 무엇인가:</strong> 학습이 한 방향으로만 흐르지 않고 세 AI 사이에서 돌고 돈다는 뜻입니다. Claude → Codex에서 Repository 인터페이스를, Codex → Gemini에서 Retrofit DTO 구조를, Gemini → Claude에서 Repository 패턴을 배웠습니다. 즉 "가르치는 AI"와 "배우는 AI"가 역할이 고정되지 않고 계속 바뀌며, 세 AI 모두가 동시에 배우는 학생이자 가르치는 선생 역할을 했습니다. 이것이 <strong>완전한 상호 학습 고리</strong>입니다.</div>
     </div>
 
     <div class="insight" style="margin-top:12px">
@@ -270,7 +270,7 @@
   <!-- 04 자가 개선 계획 -->
   <section class="card" id="improve">
     <div class="sh"><span class="sh-num">04</span><h2>자가 개선 계획</h2></div>
-    <p style="color:var(--fg2);margin-bottom:16px">각 AI가 리뷰를 마치고 "내 코드에서 바꾸겠다"고 제시한 구체적인 항목. 실제 개선 여부와 무관하게, 무엇을 인식했는지 자체가 이 실험의 핵심 데이터입니다.</p>
+    <p style="color:var(--fg2);margin-bottom:16px">각 AI가 리뷰를 마치고 "내 코드에서 바꾸겠다"고 제시한 구체적인 항목입니다. 각 항목 뒤에는 아이디어를 어느 AI에서 가져왔는지 출처를 표시했습니다. 실제로 코드를 바꾸지 않더라도, 어떤 패턴을 문제로 인식했고 어떤 해결책을 배웠는지가 이 실험의 핵심 데이터입니다.</p>
 
     <div class="ai-grid" style="grid-template-columns:repeat(3,1fr)">
       <div class="ai-card">
@@ -425,15 +425,15 @@
     <div class="score-verdict-grid">
       <div class="score-cell">
         <div class="score-label"><span class="dot claude"></span> Claude</div>
-        <div class="score-desc">Codex의 DIP 패턴과 Gemini의 원자적 상태 업데이트를 정확히 식별했다. 5개 개선 항목 모두 클래스·메서드 수준으로 구체적. 리뷰가 가장 자기비판적이었다 — "좋은 결정과 아쉬운 결정이 뒤섞여 있다".</div>
+        <div class="score-desc">Codex의 DIP(의존성 역전 원칙) 패턴과 Gemini의 <code>_uiState.update{}</code> 원자적 상태 업데이트를 정확히 식별해 개선 계획으로 전환했습니다. 5개 항목 모두 클래스명·메서드명을 명시한 구체적 수준. 리뷰 전반에서 가장 자기비판적이었습니다 — "좋은 결정과 아쉬운 결정이 뒤섞여 있다".</div>
       </div>
       <div class="score-cell">
         <div class="score-label"><span class="dot codex"></span> Codex</div>
-        <div class="score-desc">가장 빠른 리뷰(671초). 파일 직접 접근으로 가장 정확한 코드 레퍼런스. 자가 개선 5개 항목이 다른 AI의 코드를 직접 참조해 구체적. 특히 "처음부터 Retrofit 또는 Repository 인터페이스를 먼저 세우겠다"는 소감이 핵심 교훈 요약.</div>
+        <div class="score-desc">가장 빠른 리뷰(671초). PowerShell로 파일을 직접 읽어 코드 레퍼런스가 가장 정확했습니다. 자가 개선 5개 항목 모두 다른 AI의 실제 코드 패턴을 인용해 구체적. "처음부터 Retrofit 또는 Repository 인터페이스를 먼저 세우겠다"는 소감이 V4~V8 설계 교훈을 가장 정확히 요약합니다.</div>
       </div>
       <div class="score-cell">
         <div class="score-label"><span class="dot gemini"></span> Gemini</div>
-        <div class="score-desc">리포 루트에서 재실행해 파일 직접 읽기 성공. Claude의 <code>fetchJob?.cancel()</code>, Codex의 <code>FakeOpenMeteoServer</code>를 코드 레퍼런스로 정확히 인용. 4개 개선 항목 모두 구체적. 실행 위치가 작업 범위에 미치는 영향을 가장 명확히 보여준 AI.</div>
+        <div class="score-desc">초기 실행 시 워크스페이스 밖 파일 접근이 막혔지만, 리포 루트에서 재실행해 파일 직접 읽기에 성공했습니다. Claude의 <code>fetchJob?.cancel()</code>과 Codex의 <code>FakeOpenMeteoServer</code>를 실제 코드 레퍼런스로 인용해 4개 개선 항목을 도출. 실행 위치(디렉토리)가 AI 도구의 작업 범위를 결정한다는 실용적 교훈을 가장 잘 보여준 사례입니다.</div>
       </div>
     </div>
 
@@ -444,12 +444,12 @@
 
     <div class="insight" style="margin-top:12px">
       <span class="insight-icon">🔍</span>
-      <div><strong>V9 핵심 발견 — AI도 상호 학습이 가능하다:</strong> 3개 AI가 각자 다른 것을 강점으로 보유하고(Claude: 구조·일관성 / Codex: 테스트·DIP / Gemini: 속도·스마트 기능), 서로의 강점을 정확히 인식해 자기 코드 개선 계획으로 전환했습니다. <strong>단독 실험만으로는 관찰 불가능한 AI 간 능력 차이</strong>가 상호 리뷰를 통해 처음으로 드러났습니다.</div>
+      <div><strong>V9 핵심 발견 — AI도 상호 학습이 가능하다:</strong> 3개 AI가 각자 다른 것을 강점으로 보유하고 있었습니다(Claude: 레이어 분리·코루틴 일관성 / Codex: 테스트 자동화·DIP 패턴 / Gemini: 빠른 구현 속도·스마트 기능). 각 AI는 자신에게 없는 강점을 상대 코드에서 정확히 찾아내고, 그것을 "다음에 내 코드에서 이렇게 바꾸겠다"는 구체적인 항목으로 전환했습니다. 이 패턴은 <strong>AI를 단독으로 실험할 때는 보이지 않으며, 오직 AI들이 서로를 평가하는 상호 리뷰 구도에서만 관찰할 수 있습니다.</strong></div>
     </div>
 
     <div class="insight" style="margin-top:12px">
       <span class="insight-icon">🗂️</span>
-      <div><strong>V1→V9 전체 실험의 결론:</strong> V1 한국어 깨짐(Codex)에서 V9 상호 학습까지, 각 AI의 특성은 첫 버전에서 마지막 버전까지 일관됐습니다. Gemini는 빠르지만 샌드박스 제약과 품질 일관성, Codex는 효율적이고 품질 지향적이지만 Worker 목 데이터 같은 실용주의적 타협, Claude는 구조가 좋지만 냉전에는 느립니다. <strong>8단계 누적 실험이 단일 과제에서는 보이지 않는 이 패턴을 비로소 드러냈습니다.</strong></div>
+      <div><strong>V1→V9 전체 실험의 결론:</strong> V1 Codex 한국어 깨짐부터 V9 상호 학습 고리까지, 각 AI의 강점과 약점은 첫 버전에서 마지막 버전까지 놀랍도록 일관됐습니다. Gemini는 항상 가장 빨랐지만 후반부 품질 일관성에서 흔들렸습니다. Codex는 효율적이고 설계 지향적이었지만 V8 Worker에서 실 API 대신 목 데이터를 쓰는 현실적 타협을 했습니다. Claude는 레이어 구조가 가장 체계적이었지만 실행 속도는 느렸습니다. <strong>이 패턴은 단일 과제 하나로는 보이지 않습니다. 8단계 누적 실험을 통해 처음으로 드러났습니다.</strong></div>
     </div>
   </section>
 

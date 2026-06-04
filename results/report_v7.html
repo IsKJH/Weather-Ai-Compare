@@ -12,7 +12,7 @@
   <header class="rh">
     <div class="rh-eyebrow">AI CODING TOOL COMPARISON · V7</div>
     <h1 class="rh-title">V7 — Room Database 영속성</h1>
-    <p class="rh-sub">즐겨찾기 도시를 앱 재시작 후에도 기억하도록 Room DB를 추가했습니다. 기존 단위 테스트 호환 전략이 3가지로 갈렸습니다: Claude(DAO nullable) / Codex(Repository 인터페이스·DIP) / Gemini(테스트 수정).</p>
+    <p class="rh-sub">즐겨찾기 도시를 앱 재시작 후에도 기억하도록 Room DB를 추가했습니다. DB를 추가하면 기존 단위 테스트가 "DAO를 모르기 때문에" 깨지는 문제가 생기는데, 이 <strong>테스트 호환성</strong> 문제를 세 AI가 완전히 다른 방식으로 해결했습니다: Claude(DAO nullable) / Codex(Repository 인터페이스·DIP) / Gemini(기존 테스트 직접 수정).</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span>
       <span class="ai-pill"><span class="dot codex"></span>Codex</span>
@@ -67,8 +67,8 @@
         <div class="callout-v">세 AI 모두 "단일행 테이블" 스키마를 선택했습니다. 차이는 기존 V5 단위 테스트를 어떻게 깨지 않게 유지했느냐 — 접근이 세 가지 모두 달랐습니다.</div>
       </div>
       <div class="callout">
-        <div class="callout-k">V5 연속성</div>
-        <div class="callout-v">V5에서 각 AI가 작성한 단위 테스트가 이번 V7 변경 후에도 통과해야 합니다. DAO 의존성이 ViewModel에 추가되면 테스트가 깨질 수 있기 때문에 호환 전략이 중요합니다.</div>
+        <div class="callout-k">V5 연속성 — 왜 테스트 호환성이 핵심인가</div>
+        <div class="callout-v">V5에서 각 AI가 작성한 단위 테스트는 ViewModel을 생성자 인자 없이 인스턴스화합니다. V7에서 DAO를 ViewModel 생성자에 추가하면, 그 테스트들은 "DAO를 넘기지 않았다"는 이유로 컴파일 단계부터 실패합니다. 이것이 <strong>테스트 호환성 문제</strong>입니다. 새 기능을 추가하면서도 V5 테스트를 무수정으로 통과시키는 것이 이번 단계의 핵심 기술 과제였습니다.</div>
       </div>
     </div>
   </section>
@@ -125,7 +125,7 @@
   <!-- 설계 전략 비교 -->
   <section class="card" id="design">
     <div class="sh"><span class="sh-num">03</span><h2>테스트 호환 설계 전략</h2></div>
-    <p class="lead">Room DAO를 ViewModel에 주입하면 기존 단위 테스트가 DAO 없이 ViewModel을 생성할 수 없게 됩니다. 세 AI가 이 문제를 각각 다른 방식으로 해결했습니다.</p>
+    <p class="lead"><strong>테스트 호환성(Test Compatibility)</strong>이란, 새 기능을 추가한 후에도 이전 단계에서 작성한 단위 테스트가 수정 없이 그대로 통과할 수 있는 상태를 말합니다. Room DAO를 ViewModel 생성자에 추가하면, V5 단계에서 작성된 테스트는 DAO를 인자로 넘기지 않기 때문에 컴파일 자체가 실패합니다. 세 AI가 이 문제를 각각 다른 방식으로 해결했습니다.</p>
 
     <div class="tbl-wrap">
       <table>
@@ -143,22 +143,22 @@
             <td class="col-label"><span class="dot claude"></span> Claude</td>
             <td><strong>DAO nullable 파라미터</strong><br>DAO가 null이면 DB 작업 생략</td>
             <td><code>class WeatherViewModel(private val dao: FavoriteCityDao? = null)</code></td>
-            <td>기존 테스트 코드 무수정. 최소한의 변경.</td>
-            <td>null 체크가 프로덕션 코드에 남음. 타입 안전성 약함.</td>
+            <td>기존 테스트 코드를 한 줄도 건드리지 않아 테스트 호환성을 완벽히 유지합니다. 변경 범위가 최소화되어 도입 위험이 낮습니다.</td>
+            <td>DAO가 null일 수 있다는 사실이 프로덕션 코드에 <code>dao?.upsert()</code> 형태로 남습니다. 실제로는 프로덕션에서 null이 들어올 일이 없는데도 코드가 방어적으로 작성되어, 타입 시스템이 "DAO가 없는 상태"를 정상 경로로 오인할 수 있습니다.</td>
           </tr>
           <tr class="row-hl">
             <td class="col-label"><span class="dot codex"></span> Codex</td>
-            <td><strong>Repository 인터페이스 + NoOp</strong><br>테스트에선 NoOp, 프로덕션에선 Room 구현체</td>
+            <td><strong>Repository 인터페이스 + NoOp 구현체</strong><br>테스트에선 아무것도 안 하는 NoOp, 프로덕션에선 Room 구현체 주입</td>
             <td><code>interface FavoriteCityRepository</code><br><code>object NoOpFavoriteCityRepository</code></td>
-            <td>의존성 역전 원칙(DIP) 적용. 테스트·프로덕션 교체 용이. 가장 확장성 높음.</td>
-            <td>파일 5개 추가로 코드량 증가.</td>
+            <td><strong>의존성 역전 원칙(DIP, Dependency Inversion Principle)</strong> — "상위 모듈(ViewModel)은 구체적인 구현(Room)에 의존하지 말고 추상(인터페이스)에 의존해야 한다"는 원칙 — 을 적용했습니다. ViewModel은 <code>FavoriteCityRepository</code> 인터페이스만 알고, 어떤 구현체가 주입되는지 관심이 없습니다. <strong>NoOpFavoriteCityRepository</strong>는 인터페이스를 구현하되 실제 저장은 아무것도 하지 않는 "빈 껍데기" 구현체로, 테스트에서 DB 없이 주입할 수 있습니다. Hilt·Koin 같은 DI 프레임워크를 도입하거나 구현체를 교체할 때 ViewModel 코드를 전혀 수정하지 않아도 됩니다.</td>
+            <td>파일 5개 추가로 코드량이 늘어납니다. 소규모 프로젝트에서는 과설계처럼 보일 수 있습니다.</td>
           </tr>
           <tr>
             <td class="col-label"><span class="dot gemini"></span> Gemini</td>
-            <td><strong>기존 테스트 직접 수정</strong><br>DAO를 MockK로 mock해서 테스트에 주입</td>
+            <td><strong>기존 테스트 직접 수정</strong><br>DAO를 MockK로 mock해서 기존 테스트에 주입</td>
             <td><code>val mockDao = mockk&lt;FavoriteCityDao&gt;()</code></td>
-            <td>프로덕션 코드가 가장 단순하고 명확.</td>
-            <td>V5 원칙("기존 테스트 무수정") 위반. 테스트 변경 시 DAO 구현 변경도 필요.</td>
+            <td>프로덕션 코드가 가장 단순하고 명확합니다. DAO가 직접 주입되므로 의도가 코드에 바로 드러납니다.</td>
+            <td>이 실험의 V5 단계 원칙인 "기존 테스트는 수정하지 말 것"을 직접 위반합니다. 테스트를 수정 가능한 산출물로 취급하면, 이후 V8·V9 단계에서도 기능 추가 때마다 테스트가 변경되어 "테스트가 설계 변경으로부터 코드를 보호한다"는 역할을 잃게 됩니다. 또한 DAO 시그니처가 바뀔 때마다 테스트도 함께 수정해야 하는 결합도 문제가 생깁니다.</td>
           </tr>
         </tbody>
       </table>
@@ -166,15 +166,15 @@
 
     <div class="insight">
       <span class="insight-icon">🏆</span>
-      <div><strong>Codex의 Repository 인터페이스 접근이 가장 설계 지향적입니다.</strong> 의존성 역전 원칙을 적용해 테스트에서 NoOp 구현체, 프로덕션에서 Room 구현체를 주입하는 구조입니다. Hilt 같은 DI 프레임워크 도입 시에도 인터페이스만 바꾸면 됩니다.</div>
+      <div><strong>Codex의 Repository 인터페이스 접근이 가장 설계 지향적입니다.</strong> DIP를 적용해 ViewModel이 구체 클래스(Room DAO) 대신 추상(인터페이스)에 의존하도록 했습니다. 이 구조의 강점은 "교체 가능성"에 있습니다. 테스트에선 NoOp 구현체를, 프로덕션에선 Room 구현체를 주입하면 되고, 나중에 DataStore나 다른 저장소로 교체해도 ViewModel 코드를 건드리지 않아도 됩니다. 약점은 파일 수 증가로 인한 초기 코드량이지만, 프로젝트 규모가 커질수록 이 투자는 상쇄됩니다.</div>
     </div>
     <div class="insight">
       <span class="insight-icon">💡</span>
-      <div><strong>Claude의 nullable DAO는 실용적 선택입니다.</strong> 기존 테스트를 한 줄도 건드리지 않으면서 가장 적은 코드 변경으로 목표를 달성했습니다. 다만 <code>dao?.upsert()</code> 형태의 null 체크가 프로덕션 코드에 남는 것은 타입 안전성 측면에서 아쉽습니다.</div>
+      <div><strong>Claude의 nullable DAO는 방어적 타협입니다.</strong> 기존 테스트를 수정하지 않으면서 가장 적은 코드 변경으로 목표를 달성한 실용적 선택입니다. 강점은 변경 범위가 최소화되고 테스트 호환성이 완벽하다는 점입니다. 약점은 DAO가 null일 수 있다는 사실이 프로덕션 코드에 영구적으로 남아, 실제로는 발생하지 않는 null 경로를 코드가 계속 인지하고 있어야 한다는 점입니다.</div>
     </div>
     <div class="insight">
       <span class="insight-icon">⚠️</span>
-      <div><strong>Gemini는 기존 테스트를 수정했습니다.</strong> 프롬프트에 "기존 테스트를 수정하지 말 것"을 명시했는데, Gemini는 DAO mock을 추가하는 방식으로 테스트를 변경했습니다. 프로덕션 코드는 가장 단순하지만, 지시 이행 정확도에서 차이가 있습니다.</div>
+      <div><strong>Gemini의 기존 테스트 수정은 왜 문제인가.</strong> 이 실험은 V5 단계부터 "기존 테스트는 수정하지 말 것"을 명시적 원칙으로 설정했습니다. 이 원칙이 존재하는 이유는 단위 테스트가 <em>코드 변경의 안전망</em>이기 때문입니다. 테스트를 수정하면 그 안전망 자체가 흔들리고, 테스트가 "기능이 올바른지 확인"하는 역할 대신 "새 기능에 맞춰 계속 따라가야 하는 대상"으로 성격이 바뀝니다. Gemini는 프로덕션 코드를 가장 단순하게 작성했지만, 지시 이행 정확도와 장기적 설계 원칙 준수 측면에서 다른 두 AI와 차이가 있습니다.</div>
     </div>
   </section>
 
@@ -296,7 +296,7 @@
 
     <div class="insight" style="margin-top:16px">
       <span class="insight-icon">📊</span>
-      <div><strong>V7 종합:</strong> Codex가 속도·설계·토큰 효율 3관왕을 달성했습니다. Repository 인터페이스 도입은 V9 상호 코드 리뷰 때 다른 AI가 "이 코드는 이미 DI에 준비되어 있다"고 평가할 가능성이 높습니다. Gemini는 빌드에 성공했지만 프롬프트 지시("기존 테스트 무수정")를 이행하지 못한 점이 아쉽습니다. <strong>V5에서 Codex가 선택한 URLStreamHandler 방식보다 이번 Repository 인터페이스가 훨씬 관용적인 설계입니다.</strong></div>
+      <div><strong>V7 종합:</strong> Codex가 속도·설계·토큰 효율 3관왕을 달성했습니다. Repository 인터페이스 도입은 DIP를 실현한 설계로, V9 상호 코드 리뷰 때 다른 AI가 "이 코드는 이미 DI 프레임워크 도입에 준비되어 있다"고 평가할 가능성이 높습니다. Claude는 테스트 호환성을 지키는 실용적 선택을 했으나 nullable로 인한 타입 안전성 약화가 장기적 약점입니다. Gemini는 빌드에 성공했지만, 프롬프트의 핵심 지시인 "기존 테스트 무수정"을 따르지 않아 실험 평가 기준에서 감점 요인이 됩니다. <strong>V5에서 Codex가 선택한 URLStreamHandler 방식보다 이번 Repository 인터페이스가 훨씬 관용적인 설계입니다.</strong></div>
     </div>
   </section>
 
