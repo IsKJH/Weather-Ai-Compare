@@ -337,7 +337,7 @@ body {
 .reveal.visible { opacity: 1; transform: none; }
 
 /* ── EVENTS GRID ── */
-.events-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+.events-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 .ev-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 18px 20px; }
 .ev-tag { display: inline-flex; font-size: 10.5px; font-weight: 700; letter-spacing: .3px; padding: 2px 8px; border-radius: 3px; margin-bottom: 8px; border: 1px solid transparent; }
 .claude-tag { color: var(--claude); background: rgba(194,98,42,.08); border-color: rgba(194,98,42,.2); }
@@ -417,7 +417,7 @@ body {
     </div>
     <div class="stat-item">
       <div class="stat-n">Gemini</div>
-      <div class="stat-l">전 단계 최단 · 426~318초</div>
+      <div class="stat-l">V1~V6 전 단계 최단 · V7부터 Codex 역전</div>
     </div>
     <div class="stat-item">
       <div class="stat-n">Codex</div>
@@ -671,6 +671,11 @@ body {
         <div class="ev-tag gemini-tag">V7–V8 · Gemini</div>
         <div class="ev-title">연속 원칙 위반</div>
         <div class="ev-desc">V7: 기존 테스트 직접 수정(V5 원칙 위반). V8: <code>runBlocking</code> 안티패턴 → 빌드 통과 후 실기기 크래시. 직접 발견·수정.</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-tag codex-tag">V9 · 전체</div>
+        <div class="ev-title">3개 AI 상호 리뷰 — 순환 학습</div>
+        <div class="ev-desc">Claude·Codex·Gemini가 서로의 V8 코드를 직접 읽고 평가. Codex의 <code>FakeOpenMeteoServer</code>가 세 AI 모두로부터 "가장 독창적인 테스트"로 극찬을 받았습니다. 자가 개선 계획 14개 도출.</div>
       </div>
     </div>
   </section>

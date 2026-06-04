@@ -206,7 +206,7 @@
         <span class="diff-bar-num">×1.0 기준</span>
       </div>
     </div>
-    <div class="note-box">언어 차이 고려: Flutter는 Android보다 초기 세팅(pubspec.yaml, build_runner 설정, Riverpod 세팅)에 약 10~15분이 추가됩니다. 순수 화면 구현만 따지면 실제 차이는 약 ×10 수준으로 추정됩니다.</div>
+    <div class="note-box">언어 차이 고려: Flutter는 Android보다 초기 세팅(pubspec.yaml, build_runner 설정, Riverpod 세팅)에 약 10~15분이 추가됩니다. 순수 화면 구현만 따지면 실제 차이는 약 ×10 수준으로 추정됩니다. Codex V1은 실행 환경 차이로 Phase 1 시간이 기록되지 않았습니다(전체 실험 대시보드의 측정 시간과 다를 수 있음).</div>
 
     <h3 style="font-size:14px;font-weight:850;color:#555;margin:20px 0 10px;">코드량 비교</h3>
     <div class="tbl-wrap">
@@ -260,8 +260,8 @@
             <td class="col-label">메인 UI 파일</td>
             <td>weather_screen.dart<br><span style="color:#9CA3AF;font-size:12px;">296줄</span></td>
             <td>WeatherScreen.kt<br><span style="color:#9CA3AF;font-size:12px;">340줄</span></td>
-            <td>WeatherScreen.kt<br><span style="color:#9CA3AF;font-size:12px;">-</span></td>
-            <td>WeatherScreen.kt<br><span style="color:#9CA3AF;font-size:12px;">-</span></td>
+            <td>WeatherScreen.kt</td>
+            <td>WeatherScreen.kt</td>
           </tr>
           <tr class="row-hl">
             <td class="col-label">소요 시간</td>
@@ -350,7 +350,7 @@
 
     <!-- 이 코드가 증명하는 것 -->
     <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border,#E8E8E8)">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3,#888);margin-bottom:12px">이 Flutter 코드가 증명하는 것</p>
+      <h3 style="font-size:14px;font-weight:850;color:#555;margin:0 0 10px;">이 코드가 증명하는 것 — AI가 도달하는 데 7단계가 필요했던 설계를 첫 버전에서 적용</h3>
       <div class="insight-grid">
         <div class="insight purple">
           <div class="insight-k">V7 패턴을 V1에서 적용</div>
@@ -416,7 +416,7 @@
       </div>
       <div class="diff-bar-row">
         <span class="diff-bar-label"><span class="dot claude" style="display:inline-block;margin-right:5px;"></span>Claude</span>
-        <div class="diff-bar-track"><div class="diff-bar-fill claude" style="width:7.5%"></div></div>
+        <div class="diff-bar-track"><div class="diff-bar-fill claude" style="width:11.2%"></div></div>
         <span class="diff-bar-num">×2.4배</span>
       </div>
       <div class="diff-bar-row">
@@ -492,18 +492,18 @@
       <div class="time-box">
         <div class="time-ai"><span class="dot claude" style="display:inline-block;margin-right:5px;"></span>Claude · Kotlin</div>
         <div class="time-val">412.5초</div>
-        <div class="time-sub">Visual Logic &amp; UI</div>
+        <div class="time-sub">시각적 날씨 UI 개선</div>
       </div>
       <div class="time-box">
         <div class="time-ai"><span class="dot gemini" style="display:inline-block;margin-right:5px;"></span>Gemini · Kotlin</div>
         <div class="time-val">185.2초</div>
-        <div class="time-sub">Narrative Insight 카드</div>
+        <div class="time-sub">날씨 내러티브 인사이트 카드</div>
         <div class="time-badge">최단</div>
       </div>
       <div class="time-box">
         <div class="time-ai"><span class="dot codex" style="display:inline-block;margin-right:5px;"></span>Codex · Kotlin</div>
         <div class="time-val">280초</div>
-        <div class="time-sub">Dynamic Refresh Engine</div>
+        <div class="time-sub">코드 리팩터링 (-178줄)</div>
       </div>
     </div>
 
