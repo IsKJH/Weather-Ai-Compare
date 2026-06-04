@@ -11,7 +11,7 @@
 
   <header class="rh">
     <h1 class="rh-title">V9 — 상호 코드 리뷰</h1>
-    <p class="rh-sub">각 AI가 다른 두 AI의 V8 최종 코드를 직접 읽고 평가했습니다. 결과: Claude는 Codex에서 Repository 인터페이스 패턴을, Codex는 Claude에서 fetchJob?.cancel() 경쟁 상태 방지를, Gemini는 Codex에서 FakeOpenMeteoServer 테스트 방식을 배웠습니다. 세 AI가 각자 다른 것을 잘하고, 그것을 정확히 서로에게서 배우는 <strong>순환 학습 고리</strong>가 형성된 것입니다.</p>
+    <p class="rh-sub">각 AI가 다른 두 AI의 V8 최종 코드를 직접 읽고 평가했습니다. 각자 다른 강점을 가진 세 AI가 서로의 코드에서 배울 점을 정확히 찾아냈습니다. 이 단계의 결과는 <strong>개선 계획 도출</strong>까지입니다 — 실제 코드 변경은 이번 실험의 범위 밖이며, 어떤 패턴을 문제로 인식했는지 자체가 이 실험의 데이터입니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span>
       <span class="ai-pill"><span class="dot codex"></span>Codex</span>
@@ -22,7 +22,7 @@
     <div class="rh-tldr">
       <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">각 AI가 다른 두 AI의 코드를 직접 읽고 품질 평가 + 자가 개선 계획 총 14개 도출</div></div>
       <div><div class="rh-tldr-label">핵심 차이점</div><div class="rh-tldr-val">Codex FakeOpenMeteoServer가 전원 최고 평가. Claude fetchJob?.cancel(), Gemini generateInsight()를 서로가 강점으로 인정</div></div>
-      <div><div class="rh-tldr-label">결론</div><div class="rh-tldr-val"><strong>순환 학습 고리 형성</strong> &middot; Codex 671초 최단 &middot; AI도 상호 학습 가능</div></div>
+      <div><div class="rh-tldr-label">결론</div><div class="rh-tldr-val"><strong>서로의 강점을 정확히 인식</strong> &middot; Codex 671초 최단 &middot; 개선 계획 14개 도출 (코드 변경은 이번 실험 범위 밖)</div></div>
     </div>
   </header>
 

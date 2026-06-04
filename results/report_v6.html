@@ -307,53 +307,18 @@
   <section class="card" id="verdict">
     <div class="sh"><span class="sh-num">06</span><h2>최종 평가</h2></div>
 
-    <div class="score-grid">
-      <div class="score-hdr">평가 기준</div>
-      <div class="score-hdr claude">Claude</div>
-      <div class="score-hdr codex">Codex</div>
-      <div class="score-hdr gemini">Gemini</div>
-
-      <div class="score-row hl">
-        <div class="score-label">버그 발견</div>
-        <div class="score-val">✅</div>
-        <div class="score-val">✅</div>
-        <div class="score-val">✅</div>
+    <div class="score-verdict-grid">
+      <div class="score-cell">
+        <div class="score-label"><span class="dot claude"></span> Claude</div>
+        <div class="score-desc">버그 5/5 발견. git diff로 변경점을 먼저 파악해 빠르게 위치를 잡는 접근. 빌드 확인으로 수정을 마무리했으며 환경 문제 없이 완료.</div>
       </div>
-      <div class="score-row">
-        <div class="score-label">코드 독해력 (과정)</div>
-        <div class="score-val">⭐⭐</div>
-        <div class="score-val">⭐⭐⭐</div>
-        <div class="score-val">⭐⭐⭐</div>
+      <div class="score-cell">
+        <div class="score-label"><span class="dot codex"></span> Codex</div>
+        <div class="score-desc">버그 5/5 발견. 수정 후 V5에서 직접 작성한 단위 테스트까지 자체 실행해 동작을 객관적으로 증명. JAVA_HOME 오류도 스스로 해결. 이번 단계에서 가장 철저한 검증.</div>
       </div>
-      <div class="score-row">
-        <div class="score-label">검증 품질</div>
-        <div class="score-val">⭐⭐</div>
-        <div class="score-val">⭐⭐⭐</div>
-        <div class="score-val">⭐</div>
-      </div>
-      <div class="score-row">
-        <div class="score-label">토큰 효율</div>
-        <div class="score-val">⭐⭐</div>
-        <div class="score-val">⭐⭐⭐</div>
-        <div class="score-val">⭐</div>
-      </div>
-      <div class="score-row">
-        <div class="score-label">속도</div>
-        <div class="score-val">⭐⭐</div>
-        <div class="score-val">⭐⭐</div>
-        <div class="score-val">⭐⭐⭐</div>
-      </div>
-      <div class="score-row">
-        <div class="score-label">장애물 대응</div>
-        <div class="score-val">⭐⭐⭐</div>
-        <div class="score-val">⭐⭐⭐</div>
-        <div class="score-val">⭐</div>
-      </div>
-      <div class="score-row hl">
-        <div class="score-label">자율 범위 확장</div>
-        <div class="score-val">⭐⭐</div>
-        <div class="score-val">⭐⭐⭐</div>
-        <div class="score-val">⭐⭐</div>
+      <div class="score-cell">
+        <div class="score-label"><span class="dot gemini"></span> Gemini</div>
+        <div class="score-desc">버그 5/5 발견이 가장 빠름(194초). git diff 없이 코드 직독으로 찾은 것이 인상적. 그러나 JAVA_HOME 환경 오류로 빌드 검증을 완료하지 못했음.</div>
       </div>
     </div>
 

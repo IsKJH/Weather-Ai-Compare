@@ -702,7 +702,7 @@ body {
           </tr>
           <!-- ── 소요 시간 ── -->
           <tr style="background:var(--faint)">
-            <td colspan="5" style="padding:7px 18px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)">소요 시간 (초) &nbsp;·&nbsp; Cursor는 V4 직전 사용량 한도 초과로 이탈</td>
+            <td colspan="5" style="padding:7px 18px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)">소요 시간 (초) &nbsp;·&nbsp; Cursor는 V4 직전 무료 플랜 한도 도달로 이탈</td>
           </tr>
           <tr>
             <td class="rk">V1 첫 생성</td>
@@ -836,7 +836,7 @@ body {
         </tbody>
       </table>
     </div>
-    <p class="note">Gemini는 V1~V6까지 매 단계 가장 빠릅니다. V7부터 Codex가 역전합니다. Cursor는 V4 직전 구독 한도를 소진해 이후 실험에서 빠졌습니다. Gemini V9 시간에는 재실행이 포함됩니다.</p>
+    <p class="note">Gemini는 V1~V6까지 매 단계 가장 빠릅니다. V7부터 Codex가 역전합니다. Cursor는 V4 직전 무료 플랜 한도에 도달해 이후 실험에서 빠졌습니다. Gemini V9 시간에는 재실행이 포함됩니다.</p>
   </section>
 
   <!-- 코드 성장 추이 -->
@@ -1035,6 +1035,7 @@ body {
             <span class="ai-tag warn">토큰 최다</span>
           </div>
           <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> V4 Repository 설계가 V5~V8에 연쇄적으로 긍정 영향을 줬습니다. 기능 추가 속도는 가장 느리지만, 그 대신 코드베이스를 오래 건강하게 유지하는 방향을 일관되게 선택했습니다.</div>
+          <div class="ai-arc" style="border-top:1px dashed var(--border);margin-top:8px;padding-top:8px;font-style:italic"><strong style="color:var(--ink);font-style:normal">실사용 느낌:</strong> 요구사항을 가장 잘 이해하고 원하는 방향으로 움직임. 단, 작업이 길어지면 토큰 한도에 자주 걸림.</div>
         </div>
       </div>
       <div class="ai-card">
@@ -1050,7 +1051,8 @@ body {
             <span class="ai-tag good">토큰 효율 최고</span>
             <span class="ai-tag good">자가수정 능력</span>
           </div>
-          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 실패에서 배우는 능력(V2 한국어 수정, V5 테스트 자가진단)과 설계 지향적 선택(V3 리팩터링, V7 DIP)이 가장 두드러집니다. V4 이후 한도를 초과한 Cursor를 제외하면 누적 종합 1위입니다.</div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 실패에서 배우는 능력(V2 한국어 수정, V5 테스트 자가진단)과 설계 지향적 선택(V3 리팩터링, V7 DIP)이 가장 두드러집니다. V4 이후 무료 플랜 한도를 초과한 Cursor를 제외하면 누적 종합 1위입니다.</div>
+          <div class="ai-arc" style="border-top:1px dashed var(--border);margin-top:8px;padding-top:8px;font-style:italic"><strong style="color:var(--ink);font-style:normal">실사용 느낌:</strong> 무난하고 안정적. Claude보다 지시 정확도는 낮지만, 토큰 여유가 많아 긴 작업을 중단 없이 이어갈 수 있음.</div>
         </div>
       </div>
       <div class="ai-card">
@@ -1068,6 +1070,7 @@ body {
             <span class="ai-tag bad">V8 안티패턴</span>
           </div>
           <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 초반 속도와 창의성이 후반 품질 일관성으로 이어지지 못했습니다. V6, V7, V8에서 연속으로 품질 이슈가 발생한 것은 우연이 아닌 패턴으로 보입니다.</div>
+          <div class="ai-arc" style="border-top:1px dashed var(--border);margin-top:8px;padding-top:8px;font-style:italic"><strong style="color:var(--ink);font-style:normal">실사용 느낌:</strong> 응답이 가장 빠르지만 간헐적으로 무한 로딩, rate limit, 환경 오류가 발생함. 이번 실험에서도 그 패턴이 반복됐음.</div>
         </div>
       </div>
       <div class="ai-card">
@@ -1077,13 +1080,14 @@ body {
           <span class="ai-model">auto (Cursor Agent)</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">VS Code IDE 안에서 동작하는 에이전트 방식으로 V1~V3를 진행했습니다. V3에서 쾌적 지수(온도·습도·체감온도를 종합해 '지금 나가기 좋은지' 알려주는 기능)를 추가해 전 단계 코드량 최다(11파일·986줄)를 달성했습니다. V4부터 플랜 사용량 한도 초과로 비교에서 이탈했습니다.</p>
+          <p class="ai-summary">VS Code IDE 안에서 동작하는 에이전트 방식으로 V1~V3를 진행했습니다. V3에서 쾌적 지수(온도·습도·체감온도를 종합해 '지금 나가기 좋은지' 알려주는 기능)를 추가해 전 단계 코드량 최다(11파일·986줄)를 달성했습니다. V4부터 무료 플랜 한도 도달로 비교에서 이탈했습니다.</p>
           <div class="ai-tags">
             <span class="ai-tag good">APK 자동 빌드</span>
             <span class="ai-tag good">V3 스마트 기능</span>
             <span class="ai-tag warn">V4부터 한도 초과</span>
           </div>
-          <div class="ai-arc"><strong style="color:var(--ink)">V1–V3 아크:</strong> IDE에 직접 통합된 에이전트 방식의 강점(풍부한 컨텍스트, 자동 빌드)이 두드러졌습니다. 그러나 유료 플랜 사용량 한도가 장기 실험의 걸림돌이 됐습니다.</div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V3 아크:</strong> IDE에 직접 통합된 에이전트 방식의 강점(풍부한 컨텍스트, 자동 빌드)이 두드러졌습니다. 그러나 무료 플랜 한도가 장기 실험의 걸림돌이 됐습니다.</div>
+          <div class="ai-arc" style="border-top:1px dashed var(--border);margin-top:8px;padding-top:8px;font-style:italic"><strong style="color:var(--ink);font-style:normal">실사용 느낌:</strong> IDE 안에서 코드가 바로 적용되는 방식이 직관적. 단, 무료 플랜은 장기 프로젝트에서 금방 소진됨.</div>
         </div>
       </div>
     </div>
@@ -1113,6 +1117,34 @@ body {
         <div class="vbox-name">Claude</div>
         <div class="vbox-desc">V4 Repository 설계가 V5~V8에 연쇄 긍정 영향. 지시 이행률 최고. V8에서도 runBlocking 없는 정석 코루틴 구현. 여러 사람이 함께 유지보수해야 하는 팀 협업 코드베이스에 적합합니다.</div>
       </div>
+    </div>
+
+    <!-- 상황별 도구 선택 -->
+    <div style="margin-bottom:20px">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">상황별 도구 선택</p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+        <div style="background:var(--faint);border-radius:6px;padding:14px 18px;border-left:3px solid var(--gemini)">
+          <div style="font-size:11px;font-weight:700;color:var(--gemini);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">빠른 프로토타입</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Gemini</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.65">V1~V6 전 단계 최단. 일단 빠르게 만들어보고 싶을 때.</div>
+        </div>
+        <div style="background:var(--faint);border-radius:6px;padding:14px 18px;border-left:3px solid var(--codex)">
+          <div style="font-size:11px;font-weight:700;color:var(--codex);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">긴 작업 · 비용 절감</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Codex</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.65">토큰 효율 최고. 한도 걱정 없이 이어서 작업 가능.</div>
+        </div>
+        <div style="background:var(--faint);border-radius:6px;padding:14px 18px;border-left:3px solid var(--claude)">
+          <div style="font-size:11px;font-weight:700;color:var(--claude);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">복잡한 요구사항 · 정확도</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Claude Code</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.65">지시를 가장 잘 이해함. 단, 작업이 길어지면 토큰 한도 주의.</div>
+        </div>
+        <div style="background:var(--faint);border-radius:6px;padding:14px 18px;border-left:3px solid #111827">
+          <div style="font-size:11px;font-weight:700;color:#111827;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">IDE 통합 방식 선호</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Cursor</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.65">IDE 안에서 바로 적용되는 방식. 무료 플랜은 장기 프로젝트에 부족할 수 있음.</div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;font-style:italic">* 실사용 경험 기반 (이 실험 포함 일반 사용 경험 종합)</p>
     </div>
 
     <div class="learn-grid">
