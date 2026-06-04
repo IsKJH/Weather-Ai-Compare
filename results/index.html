@@ -19,7 +19,7 @@ html { scroll-behavior: smooth; }
   --bg:       #F5F5F5;
   --surface:  #FFFFFF;
   --border:   #E2E2E2;
-  --muted:    #777777;
+  --muted:    #646464;
   --faint:    #F0F0F0;
   --mono:     'JetBrains Mono', monospace;
 }
@@ -78,7 +78,7 @@ body {
   max-width: 760px; margin-bottom: 18px;
 }
 .hero-sub {
-  font-size: 15.5px; color: var(--muted);
+  font-size: 16px; color: var(--muted);
   line-height: 1.85; max-width: 580px; margin-bottom: 28px;
 }
 .hero-badges { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -158,15 +158,9 @@ body {
   display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
   position: relative;
 }
-.human-banner::before {
-  content: 'NEW'; position: absolute; top: 16px; right: 16px;
-  font-family: var(--mono); font-size: 9px; font-weight: 700;
-  letter-spacing: 1.5px; background: var(--human); color: #fff;
-  padding: 2px 7px; border-radius: 3px;
-}
 .hb-tag { font-size: 11px; font-weight: 700; color: var(--human); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
 .hb-title { font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.4; margin-bottom: 5px; }
-.hb-desc { font-size: 14px; color: var(--muted); line-height: 1.75; }
+.hb-desc { font-size: 14.5px; color: var(--muted); line-height: 1.75; }
 .hb-nums { display: flex; gap: 20px; flex-shrink: 0; align-items: center; }
 .hb-num { text-align: center; }
 .hb-n { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--ink); line-height: 1; }
@@ -198,9 +192,9 @@ body {
 .phase-title { font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.3; }
 .phase-desc { font-size: 14px; color: var(--muted); line-height: 1.75; flex: 1; }
 .phase-result {
-  font-size: 13px; color: var(--muted);
+  font-size: 13.5px; color: var(--muted);
   background: var(--faint); border: 1px solid var(--border);
-  border-radius: 4px; padding: 7px 11px; line-height: 1.6;
+  border-radius: 4px; padding: 8px 12px; line-height: 1.65;
 }
 .phase-link {
   text-decoration: none; font-size: 13.5px; font-weight: 700; color: var(--ink);
@@ -267,7 +261,7 @@ body {
 }
 .gp-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
 .gp-title { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-.gp-desc { font-size: 14px; color: var(--muted); line-height: 1.75; }
+.gp-desc { font-size: 14.5px; color: var(--muted); line-height: 1.8; }
 .gp-btn {
   text-decoration: none; background: var(--ink); color: #fff;
   padding: 9px 18px; border-radius: 4px; font-size: 13px;
@@ -307,7 +301,7 @@ body {
 .growth-fill { height: 100%; border-radius: 2px; background: var(--ink); transition: width .6s cubic-bezier(.25,.46,.45,.94); }
 .growth-val { font-family: var(--mono); font-size: 12.5px; font-weight: 700; color: var(--ink); width: 52px; text-align: right; }
 .growth-diff { font-size: 11px; color: var(--muted); width: 48px; text-align: right; }
-.growth-note { font-size: 13.5px; color: var(--muted); margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border); line-height: 1.65; }
+.growth-note { font-size: 14px; color: var(--muted); margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border); line-height: 1.7; }
 
 /* ── V3 EVAL TABLE ── */
 .eval-wrap { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
@@ -318,7 +312,7 @@ body {
 .eval-table thead th.gm { color: var(--gemini); }
 .eval-table tbody td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
 .eval-table tbody tr:last-child td { border-bottom: none; font-weight: 700; background: var(--faint); }
-.eval-table td.crit { font-size: 13px; color: var(--muted); font-weight: 500; }
+.eval-table td.crit { font-size: 13.5px; color: var(--muted); font-weight: 500; }
 .eval-table td.score { font-family: var(--mono); font-weight: 700; color: var(--ink); }
 .eval-table td.score.top { color: var(--codex); }
 
@@ -327,7 +321,7 @@ body {
 .read-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 20px 22px; }
 .read-n { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--faint); line-height: 1; margin-bottom: 10px; -webkit-text-stroke: 1.5px var(--border); }
 .read-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
-.read-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.read-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
 
 /* ── FOOTER ── */
 .footer { background: var(--surface); border-top: 1px solid var(--border); padding: 22px 36px; font-size: 12px; color: var(--muted); text-align: center; }
@@ -350,7 +344,7 @@ body {
 .vbox { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 18px 20px; }
 .vbox-rank { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 6px; }
 .vbox-name { font-size: 17px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
-.vbox-desc { font-size: 14px; color: var(--muted); line-height: 1.75; }
+.vbox-desc { font-size: 14.5px; color: var(--muted); line-height: 1.8; }
 
 /* ── LEARN BOX ── */
 .learn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -442,22 +436,22 @@ body {
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">속도</div>
         <div style="font-size:17px;font-weight:800;margin-bottom:5px">Gemini</div>
-        <div style="font-size:13px;opacity:.6;line-height:1.65">전 단계 최단. V2 149초로 Claude(360초) 대비 2.4배 빠름</div>
+        <div style="font-size:14px;opacity:.8;line-height:1.7">전 단계 최단. V2 149초로 Claude(360초) 대비 2.4배 빠름</div>
       </div>
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">코드 품질 · 효율</div>
         <div style="font-size:17px;font-weight:800;margin-bottom:5px">Codex</div>
-        <div style="font-size:13px;opacity:.6;line-height:1.65">V4 토큰 57배 절감. DIP 패턴 일관 적용. V5 자가수정 성공</div>
+        <div style="font-size:14px;opacity:.8;line-height:1.7">V4 토큰 57배 절감. DIP 패턴 일관 적용. V5 자가수정 성공</div>
       </div>
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">설계의 파급효과</div>
         <div style="font-size:17px;font-weight:800;margin-bottom:5px">V4가 V5~V8 결정</div>
-        <div style="font-size:13px;opacity:.6;line-height:1.65">Claude V4에서 Repository 레이어를 분리하자 V5 테스트가 140줄로 끝났습니다. Codex는 ViewModel에 통합했고 V5 테스트에 245줄이 필요했습니다. 설계 하나가 이후 모든 단계의 복잡도를 결정했습니다.</div>
+        <div style="font-size:14px;opacity:.8;line-height:1.7">Claude V4에서 Repository 레이어를 분리하자 V5 테스트가 140줄로 끝났습니다. Codex는 ViewModel에 통합했고 V5 테스트에 245줄이 필요했습니다. 설계 하나가 이후 모든 단계의 복잡도를 결정했습니다.</div>
       </div>
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">핵심 발견</div>
         <div style="font-size:17px;font-weight:800;margin-bottom:5px">빌드 ≠ 실동작</div>
-        <div style="font-size:13px;opacity:.6;line-height:1.65">V8 Gemini는 빌드(assembleDebug)가 성공했지만 실기기에서 즉시 크래시. runBlocking 안티패턴과 플러그인 누락은 컴파일러가 잡지 못합니다. 빌드 성공이 곧 앱 동작 보장이 아닙니다.</div>
+        <div style="font-size:14px;opacity:.8;line-height:1.7">V8 Gemini는 빌드(assembleDebug)가 성공했지만 실기기에서 즉시 크래시. runBlocking 안티패턴과 플러그인 누락은 컴파일러가 잡지 못합니다. 빌드 성공이 곧 앱 동작 보장이 아닙니다.</div>
       </div>
     </div>
   </div>
@@ -474,15 +468,15 @@ body {
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
       <div style="border:1px solid var(--border);border-left:3px solid var(--gemini);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--gemini);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">속도 · 구현력</div>
-        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Gemini가 전 단계 최단</strong>(평균 217초). V3에서 날씨 데이터를 자연어로 해석해주는 인사이트 카드와 온도 기반 배경색 같은 스마트 기능을 만들었고, V4 실 API 연동 후에도 이 기능들을 유일하게 유지했습니다.</p>
+        <p style="font-size:14px;line-height:1.75;color:var(--ink)"><strong>Gemini가 전 단계 최단</strong>(평균 217초). V3에서 날씨 데이터를 자연어로 해석해주는 인사이트 카드와 온도 기반 배경색 같은 스마트 기능을 만들었고, V4 실 API 연동 후에도 이 기능들을 유일하게 유지했습니다.</p>
       </div>
       <div style="border:1px solid var(--border);border-left:3px solid var(--claude);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--claude);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">아키텍처 · 설계</div>
-        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Claude의 V4 Repository 분리</strong>가 V5 테스트를 140줄로 압축했습니다. Repository는 API 호출 로직을 ViewModel과 분리해 테스트에서 가짜(mock)로 교체할 수 있게 해주는 레이어입니다. <strong>V4 설계 결정 하나가 V5 복잡도를 직접 결정</strong>한 핵심 사례입니다.</p>
+        <p style="font-size:14px;line-height:1.75;color:var(--ink)"><strong>Claude의 V4 Repository 분리</strong>가 V5 테스트를 140줄로 압축했습니다. Repository는 API 호출 로직을 ViewModel과 분리해 테스트에서 가짜(mock)로 교체할 수 있게 해주는 레이어입니다. <strong>V4 설계 결정 하나가 V5 복잡도를 직접 결정</strong>한 핵심 사례입니다.</p>
       </div>
       <div style="border:1px solid var(--border);border-left:3px solid var(--codex);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--codex);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">코드 품질 · 검증</div>
-        <p style="font-size:13.5px;line-height:1.7;color:var(--ink)"><strong>Codex가 코드 품질 1위.</strong> V5에서 URLStreamHandlerFactory로 네트워크 레이어를 직접 가로채는 독창적인 테스트 방식을 썼습니다. V6 버그 디버깅에서는 세 AI 중 유일하게 수정 후 단위 테스트까지 직접 실행해 검증했습니다.</p>
+        <p style="font-size:14px;line-height:1.75;color:var(--ink)"><strong>Codex가 코드 품질 1위.</strong> V5에서 URLStreamHandlerFactory로 네트워크 레이어를 직접 가로채는 독창적인 테스트 방식을 썼습니다. V6 버그 디버깅에서는 세 AI 중 유일하게 수정 후 단위 테스트까지 직접 실행해 검증했습니다.</p>
       </div>
     </div>
   </div>
@@ -1127,22 +1121,22 @@ body {
         <div style="background:var(--faint);border-radius:6px;padding:14px 18px;border-left:3px solid var(--gemini)">
           <div style="font-size:11px;font-weight:700;color:var(--gemini);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">빠른 프로토타입</div>
           <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Gemini</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.65">V1~V6 전 단계 최단. 일단 빠르게 만들어보고 싶을 때.</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.7">V1~V6 전 단계 최단. 일단 빠르게 만들어보고 싶을 때.</div>
         </div>
         <div style="background:var(--faint);border-radius:6px;padding:14px 18px;border-left:3px solid var(--codex)">
           <div style="font-size:11px;font-weight:700;color:var(--codex);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">긴 작업 · 비용 절감</div>
           <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Codex</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.65">토큰 효율 최고. 한도 걱정 없이 이어서 작업 가능.</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.7">토큰 효율 최고. 한도 걱정 없이 이어서 작업 가능.</div>
         </div>
         <div style="background:var(--faint);border-radius:6px;padding:14px 18px;border-left:3px solid var(--claude)">
           <div style="font-size:11px;font-weight:700;color:var(--claude);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">복잡한 요구사항 · 정확도</div>
           <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Claude Code</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.65">지시를 가장 잘 이해함. 단, 작업이 길어지면 토큰 한도 주의.</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.7">지시를 가장 잘 이해함. 단, 작업이 길어지면 토큰 한도 주의.</div>
         </div>
         <div style="background:var(--faint);border-radius:6px;padding:14px 18px;border-left:3px solid #111827">
           <div style="font-size:11px;font-weight:700;color:#111827;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">IDE 통합 방식 선호</div>
           <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Cursor</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.65">IDE 안에서 바로 적용되는 방식. 무료 플랜은 장기 프로젝트에 부족할 수 있음.</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.7">IDE 안에서 바로 적용되는 방식. 무료 플랜은 장기 프로젝트에 부족할 수 있음.</div>
         </div>
       </div>
       <p style="font-size:12px;color:var(--muted);margin-top:8px;font-style:italic">* 실사용 경험 기반 (이 실험 포함 일반 사용 경험 종합)</p>
