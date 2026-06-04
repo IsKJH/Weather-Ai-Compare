@@ -209,6 +209,11 @@
       <span class="insight-icon">🗂️</span>
       <div><strong>Codex — 관심사 분리 일관성:</strong> V7에서 <code>FavoriteCityRepository</code> 인터페이스로 분리했던 것처럼 V8에서도 <code>WeatherNotificationScheduler</code>를 별도 클래스로 분리했습니다. Worker 등록 로직이 Application 클래스에 섞이지 않아 테스트와 교체가 쉽습니다. 반면 Claude·Gemini는 Application 클래스에 직접 인라인했습니다.</div>
     </div>
+
+    <div class="insight" style="margin-top:12px">
+      <span class="insight-icon">❓</span>
+      <div><strong>Codex — 왜 V8에서 목 데이터를 썼나:</strong> Codex는 V4부터 Open-Meteo 실 API를 사용해왔습니다. 그런데 V8 Worker에서는 <code>mockConditionForCity(cityIndex)</code>로 하드코딩된 날씨 상태("맑음", "구름많음" 등)를 반환했습니다. 이유는 <strong>Worker의 책임 범위를 "알림 발송"으로 한정</strong>하고 네트워크 지연 실패를 Worker 재시도 루프와 분리하려는 설계 판단으로 보입니다. 알림 신뢰성(네트워크 없어도 항상 발송)을 API 정확성보다 우선했습니다. Claude·Gemini는 반대로 실 API를 Worker 안에서 직접 호출하여 실시간 날씨를 제공하되, 실패 시 <code>Result.retry()</code>로 대응했습니다.</div>
+    </div>
   </section>
 
   <!-- 04 실기기 검증 -->

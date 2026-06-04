@@ -336,13 +336,38 @@ body {
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity .45s ease, transform .45s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 
+/* ── EVENTS GRID ── */
+.events-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+.ev-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 18px 20px; }
+.ev-tag { display: inline-flex; font-size: 10.5px; font-weight: 700; letter-spacing: .3px; padding: 2px 8px; border-radius: 3px; margin-bottom: 8px; border: 1px solid transparent; }
+.claude-tag { color: var(--claude); background: rgba(194,98,42,.08); border-color: rgba(194,98,42,.2); }
+.codex-tag  { color: var(--codex);  background: rgba(11,138,94,.08);  border-color: rgba(11,138,94,.2); }
+.gemini-tag { color: var(--gemini); background: rgba(26,79,219,.08);  border-color: rgba(26,79,219,.2); }
+.ev-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 6px; line-height: 1.4; }
+.ev-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ── VERDICT BOX ── */
+.vbox { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 18px 20px; }
+.vbox-rank { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 6px; }
+.vbox-name { font-size: 17px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+.vbox-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ── LEARN BOX ── */
+.learn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.learn-item { background: var(--faint); border: 1px solid var(--border); border-radius: 6px; padding: 18px 20px; }
+.learn-n { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+.learn-body { font-size: 14px; line-height: 1.8; color: var(--ink); }
+
+/* ── AI CARD ARC ── */
+.ai-arc { margin-top: 10px; font-size: 12.5px; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 10px; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 860px) {
   .hero { padding: 40px 20px 36px; }
   .nav { padding: 0 20px; }
   .stat-inner { padding: 0 20px; grid-template-columns: repeat(3,1fr); }
   .wrap { padding: 36px 20px 80px; }
-  .phase-grid, .ai-grid, .growth-grid { grid-template-columns: 1fr; }
+  .phase-grid, .ai-grid, .growth-grid, .events-grid, .learn-grid { grid-template-columns: 1fr; }
   .verdict, .human-banner { grid-template-columns: 1fr; }
   .verdict-badge { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 14px; flex-direction: row; align-items: baseline; gap: 10px; }
   .hb-nums { flex-direction: row; }
@@ -370,7 +395,7 @@ body {
 
 <header class="hero">
   <div class="hero-inner">
-    <div class="hero-date">2026-05-28 · Android Kotlin · Jetpack Compose</div>
+    <div class="hero-date">Android Kotlin · Jetpack Compose · V1 → V8 · 8단계 실험</div>
     <h1 class="hero-h1">같은 앱을 네 AI에게 맡기면<br>무엇이 달라질까</h1>
     <p class="hero-sub">Claude Code, OpenAI Codex, Gemini CLI, Cursor Agent에 동일한 날씨 앱 스펙을 주고 비교했습니다. 직접 손 코딩한 시간과도 비교합니다.</p>
     <div class="hero-badges">
@@ -413,6 +438,12 @@ body {
 </div>
 
 <div class="wrap">
+
+  <!-- 이 실험을 하는 이유 -->
+  <div class="card" style="margin-bottom:12px;padding:24px 30px;border-left:3px solid var(--ink);">
+    <p style="font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">이 실험을 하는 이유</p>
+    <p style="font-size:15px;line-height:1.9;color:var(--ink);max-width:880px">AI 코딩 도구를 쓰면 빠르다는 건 알고 있었습니다. 그런데 <strong>어느 AI가 어떤 상황에서 더 나은 결정을 내리는지</strong>는 막연했습니다. 같은 날씨 앱 스펙에 동일한 프롬프트를 주고, V1(초기 생성)부터 V8(백그라운드 알림)까지 8단계로 나눠 체계적으로 비교했습니다. 속도·토큰 효율뿐 아니라 <strong>아키텍처 결정이 이후 단계에 미치는 영향</strong>, 예상치 못한 버그와 자가 수정 능력, 지시 이행 일관성까지 단계를 거치며 기록했습니다. 실제로 AI 코딩 도구를 선택해야 하는 개발자에게 실용적인 판단 근거가 되길 목표로 합니다.</p>
+  </div>
 
   <!-- 종합 요약 -->
   <div class="card reveal" style="margin-bottom:12px;padding:24px 30px;">
@@ -550,6 +581,57 @@ body {
           <a class="phase-link" href="report_v8.html">V8 보고서 보기</a>
         </div>
       </article>
+    </div>
+  </section>
+
+  <!-- 기억할 만한 사건들 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">—</span>
+      <h2 class="sec-t">기억할 만한 사건들</h2>
+      <span class="sec-sub">V1 → V8 중 패턴을 바꾼 결정과 실패</span>
+    </div>
+    <div class="events-grid">
+      <div class="ev-card">
+        <div class="ev-tag codex-tag">V1 · Codex</div>
+        <div class="ev-title">한국어 깨짐</div>
+        <div class="ev-desc">stdin 인코딩 손실로 도시명이 <code>?????</code>로 출력됨. 3개 AI 중 유일한 V1 기능 실패. V2에서 자가 수정.</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-tag gemini-tag">V1–V3 · Gemini</div>
+        <div class="ev-title">일관된 속도 우위</div>
+        <div class="ev-desc">318초(V1) → 149초(V2) → 185초(V3). 세 단계 연속 1위. 이 속도 패턴이 V8까지 이어졌습니다.</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-tag codex-tag">V3 · Codex</div>
+        <div class="ev-title">유일한 코드 감소</div>
+        <div class="ev-desc">자율 혁신 단계에서 기능 추가 대신 리팩터링 선택. V2 736줄 → V3 558줄 <strong>(-178줄)</strong>. 세 AI 중 유일.</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-tag gemini-tag">V3–V4 · Gemini</div>
+        <div class="ev-title">화면에서 보이는 스마트 기능</div>
+        <div class="ev-desc">인사이트 카드·온도 기반 배경이 실제 화면에서 즉시 확인됨. Claude·Codex V3 기능은 체감 변화 없었습니다.</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-tag claude-tag">V4 · Claude</div>
+        <div class="ev-title">Repository 레이어 분리</div>
+        <div class="ev-desc">이 설계 결정 하나가 V5 테스트 코드를 <strong>140줄</strong>로 압축. Codex(ViewModel 통합)는 245줄 필요. V4 아키텍처가 V5 복잡도를 직접 결정했습니다.</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-tag codex-tag">V5 · Codex</div>
+        <div class="ev-title">TimeoutCancellationException 자가수정</div>
+        <div class="ev-desc">테스트 3개 실패 후 원인을 스스로 진단 → <code>UnconfinedTestDispatcher</code>로 수정 성공. 실패에서 배우는 능력을 보여준 사례.</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-tag gemini-tag">V6 · Gemini</div>
+        <div class="ev-title">버그 5/5 발견, 빌드 검증 실패</div>
+        <div class="ev-desc">발견율은 전원 동일(5/5). 그러나 Gemini는 <code>JAVA_HOME</code> 환경 변수 오류로 빌드 검증을 완료하지 못함. 3개 AI 중 유일.</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-tag gemini-tag">V7–V8 · Gemini</div>
+        <div class="ev-title">연속 원칙 위반</div>
+        <div class="ev-desc">V7: 기존 테스트 직접 수정(V5 원칙 위반). V8: <code>runBlocking</code> 안티패턴 → 빌드 통과 후 실기기 크래시. 직접 발견·수정.</div>
+      </div>
     </div>
   </section>
 
@@ -730,6 +812,41 @@ body {
             <td><span class="badge ok">suspend 정석</span></td>
             <td><span class="badge ok">suspend + 이중 권한</span></td>
             <td><span class="badge warn">runBlocking 안티패턴</span></td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V8 데이터 소스</td>
+            <td><span class="badge ok">실 API (Open-Meteo)</span></td>
+            <td><span class="badge warn">목 데이터 (하드코딩)</span></td>
+            <td><span class="badge ok">실 API (Open-Meteo)</span></td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V8 알림 스타일</td>
+            <td>기본 알림</td>
+            <td class="win">BigTextStyle + 커스텀 아이콘</td>
+            <td>기본 알림</td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V6 소요 시간</td>
+            <td class="mono">506초</td>
+            <td class="mono">~480초</td>
+            <td class="mono win">194초 — 최단</td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V7 토큰 합계</td>
+            <td>1,857,932 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
+            <td class="win">104,195 — 최저</td>
+            <td>4,607,039 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V8 토큰 합계</td>
+            <td>1,526,954 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
+            <td class="win">74,945 — 최저</td>
+            <td>427,032</td>
             <td style="color:var(--muted);">한도 초과</td>
           </tr>
           <tr>
@@ -941,12 +1058,13 @@ body {
           <span class="ai-model">claude-sonnet-4-6</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">레이어 분리 구조가 가장 체계적. 단 UI 파일이 340줄 모놀리식이고 private 수식자가 없어 후처리 필요.</p>
+          <p class="ai-summary">레이어 분리 구조가 가장 체계적. V4 Repository 분리 결정이 V5 테스트를 140줄로 압축. V8까지 runBlocking 없는 정석 구현을 유지. 토큰 사용량은 많지만 캐시 재사용률이 높아 실질 비용은 경쟁력 있음.</p>
           <div class="ai-tags">
-            <span class="ai-tag good">구조 우수</span>
-            <span class="ai-tag warn">모놀리식 UI</span>
-            <span class="ai-tag warn">private 없음</span>
+            <span class="ai-tag good">구조 · 설계 일관성</span>
+            <span class="ai-tag good">지시 이행 최고</span>
+            <span class="ai-tag warn">토큰 최다</span>
           </div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> V4 Repository 설계가 V5~V8에 연쇄 긍정 영향. 기능 추가 속도는 느리지만 코드베이스 안정성은 가장 높음.</div>
         </div>
       </div>
       <div class="ai-card">
@@ -956,12 +1074,13 @@ body {
           <span class="ai-model">gpt-5.5</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">컴포넌트 단위 코드 품질 1위. 자동 빌드 성공. 파일 위치와 테마 분리 후처리 필요.</p>
+          <p class="ai-summary">V1 한국어 깨짐을 V2에서 자가 수정. V3 유일한 코드 감소(-178줄). V5 TimeoutCancellationException 자가진단. V7 Repository 인터페이스(DIP). V8 이중 권한 방어 + BigTextStyle. 전 단계 토큰 효율 1위.</p>
           <div class="ai-tags">
             <span class="ai-tag good">코드 품질 1위</span>
-            <span class="ai-tag good">자동 빌드</span>
-            <span class="ai-tag warn">파일 위치</span>
+            <span class="ai-tag good">토큰 효율 최고</span>
+            <span class="ai-tag good">자가수정 능력</span>
           </div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 실패에서 배우는 능력(V2 수정, V5 자가진단)과 설계 지향성(V3 리팩터링, V7 DIP)이 가장 두드러짐. V4 이후 한도 초과된 Cursor를 제외하면 누적 종합 1위.</div>
         </div>
       </div>
       <div class="ai-card">
@@ -971,12 +1090,14 @@ body {
           <span class="ai-model">gemini-3-flash</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">전 단계 가장 빠름. 성능 패턴 우수. lifecycle 누수는 생성 직후 수정 필요.</p>
+          <p class="ai-summary">V1~V8 전 단계 최단(평균 294초). V3·V4 스마트 기능 화면 즉시 체감. V4 Retrofit 선택(유일 외부 라이브러리). 단 V6 빌드 검증 실패, V7 테스트 수정, V8 runBlocking으로 후반부 품질 일관성 아쉬움.</p>
           <div class="ai-tags">
             <span class="ai-tag good">전 단계 최단</span>
-            <span class="ai-tag good">성능 패턴 우수</span>
-            <span class="ai-tag bad">lifecycle 누수</span>
+            <span class="ai-tag good">V3 스마트 기능</span>
+            <span class="ai-tag bad">V7 원칙 위반</span>
+            <span class="ai-tag bad">V8 안티패턴</span>
           </div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 초반 속도·창의성이 후반 품질 일관성으로 이어지지 못함. V6~V8 연속 품질 이슈는 우연이 아닌 패턴으로 보임.</div>
         </div>
       </div>
       <div class="ai-card">
@@ -986,13 +1107,60 @@ body {
           <span class="ai-model">auto (Cursor Agent)</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">IDE 에이전트 방식으로 V1~V3 진행. 라이트 청록 테마. 전 단계 코드량 최다(V3 11파일·986줄). V3 쾌적 지수 카드가 화면에서 즉시 확인됨. V4는 사용량 한도 초과로 미진행.</p>
+          <p class="ai-summary">IDE 에이전트 방식으로 V1~V3 진행. V3 Smart Comfort Index(쾌적 지수·외출 팁) 추가로 전 단계 코드량 최다(11파일·986줄). V3 기능이 화면에서 즉시 확인됨. V4 사용량 한도 초과로 비교에서 이탈.</p>
           <div class="ai-tags">
             <span class="ai-tag good">APK 자동 빌드</span>
-            <span class="ai-tag good">전 단계 코드량 최다</span>
-            <span class="ai-tag warn">V4 한도 초과</span>
+            <span class="ai-tag good">V3 스마트 기능</span>
+            <span class="ai-tag warn">V4부터 한도 초과</span>
           </div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V3 아크:</strong> IDE 통합 에이전트 방식의 강점(컨텍스트 풍부, 자동 빌드)이 두드러졌지만, 유료 한도 제한이 장기 실험의 걸림돌이 됨.</div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 누적 결론 -->
+  <section class="section reveal">
+    <div class="sec-head">
+      <span class="sec-n">06</span>
+      <h2 class="sec-t">V1 → V8 누적 결론</h2>
+      <span class="sec-sub">8단계를 모두 마친 후 내릴 수 있는 결론</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+      <div class="vbox" style="border-left:3px solid var(--gemini);">
+        <div class="vbox-rank" style="color:var(--gemini);">속도 · 1위</div>
+        <div class="vbox-name">Gemini</div>
+        <div class="vbox-desc">V1~V8 전 단계 최단. 평균 294초. 특히 V2에서 149초로 Claude(360초) 대비 2.4배 빠름. 프로토타입 속도가 최우선이라면 Gemini.</div>
+      </div>
+      <div class="vbox" style="border-left:3px solid var(--codex);">
+        <div class="vbox-rank" style="color:var(--codex);">코드 품질 + 토큰 효율 · 1위</div>
+        <div class="vbox-name">Codex</div>
+        <div class="vbox-desc">V4 92,991토큰(Claude 5,262,416 대비 57배 절감). V7 Repository 인터페이스, V8 이중 권한 방어. 장기 운용 비용과 코드 품질 모두 우수.</div>
+      </div>
+      <div class="vbox" style="border-left:3px solid var(--claude);">
+        <div class="vbox-rank" style="color:var(--claude);">일관성 · 1위</div>
+        <div class="vbox-name">Claude</div>
+        <div class="vbox-desc">V4 Repository 설계가 V5~V8에 연쇄 긍정 영향. 지시 이행률 최고. V8에서도 runBlocking 없는 정석 구현. 팀 협업 코드베이스에 적합.</div>
+      </div>
+    </div>
+
+    <div class="learn-grid">
+      <div class="learn-item">
+        <div class="learn-n">배운 것 1</div>
+        <p class="learn-body"><strong>V4 아키텍처 결정이 V5~V8 복잡도를 결정했습니다.</strong> Claude의 Repository 분리가 V5 테스트를 140줄로 줄인 반면, Codex의 ViewModel 통합은 245줄이 필요했습니다. AI가 내리는 설계 결정의 파급효과가 생각보다 큽니다.</p>
+      </div>
+      <div class="learn-item">
+        <div class="learn-n">배운 것 2</div>
+        <p class="learn-body"><strong>빌드 통과가 동작 보장이 아닙니다.</strong> Gemini V8은 <code>assembleDebug</code> 성공 후 실기기에서 <code>ClassNotFoundException</code> 즉시 크래시. <code>kotlin-android</code> 플러그인 누락과 <code>runBlocking</code> 안티패턴은 컴파일러가 잡지 못합니다. 실기기 검증이 필수입니다.</p>
+      </div>
+      <div class="learn-item">
+        <div class="learn-n">배운 것 3</div>
+        <p class="learn-body"><strong>각 AI의 특성은 첫 버전부터 일관됩니다.</strong> Gemini는 V1 최단 → V8 최단. Codex는 V1 자동 빌드 → V8 이중 권한 방어. Claude는 V1 레이어 분리 → V8 정석 패턴. 첫 버전에서 보이는 AI 특성이 이후 단계에도 그대로 나타납니다.</p>
+      </div>
+      <div class="learn-item">
+        <div class="learn-n">배운 것 4</div>
+        <p class="learn-body"><strong>AI 능력 평가는 단계별 누적 과제가 필요합니다.</strong> V1 한 번으로는 Codex 한국어 깨짐이 일회성인지 패턴인지 알 수 없습니다. V5 자가수정이나 V8 실기기 크래시 자가진단 같은 사건은 단일 과제에서는 관찰 불가능합니다.</p>
       </div>
     </div>
   </section>
@@ -1000,7 +1168,7 @@ body {
 </div>
 
 <footer class="footer">
-  WeatherNow AI 비교 실험 · 2026-05-28~06-01 · Claude Code / OpenAI Codex / Gemini CLI / Cursor Agent
+  WeatherNow AI 비교 실험 · Claude Code / OpenAI Codex / Gemini CLI / Cursor Agent
 </footer>
 
 <script>
