@@ -13,9 +13,7 @@
     <p class="rh-sub">목 데이터를 Open-Meteo 실시간 API로 교체했습니다. Claude만 WeatherRepository 레이어를 분리했고, 이 한 줄의 아키텍처 결정이 V5 테스트 코드량을 140줄 vs 245줄로 갈라놓았습니다. Gemini는 동일한 목표를 위해 외부 라이브러리 Retrofit을 선택했고, Claude·Codex는 Android 내장 클래스만으로 처리했습니다. Cursor는 이 단계에서 사용량 한도를 초과해 이후 실험에서 제외됐습니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span><span class="ai-pill"><span class="dot codex"></span>Codex</span><span class="ai-pill"><span class="dot gemini"></span>Gemini</span><span class="ai-pill"><span class="dot cursor"></span>Cursor</span>
-      <span class="tag-sm">baseline: weather-v3</span>
-      <span class="tag-sm">result: weather-v4</span>
-      <span class="tag-sm">generated: 2026-06-01</span>
+      <span class="tag-sm">2026-06-01</span>
     </div>
     <div class="rh-tldr">
       <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">하드코딩된 목 데이터를 Open-Meteo 무료 실시간 API로 교체. 각 AI가 HTTP 통신 방법을 자율적으로 선택. Cursor는 사용량 한도 초과로 V4부터 이탈</div></div>
@@ -34,7 +32,7 @@
   </section>
   <section class="card" id="prompt">
     <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
-    <p class="prompt-meta">prompt_v4.txt · Open-Meteo 실시간 API 연동</p>
+    <p class="prompt-meta">AI에게 전달한 프롬프트 (영문)</p>
     <pre class="prompt-pre">You are upgrading the existing WeatherNow Android app in this directory.
 
 This is V4 of an AI comparison experiment. You previously built and improved this app through V1, V2, and V3.
@@ -92,7 +90,7 @@ After implementation:
     <div class="screen-set"><div class="screen-ai"><div class="screen-ai-head"><span class="dot claude"></span>Claude</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v4/claude/01-top.png" alt="Claude 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 · 예보</div><img src="../screenshots/v4/claude/02-middle.png" alt="Claude 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 5일 예보</div><img src="../screenshots/v4/claude/03-bottom.png" alt="Claude 하단 5일 예보"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot codex"></span>Codex</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v4/codex/01-top.png" alt="Codex 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 · 시간별 예보</div><img src="../screenshots/v4/codex/02-middle.png" alt="Codex 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 5일 예보</div><img src="../screenshots/v4/codex/03-bottom.png" alt="Codex 하단 5일 예보"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot gemini"></span>Gemini</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v4/gemini/01-top.png" alt="Gemini 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 · 시간별·상세</div><img src="../screenshots/v4/gemini/02-middle.png" alt="Gemini 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 5일 예보</div><img src="../screenshots/v4/gemini/03-bottom.png" alt="Gemini 하단 5일 예보"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot cursor"></span>Cursor</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">미진행</div><div style="padding:12px;background:#1c1c1e;border-radius:6px;color:#666;font-size:12px;">사용량 한도 초과로 미진행</div></div></div></div></div>
   </section>
   <section class="card" id="code">
-    <div class="sh"><span class="sh-num">08</span><h2>코드 요약</h2></div>
+    <div class="sh"><span class="sh-num">07</span><h2>코드 요약</h2></div>
     <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>Kotlin 파일</th><th>Kotlin 라인</th><th>v3 대비</th><th>변경 파일 수</th><th>신규 파일 및 역할</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>6개</td><td>736줄</td><td>+156줄 (+27%)</td><td>6개</td><td>WeatherRepository.kt — 네트워크 호출을 ViewModel에서 분리해 독립 클래스로 추출. 이 파일 덕분에 V5 테스트가 Repository만 Mock으로 교체하면 돼 140줄로 완성됨.</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>6개</td><td>890줄</td><td>+154줄 (+21%)</td><td>5개</td><td>신규 파일 없음 — HTTP 호출 로직을 기존 WeatherViewModel 내부에 통합. v3에서 이미 736줄로 가장 많았고 v4에서 890줄로 더 증가. V5에서 테스트 작성 시 ViewModel 전체를 다뤄야 해 245줄 필요.</td></tr><tr class="row-hl"><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>6개</td><td>716줄</td><td>+198줄 (+38%)</td><td>7개</td><td>WeatherApiService.kt — Retrofit이 사용할 API 엔드포인트 인터페이스 선언 파일. libs.versions.toml + build.gradle도 함께 수정(의존성 3개 추가). 변경 파일 수(7개)가 셋 중 가장 많은 이유.</td></tr><tr><td class="col-label"><span class="dot cursor"></span> Cursor</td><td colspan="5" style="text-align:center;color:#888;">사용량 한도 초과로 미진행</td></tr></tbody></table></div>
     <div class="note-box">v3 기준 라인 수: Claude 580줄, Codex 736줄, Gemini 518줄 (git HEAD 기준). Codex가 v3에서 이미 가장 많은 코드량을 보유했고, v4에서도 890줄로 세 AI 중 최대입니다. Gemini는 v3 대비 증가량이 +198줄(+38%)로 가장 큰데, Retrofit 스택 설정(의존성 선언, 인터페이스 파일, Gson 데이터 클래스 등)이 포함된 탓입니다.</div>
   </section>

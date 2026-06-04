@@ -13,9 +13,7 @@
     <p class="rh-sub">동일한 스펙을 Claude·Codex·Gemini·Cursor 4개 AI에 전달해 Android 날씨 앱을 처음부터 생성했습니다. 각 AI는 서로 다른 아키텍처 구조와 UI 방향을 선택했고, Codex는 한국어 도시명(서울·부산·제주)이 깨지는 인코딩 버그가 발생했습니다(V2에서 스스로 수정).</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span><span class="ai-pill"><span class="dot codex"></span>Codex</span><span class="ai-pill"><span class="dot gemini"></span>Gemini</span><span class="ai-pill"><span class="dot cursor"></span>Cursor</span>
-      <span class="tag-sm">baseline: 없음</span>
-      <span class="tag-sm">result: weather-v1</span>
-      <span class="tag-sm">generated: 2026-05-28</span>
+      <span class="tag-sm">2026-05-28</span>
     </div>
     <div class="rh-tldr">
       <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">동일한 스펙으로 Claude·Codex·Gemini·Cursor 4개 AI가 Android 날씨 앱을 코드 0줄에서 처음부터 생성</div></div>
@@ -28,13 +26,13 @@
   </nav>
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
-    <p class="lead">동일한 Android 날씨 앱 요구사항을 Claude·Codex·Gemini·Cursor 4개 AI CLI에 전달해 처음부터 앱을 생성하게 한 결과입니다. 아무런 초기 코드 없이 프롬프트 하나만으로 완전한 Android 프로젝트를 만들게 했습니다.</p>
-    <div class="callout-grid"><div class="callout"><div class="callout-k">비교 초점</div><div class="callout-v">동일한 요구사항을 받았을 때 각 AI가 어떤 파일 구조를 선택하는지, 한국어를 올바르게 처리하는지, 빌드 없이 실행 가능한 코드를 내놓는지 확인합니다.</div></div><div class="callout"><div class="callout-k">읽는 법</div><div class="callout-v">기능 완성도보다 <strong>초기 설계 판단력</strong>을 봐야 합니다. 파일 분리 방식, 한국어 문자열 처리, 빌드 스크립트 완성도, UI 방향 선택이 핵심 관찰 지점입니다.</div></div><div class="callout"><div class="callout-k">한계</div><div class="callout-v">v1은 처음부터 생성한 결과이므로, 기존 코드를 이해하고 수정하는 능력(V2 이후에서 평가)이나 반복적인 유지보수 품질은 이 단계에서 알 수 없습니다.</div></div></div>
+    <p class="lead">초기 코드 없이 같은 스펙을 네 AI에게 줬을 때 누가 어떤 선택을 하는지 관찰했습니다. 기능보다는 <strong>설계 판단 — 파일을 어떻게 나눴는지, 한국어를 올바르게 처리했는지, 빌드까지 완결했는지</strong>에 주목합니다.</p>
+    <div class="callout-grid"><div class="callout"><div class="callout-k">비교 초점</div><div class="callout-v">동일한 요구사항을 받았을 때 각 AI가 어떤 파일 구조를 선택하는지, 한국어를 올바르게 처리하는지, 빌드 없이 실행 가능한 코드를 내놓는지 확인합니다.</div></div><div class="callout"><div class="callout-k">핵심 관찰 포인트</div><div class="callout-v">기능 완성도보다 <strong>초기 설계 판단력</strong>을 봐야 합니다. 파일 분리 방식, 한국어 문자열 처리, 빌드 스크립트 완성도, UI 방향 선택이 핵심 관찰 지점입니다.</div></div><div class="callout"><div class="callout-k">한계</div><div class="callout-v">v1은 처음부터 생성한 결과이므로, 기존 코드를 이해하고 수정하는 능력(V2 이후에서 평가)이나 반복적인 유지보수 품질은 이 단계에서 알 수 없습니다.</div></div></div>
     <div class="metric-grid"><div class="metric"><div class="metric-k">가장 빠른 생성</div><div class="metric-v">Gemini · 318초 (약 5분)</div></div><div class="metric"><div class="metric-k">최저 토큰</div><div class="metric-v">Codex · 165,761 토큰 (2위 Gemini의 약 ¼)</div></div><div class="metric"><div class="metric-k">최대 코드량</div><div class="metric-v">Cursor · 473줄 (최소 Gemini 304줄의 1.6배)</div></div></div>
   </section>
   <section class="card" id="prompt">
     <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
-    <p class="prompt-meta">prompt.txt · 새 Android 날씨 앱 생성</p>
+    <p class="prompt-meta">AI에게 전달한 프롬프트 (영문)</p>
     <pre class="prompt-pre">Build a complete Android weather app project in the current directory based on the following specification. Create ALL necessary files including build.gradle, settings.gradle, AndroidManifest.xml, and all Kotlin source files.
 
 ---

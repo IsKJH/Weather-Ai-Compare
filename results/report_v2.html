@@ -13,9 +13,7 @@
     <p class="rh-sub">각 AI가 자신이 만든 V1 코드를 읽고, 시간별 예보·새로고침·즐겨찾기를 추가하도록 동일한 프롬프트를 주었습니다. 처음부터 다시 만드는 게 아니라 <em>기존 코드를 이해하고 확장</em>하는 능력을 측정하는 단계입니다. 4개 AI 모두 6가지 요구사항을 전부 충족했으며, Codex는 V1에서 미해결로 남아 있던 한국어 깨짐 버그를 이 단계에서 명시적 지시 없이 스스로 수정했습니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span><span class="ai-pill"><span class="dot codex"></span>Codex</span><span class="ai-pill"><span class="dot gemini"></span>Gemini</span><span class="ai-pill"><span class="dot cursor"></span>Cursor</span>
-      <span class="tag-sm">baseline: weather-v1</span>
-      <span class="tag-sm">result: weather-v2</span>
-      <span class="tag-sm">generated: 2026-05-29</span>
+      <span class="tag-sm">2026-05-29</span>
     </div>
     <div class="rh-tldr">
       <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">V1 코드 위에 시간별 예보·새로고침·즐겨찾기 4가지 기능 추가</div></div>
@@ -29,12 +27,12 @@
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
     <p class="lead">각 AI에게 자신이 V1에서 작성한 코드를 넘겨주고, 동일한 V2 프롬프트로 기능을 추가하도록 했습니다. "V1을 얼마나 잘 읽고 이어서 쓸 수 있는가"를 측정한 단계입니다.</p>
-    <div class="callout-grid"><div class="callout"><div class="callout-k">비교 초점</div><div class="callout-v">V1 코드를 처음부터 다시 쓰지 않고 <em>기존 구조를 보존한 채</em> 새 기능을 추가했는지가 핵심입니다. 변경 파일 수와 diff 규모가 클수록 불필요한 재작성이 많았다는 신호입니다.</div></div><div class="callout"><div class="callout-k">읽는 법</div><div class="callout-v">요구사항 6가지(시간별 예보, 상세 날씨, 새로고침, 즐겨찾기, 한국어 복구, 빌드 성공) 충족 여부를 먼저 확인하고, 그 다음 "얼마나 적은 코드 변경으로 달성했는가"를 비교합니다.</div></div><div class="callout"><div class="callout-k">한계</div><div class="callout-v">네 앱 모두 동일하게 6/6을 충족했기 때문에 기능 완성도로는 차이가 없습니다. 진짜 차이는 코드 구조와 UI 설계 방식에 있으며, 이는 스크린샷보다 diff와 관찰 섹션에서 드러납니다.</div></div></div>
+    <div class="callout-grid"><div class="callout"><div class="callout-k">비교 초점</div><div class="callout-v">V1 코드를 처음부터 다시 쓰지 않고 <em>기존 구조를 보존한 채</em> 새 기능을 추가했는지가 핵심입니다. 변경 파일 수와 diff 규모가 클수록 불필요한 재작성이 많았다는 신호입니다.</div></div><div class="callout"><div class="callout-k">핵심 관찰 포인트</div><div class="callout-v">요구사항 6가지(시간별 예보, 상세 날씨, 새로고침, 즐겨찾기, 한국어 복구, 빌드 성공) 충족 여부를 먼저 확인하고, 그 다음 "얼마나 적은 코드 변경으로 달성했는가"를 비교합니다.</div></div><div class="callout"><div class="callout-k">한계</div><div class="callout-v">네 앱 모두 동일하게 6/6을 충족했기 때문에 기능 완성도로는 차이가 없습니다. 진짜 차이는 코드 구조와 UI 설계 방식에 있으며, 이는 스크린샷보다 diff와 관찰 섹션에서 드러납니다.</div></div></div>
     <div class="metric-grid"><div class="metric"><div class="metric-k">가장 빠른 실행</div><div class="metric-v">Gemini · 149.4초 (약 2.5분)</div></div><div class="metric"><div class="metric-k">최저 토큰 사용</div><div class="metric-v">Gemini · 642,641 (Claude의 62% 수준)</div></div><div class="metric"><div class="metric-k">최대 코드량</div><div class="metric-v">Cursor · 748줄 (파일도 9개로 최다 분리)</div></div></div>
   </section>
   <section class="card" id="prompt">
     <div class="sh"><span class="sh-num">02</span><h2>실험 프롬프트</h2></div>
-    <p class="prompt-meta">prompt_v2.txt · 기존 앱 기능 개선</p>
+    <p class="prompt-meta">AI에게 전달한 프롬프트 (영문)</p>
     <pre class="prompt-pre">You are improving the existing WeatherNow Android app in this directory.
 
 Do not recreate the project from scratch.
