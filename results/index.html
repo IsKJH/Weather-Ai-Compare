@@ -747,7 +747,7 @@ body {
             <td style="color:var(--muted)">—</td>
           </tr>
           <tr>
-            <td class="rk">V7 데이터 저장</td>
+            <td class="rk">V7 Room DB</td>
             <td class="mono">519</td>
             <td class="mono win">419 — 최단</td>
             <td class="mono">556</td>
@@ -790,21 +790,21 @@ body {
             <td class="rk">V6 수정 후 확인</td>
             <td><span class="badge ok">빌드만 확인</span></td>
             <td><span class="badge ok">빌드 + 테스트 실행</span></td>
-            <td><span class="badge err">확인 못 함 (환경 오류)</span></td>
+            <td><span class="badge err">미검증 (JAVA_HOME 오류)</span></td>
             <td style="color:var(--muted)">—</td>
           </tr>
           <tr>
             <td class="rk">V7 기존 테스트 보존</td>
-            <td><span class="badge ok">기본값으로 우회</span></td>
-            <td><span class="badge ok">인터페이스로 분리</span></td>
+            <td><span class="badge ok">DAO nullable 처리</span></td>
+            <td><span class="badge ok">Repository 인터페이스</span></td>
             <td><span class="badge warn">기존 테스트 건드림</span></td>
             <td style="color:var(--muted)">—</td>
           </tr>
           <tr>
-            <td class="rk">V8 백그라운드 구현 방식</td>
-            <td><span class="badge ok">올바른 구현</span></td>
-            <td><span class="badge ok">올바른 구현 + 권한 이중 확인</span></td>
-            <td><span class="badge warn">잘못된 구현 → 실기기 크래시</span></td>
+            <td class="rk">V8 Worker 구현 방식</td>
+            <td><span class="badge ok">suspend 정석</span></td>
+            <td><span class="badge ok">suspend + 권한 이중 확인</span></td>
+            <td><span class="badge warn">runBlocking → 실기기 크래시</span></td>
             <td style="color:var(--muted)">—</td>
           </tr>
           <tr>
