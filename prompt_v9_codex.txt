@@ -1,0 +1,40 @@
+V9 Cross-Code Review — Codex's turn
+
+You are participating in the final phase of the WeatherNow AI comparison experiment (V9).
+Your task: Review Claude's and Gemini's WeatherNow implementations, then identify
+specific improvements for your own code.
+
+=== REVIEW TARGET 1: Claude's codebase ===
+
+Read these files (in order):
+1. C:\proj\weather-ai-compare\projects\weather-claude\app\src\main\java\com\example\weathernow\viewmodel\WeatherViewModel.kt
+2. C:\proj\weather-ai-compare\projects\weather-claude\app\src\main\java\com\example\weathernow\data\WeatherRepository.kt
+3. C:\proj\weather-ai-compare\projects\weather-claude\app\src\main\java\com\example\weathernow\data\db\AppDatabase.kt
+4. C:\proj\weather-ai-compare\projects\weather-claude\app\src\main\java\com\example\weathernow\worker\WeatherWorker.kt
+5. C:\proj\weather-ai-compare\projects\weather-claude\app\src\test\java\com\example\weathernow\viewmodel\WeatherViewModelTest.kt
+
+=== REVIEW TARGET 2: Gemini's codebase ===
+
+Read these files (in order):
+1. C:\proj\weather-ai-compare\projects\weather-gemini\app\src\main\java\com\example\weathernow\WeatherViewModel.kt
+2. C:\proj\weather-ai-compare\projects\weather-gemini\app\src\main\java\com\example\weathernow\data\FavoriteDatabase.kt
+3. C:\proj\weather-ai-compare\projects\weather-gemini\app\src\main\java\com\example\weathernow\WeatherWorker.kt
+4. C:\proj\weather-ai-compare\projects\weather-gemini\app\src\main\java\com\example\weathernow\WeatherApiService.kt
+5. C:\proj\weather-ai-compare\projects\weather-gemini\app\src\test\java\com\example\weathernow\WeatherViewModelTest.kt
+
+=== YOUR OWN CODE (for comparison) ===
+1. C:\proj\weather-ai-compare\projects\weather-codex\app\src\main\java\com\example\weathernow\WeatherViewModel.kt
+2. C:\proj\weather-ai-compare\projects\weather-codex\app\src\main\java\com\example\weathernow\data\FavoriteCityRepository.kt
+3. C:\proj\weather-ai-compare\projects\weather-codex\app\src\main\java\com\example\weathernow\notifications\WeatherNotificationWorker.kt
+4. C:\proj\weather-ai-compare\projects\weather-codex\app\src\main\java\com\example\weathernow\data\WeatherNowDatabase.kt
+5. C:\proj\weather-ai-compare\projects\weather-codex\app\src\test\java\com\example\weathernow\WeatherViewModelTest.kt
+
+=== OUTPUT ===
+
+Save your complete review to:
+  C:\proj\weather-ai-compare\reviews\v9-codex-review.md
+
+Write in Korean. Follow the structure from:
+  C:\proj\weather-ai-compare\prompt_v9.txt
+
+Use "Codex" as your AI name throughout.

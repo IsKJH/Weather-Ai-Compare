@@ -389,6 +389,7 @@ body {
     <a class="nav-link" href="report_v6.html">V6 버그 디버깅</a>
     <a class="nav-link" href="report_v7.html">V7 Room DB</a>
     <a class="nav-link" href="report_v8.html">V8 WorkManager</a>
+    <a class="nav-link" href="report_v9.html">V9 상호 리뷰</a>
     <a class="nav-link" href="report_human.html">직접 구현 vs AI</a>
   </div>
 </nav>
@@ -403,7 +404,7 @@ body {
       <span class="hero-badge x">OpenAI Codex</span>
       <span class="hero-badge g">Gemini CLI</span>
       <span class="hero-badge" style="color:#111827;border-color:rgba(17,24,39,.25);">Cursor Agent</span>
-      <span class="hero-badge">V1–V3 목 데이터 · V4 실 API · V5 단위 테스트 · V6 버그 디버깅 · V7 Room DB · V8 WorkManager</span>
+      <span class="hero-badge">V1–V3 목 데이터 · V4 실 API · V5 단위 테스트 · V6 버그 디버깅 · V7 Room DB · V8 WorkManager · V9 상호 코드 리뷰</span>
     </div>
   </div>
 </header>
@@ -411,8 +412,8 @@ body {
 <div class="stat-bar">
   <div class="stat-inner">
     <div class="stat-item">
-      <div class="stat-n">8단계</div>
-      <div class="stat-l">V1 → V2 → V3 → V4 → V5 → V6 → V7 → V8</div>
+      <div class="stat-n">9단계</div>
+      <div class="stat-l">V1 → V2 → V3 → V4 → V5 → V6 → V7 → V8 → V9</div>
     </div>
     <div class="stat-item">
       <div class="stat-n">Gemini</div>
@@ -447,7 +448,7 @@ body {
 
   <!-- 종합 요약 -->
   <div class="card reveal" style="margin-bottom:12px;padding:24px 30px;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">종합 요약 — V1 → V8</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">종합 요약 — V1 → V9</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
       <div style="border:1px solid var(--border);border-left:3px solid var(--gemini);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--gemini);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">속도 · 구현력</div>
@@ -579,6 +580,18 @@ body {
           <p class="phase-desc">V7 Room DB에 저장된 즐겨찾기 도시에 대해 15분마다 날씨 알림을 발송하는 WorkManager 시스템을 추가했습니다. Worker 구현 패턴과 권한 처리 방식에서 차이가 드러났습니다.</p>
           <div class="phase-result">전원 빌드 성공 · Codex 이중 권한 방어 + BigTextStyle · Gemini runBlocking 안티패턴</div>
           <a class="phase-link" href="report_v8.html">V8 보고서 보기</a>
+        </div>
+      </article>
+      <article class="phase-card">
+        <div class="phase-shot" style="background:#1a1a2e;display:flex;align-items:center;justify-content:center;min-height:160px;">
+          <span style="font-size:40px;">🔍</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-n">09</div>
+          <h3 class="phase-title">상호 코드 리뷰 (마무리)</h3>
+          <p class="phase-desc">각 AI가 다른 두 AI의 V8 최종 코드를 직접 읽고 평가했습니다. 무엇을 강점으로 보고, 무엇을 문제로 지적했으며, 그것을 자기 코드 개선 계획으로 전환했는지를 기록합니다.</p>
+          <div class="phase-result">3개 AI 상호 학습 고리 형성 · Codex FakeOpenMeteoServer 전원 최고 평가 · Gemini 샌드박스 제약 발견</div>
+          <a class="phase-link" href="report_v9.html">V9 보고서 보기</a>
         </div>
       </article>
     </div>
@@ -847,6 +860,27 @@ body {
             <td>1,526,954 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
             <td class="win">74,945 — 최저</td>
             <td>427,032</td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V9 리뷰 소요</td>
+            <td class="mono">~980초</td>
+            <td class="mono win">671초 — 최단</td>
+            <td class="mono">~2,400초</td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V9 파일 접근</td>
+            <td><span class="badge ok">성공</span></td>
+            <td><span class="badge ok">성공</span></td>
+            <td><span class="badge warn">샌드박스 제한</span></td>
+            <td style="color:var(--muted);">한도 초과</td>
+          </tr>
+          <tr>
+            <td class="rk">V9 자가 개선</td>
+            <td>5개 항목</td>
+            <td>5개 항목</td>
+            <td>4개 항목</td>
             <td style="color:var(--muted);">한도 초과</td>
           </tr>
           <tr>

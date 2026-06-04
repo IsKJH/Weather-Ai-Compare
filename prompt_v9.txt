@@ -1,0 +1,85 @@
+V9 Cross-Code Review — WeatherNow AI Comparison
+
+This is the final phase of the WeatherNow AI comparison experiment.
+
+Your task: Review the WeatherNow implementations by the OTHER two AIs, then identify
+specific improvements you would make to YOUR OWN code based on what you learned.
+
+=== FILES TO REVIEW ===
+
+[See your AI-specific prompt for exact file paths]
+
+=== REVIEW FORMAT ===
+
+Save your complete review to:
+  C:\proj\weather-ai-compare\reviews\v9-<ai-name>-review.md
+
+Write in Korean. Use this exact structure:
+
+---
+
+# V9 코드 리뷰 — [AI Name]의 시각
+
+## [대상 AI 1] 코드 리뷰
+
+### 아키텍처
+패키지 구조, 레이어 분리, 관심사 분리에 대한 평가 (3-5문장)
+
+### 코루틴 · 상태 관리
+ViewModel 패턴, StateFlow 사용법, 코루틴 처리에 대한 평가 (3-5문장)
+
+### Worker 구현 (V8)
+CoroutineWorker 설계, 에러 처리, 데이터 소스 선택에 대한 평가 (3-5문장)
+
+### 테스트 품질 (V5)
+테스트 커버리지, 모킹 전략, 테스트 가독성에 대한 평가 (3-5문장)
+
+### DB 설계 (V7)
+Room 설정, DAO 패턴, 마이그레이션 전략에 대한 평가 (3-5문장)
+
+### 잘 한 점 (내 코드보다 나은 부분)
+- 구체적인 클래스명 / 메서드명을 포함한 강점 1
+- 강점 2
+- 강점 3
+
+### 개선 제안 (내가 유지보수한다면 바꿀 것)
+- 구체적인 변경 제안 1
+- 변경 제안 2
+- 변경 제안 3
+
+---
+
+## [대상 AI 2] 코드 리뷰
+
+(동일한 구조로 작성)
+
+---
+
+## 나의 코드 자가 개선 계획
+
+두 코드를 리뷰한 결과, 내 코드에서 개선할 수 있는 구체적인 항목:
+
+### 1. [개선 제목]
+- 영감을 받은 코드: 어느 AI의 어느 부분
+- 현재 내 코드 문제: (구체적으로 — 파일명, 클래스명 포함)
+- 제안하는 변경: (정확히 무엇을 어떻게 바꿀지)
+- 예상 효과: (왜 이게 더 나은가)
+- 난이도: easy / medium / hard
+
+### 2~4. [추가 개선 항목들]
+
+---
+
+## 전체 소감
+리뷰 경험에 대한 솔직한 소감 (2-3문단):
+- 놀라운 점이 있었나요?
+- 나의 접근법 중 확인된 것과 재고할 것?
+- 처음부터 다시 시작한다면 무엇을 다르게 할 것인가?
+
+---
+
+=== CONSTRAINTS ===
+- 모든 섹션에서 실제 클래스명, 메서드명, 파일명을 구체적으로 언급할 것
+- 다른 AI가 더 잘 한 부분을 솔직하게 인정할 것
+- 자가 개선 계획은 구체적인 코드 변경 수준으로 작성할 것 (막연한 제안 금지)
+- 소요 시간을 기록할 것 (시작~완료)
