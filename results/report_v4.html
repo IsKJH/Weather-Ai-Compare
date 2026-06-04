@@ -11,12 +11,17 @@
   <header class="rh">
     <div class="rh-eyebrow">AI CODING TOOL COMPARISON · V4</div>
     <h1 class="rh-title">WeatherNow v4 실제 API 연동 비교</h1>
-    <p class="rh-sub">목 데이터를 제거하고 Open-Meteo 실시간 API로 교체하는 동일 요구사항을 각 AI가 어떻게 해석·구현했는지 비교한 결과입니다.</p>
+    <p class="rh-sub">목 데이터를 Open-Meteo 실시간 API로 교체했습니다. Claude만 WeatherRepository 레이어를 분리한 이 결정이 이후 V5~V8 단계의 복잡도를 직접 결정했습니다. Cursor는 이 단계에서 사용량 한도를 초과했습니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span><span class="ai-pill"><span class="dot codex"></span>Codex</span><span class="ai-pill"><span class="dot gemini"></span>Gemini</span><span class="ai-pill"><span class="dot cursor"></span>Cursor</span>
       <span class="tag-sm">baseline: weather-v3</span>
       <span class="tag-sm">result: weather-v4</span>
       <span class="tag-sm">generated: 2026-06-01</span>
+    </div>
+    <div class="rh-tldr">
+      <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">목 데이터를 Open-Meteo 실시간 API로 교체. Cursor는 사용량 한도 초과로 이탈</div></div>
+      <div><div class="rh-tldr-label">핵심 차이점</div><div class="rh-tldr-val">Claude만 WeatherRepository 레이어 분리 → V5 테스트 코드 <strong>140줄 vs Codex 245줄</strong>. Gemini만 Retrofit 외부 라이브러리 선택</div></div>
+      <div><div class="rh-tldr-label">결론</div><div class="rh-tldr-val"><strong>V4 아키텍처 결정이 V5~V8 복잡도 직접 결정</strong> &middot; Codex 토큰 57배 절감</div></div>
     </div>
   </header>
   <nav class="toc">

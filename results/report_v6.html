@@ -12,13 +12,18 @@
   <header class="rh">
     <div class="rh-eyebrow">AI CODING TOOL COMPARISON · V6</div>
     <h1 class="rh-title">V6 — 버그 디버깅</h1>
-    <p class="rh-sub">동일한 유형의 버그 5개를 각 AI의 코드베이스에 심고 "찾아서 고쳐라"는 지시만 주었습니다. 발견율은 전원 5/5로 같았지만, 진단 방법과 검증 품질에서 뚜렷한 차이가 드러났습니다.</p>
+    <p class="rh-sub">V4 코드에 동일한 버그 5개를 심고 "찾아서 고쳐라"만 지시했습니다. 발견율은 전원 5/5로 동일했지만, Codex만 단위 테스트로 검증했고 Gemini는 빌드 검증을 완료하지 못했습니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span>
       <span class="ai-pill"><span class="dot codex"></span>Codex</span>
       <span class="ai-pill"><span class="dot gemini"></span>Gemini</span>
       <span class="tag-sm">baseline: V4 코드 + 버그 5개 주입</span>
       <span class="tag-sm">2026-06-01</span>
+    </div>
+    <div class="rh-tldr">
+      <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">V4 코드에 동일한 버그 5개를 심고 "찾아서 고쳐라"만 지시</div></div>
+      <div><div class="rh-tldr-label">핵심 차이점</div><div class="rh-tldr-val">발견율 전원 5/5로 동일. Codex만 단위 테스트를 직접 실행해 검증. Gemini는 JAVA_HOME 오류로 빌드 검증 실패</div></div>
+      <div><div class="rh-tldr-label">결론</div><div class="rh-tldr-val"><strong>Gemini 194초 최단</strong> &middot; 발견 능력 동등 &middot; 검증 품질 차이 명확</div></div>
     </div>
   </header>
 

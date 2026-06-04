@@ -440,6 +440,33 @@ body {
 
 <div class="wrap">
 
+  <!-- 결론 먼저 -->
+  <div style="background:var(--ink);color:#fff;border-radius:8px;padding:28px 32px;margin-bottom:12px">
+    <p style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;opacity:.45;margin-bottom:18px">결론 먼저 &nbsp;·&nbsp; 9단계 요약</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">속도</div>
+        <div style="font-size:17px;font-weight:800;margin-bottom:5px">Gemini</div>
+        <div style="font-size:13px;opacity:.6;line-height:1.65">전 단계 최단. V2 149초로 Claude(360초) 대비 2.4배 빠름</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">코드 품질 · 효율</div>
+        <div style="font-size:17px;font-weight:800;margin-bottom:5px">Codex</div>
+        <div style="font-size:13px;opacity:.6;line-height:1.65">V4 토큰 57배 절감. DIP 패턴 일관 적용. V5 자가수정 성공</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">설계의 파급효과</div>
+        <div style="font-size:17px;font-weight:800;margin-bottom:5px">V4가 V5~V8 결정</div>
+        <div style="font-size:13px;opacity:.6;line-height:1.65">Claude Repository 분리 → 테스트 140줄. Codex 통합 → 245줄</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">핵심 발견</div>
+        <div style="font-size:17px;font-weight:800;margin-bottom:5px">빌드 ≠ 실동작</div>
+        <div style="font-size:13px;opacity:.6;line-height:1.65">V8 Gemini: assembleDebug 통과 → 실기기 즉시 크래시 → 4개 버그 자가수정</div>
+      </div>
+    </div>
+  </div>
+
   <!-- 이 실험을 하는 이유 -->
   <div class="card" style="margin-bottom:12px;padding:24px 30px;border-left:3px solid var(--ink);">
     <p style="font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">이 실험을 하는 이유</p>
