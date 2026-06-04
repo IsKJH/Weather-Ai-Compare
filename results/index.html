@@ -679,254 +679,164 @@ body {
     <div class="sec-head">
       <span class="sec-n">02</span>
       <h2 class="sec-t">수치 비교</h2>
+      <span class="sec-sub">속도 · 핵심 결과 · AI 특성</span>
     </div>
     <div class="tbl-wrap">
       <table class="tbl">
         <thead>
           <tr>
-            <th>항목</th>
+            <th></th>
             <th class="cl">Claude</th>
             <th class="cd">Codex</th>
             <th class="gm">Gemini</th>
-            <th style="border-top:2px solid var(--cursor,#111827);">Cursor</th>
+            <th style="border-top:2px solid #111827;">Cursor</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td class="rk">모델</td>
-            <td class="mono">claude-sonnet-4-6</td>
-            <td class="mono">gpt-5.5</td>
-            <td class="mono">gemini-3-flash</td>
-            <td class="mono">auto (Cursor Agent)</td>
+            <td class="mono" style="font-size:12px">claude-sonnet-4-6</td>
+            <td class="mono" style="font-size:12px">gpt-5.5</td>
+            <td class="mono" style="font-size:12px">gemini-3-flash</td>
+            <td class="mono" style="font-size:12px">auto (Cursor Agent)</td>
+          </tr>
+          <!-- ── 소요 시간 ── -->
+          <tr style="background:var(--faint)">
+            <td colspan="5" style="padding:7px 18px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)">소요 시간 (초) &nbsp;·&nbsp; Cursor는 V4 직전 사용량 한도 초과로 이탈</td>
           </tr>
           <tr>
-            <td class="rk">V1 생성 시간</td>
-            <td class="mono">537초</td>
-            <td class="mono">457초</td>
-            <td class="mono win">318초 — 최단</td>
-            <td class="mono">360초</td>
+            <td class="rk">V1 첫 생성</td>
+            <td class="mono">537</td>
+            <td class="mono">457</td>
+            <td class="mono win">318 — 최단</td>
+            <td class="mono">360</td>
           </tr>
           <tr>
-            <td class="rk">V2 생성 시간</td>
-            <td class="mono">360.6초</td>
-            <td class="mono">315초</td>
-            <td class="mono win">149.4초 — 최단</td>
-            <td class="mono">240초</td>
+            <td class="rk">V2 기능 추가</td>
+            <td class="mono">361</td>
+            <td class="mono">315</td>
+            <td class="mono win">149 — 최단</td>
+            <td class="mono">240</td>
           </tr>
           <tr>
-            <td class="rk">V3 생성 시간</td>
-            <td class="mono">412.5초</td>
-            <td class="mono">280초</td>
-            <td class="mono win">185.2초 — 최단</td>
-            <td class="mono">660초</td>
+            <td class="rk">V3 자율 혁신</td>
+            <td class="mono">413</td>
+            <td class="mono">280</td>
+            <td class="mono win">185 — 최단</td>
+            <td class="mono">660</td>
           </tr>
           <tr>
-            <td class="rk">V4 생성 시간</td>
-            <td class="mono">536초</td>
-            <td class="mono">437초</td>
-            <td class="mono win">426초 — 최단</td>
-            <td class="mono" style="color:var(--muted);">한도 초과</td>
+            <td class="rk">V4 실제 API</td>
+            <td class="mono">536</td>
+            <td class="mono">437</td>
+            <td class="mono win">426 — 최단</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
-            <td class="rk">V1 토큰 합계</td>
-            <td>918,278 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
-            <td class="win">165,761 — 최저</td>
-            <td>672,522</td>
-            <td>1,170,000 <span style="font-size:12px;color:var(--muted);">(Included)</span></td>
+            <td class="rk">V5 단위 테스트</td>
+            <td class="mono">428</td>
+            <td class="mono">256</td>
+            <td class="mono win">231 — 최단</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
-            <td class="rk">V2 토큰 합계</td>
-            <td>1,043,992</td>
-            <td>1,615,940</td>
-            <td class="win">642,641 — 최저</td>
-            <td>1,228,000 <span style="font-size:12px;color:var(--muted);">(Included)</span></td>
+            <td class="rk">V6 버그 디버깅</td>
+            <td class="mono">506</td>
+            <td class="mono">~480</td>
+            <td class="mono win">194 — 최단</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
-            <td class="rk">V3 실행 비용</td>
-            <td class="mono">$0.95</td>
-            <td class="mono">$0.45</td>
-            <td class="mono win">$0.35 — 최저</td>
-            <td class="mono">$0.48 <span style="font-size:12px;color:var(--muted);">(Included)</span></td>
+            <td class="rk">V7 Room DB</td>
+            <td class="mono">519</td>
+            <td class="mono win">419 — 최단</td>
+            <td class="mono">556</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
-            <td class="rk">V4 토큰 합계</td>
-            <td>5,262,416 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
-            <td class="win">92,991 — 최저</td>
-            <td>2,065,397</td>
-            <td style="color:var(--muted);">한도 초과</td>
+            <td class="rk">V8 WorkManager</td>
+            <td class="mono">457</td>
+            <td class="mono win">410 — 최단</td>
+            <td class="mono">582</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
-            <td class="rk">V1 코드량</td>
-            <td>5파일 · 395줄</td>
-            <td>6파일 · 451줄</td>
-            <td>5파일 · 304줄</td>
-            <td>7파일 · 473줄</td>
+            <td class="rk">V9 코드 리뷰</td>
+            <td class="mono">~980</td>
+            <td class="mono win">671 — 최단</td>
+            <td class="mono">~2,400</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
-          <tr>
-            <td class="rk">V3 코드량</td>
-            <td>5파일 · 612줄</td>
-            <td class="win">6파일 · 558줄 ↓</td>
-            <td>5파일 · 542줄</td>
-            <td>11파일 · 986줄</td>
-          </tr>
-          <tr>
-            <td class="rk">V4 코드량</td>
-            <td>6파일 · 736줄</td>
-            <td class="win">6파일 · 890줄 — 최다</td>
-            <td>6파일 · 716줄</td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V4 HTTP 라이브러리</td>
-            <td>java.net.URL (stdlib)</td>
-            <td>java.net.HttpURLConnection (stdlib)</td>
-            <td>Retrofit + Gson + OkHttp</td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V5 테스트 시간</td>
-            <td class="mono">428초</td>
-            <td class="mono">256초</td>
-            <td class="mono win">231초 — 최단</td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V5 토큰 합계</td>
-            <td>1,689,609 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
-            <td class="win">73,606 — 최저</td>
-            <td>3,745,259 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
-            <td style="color:var(--muted);">한도 초과</td>
+
+          <!-- ── 핵심 결과 ── -->
+          <tr style="background:var(--faint)">
+            <td colspan="5" style="padding:7px 18px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)">핵심 결과 — 무엇이 달랐나</td>
           </tr>
           <tr>
             <td class="rk">V5 테스트 결과</td>
             <td><span class="badge ok">5/5 통과</span></td>
             <td><span class="badge warn">자가수정 후 5/5</span></td>
             <td><span class="badge ok">5/5 통과</span></td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V5 모킹 전략</td>
-            <td>MockK (mockkObject)</td>
-            <td>URLStreamHandlerFactory (직접 구현)</td>
-            <td>MockK + Turbine</td>
-            <td style="color:var(--muted);">한도 초과</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
             <td class="rk">V6 버그 발견</td>
             <td><span class="badge ok">5 / 5</span></td>
             <td><span class="badge ok">5 / 5</span></td>
             <td><span class="badge ok">5 / 5</span></td>
-            <td style="color:var(--muted);">한도 초과</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
-            <td class="rk">V6 빌드 검증</td>
-            <td><span class="badge ok">성공</span></td>
+            <td class="rk">V6 수정 검증</td>
+            <td><span class="badge ok">빌드 확인</span></td>
             <td><span class="badge ok">빌드 + 단위 테스트</span></td>
             <td><span class="badge err">미검증 (JAVA_HOME)</span></td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V7 생성 시간</td>
-            <td class="mono">519초</td>
-            <td class="mono win">419초 — 최단</td>
-            <td class="mono">556초</td>
-            <td style="color:var(--muted);">한도 초과</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
             <td class="rk">V7 테스트 호환</td>
             <td><span class="badge ok">DAO nullable</span></td>
             <td><span class="badge ok">Repository 인터페이스</span></td>
-            <td><span class="badge warn">테스트 직접 수정</span></td>
-            <td style="color:var(--muted);">한도 초과</td>
+            <td><span class="badge warn">기존 테스트 수정</span></td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
-            <td class="rk">V8 생성 시간</td>
-            <td class="mono">457초</td>
-            <td class="mono win">410초 — 최단</td>
-            <td class="mono">582초</td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V8 Worker 패턴</td>
+            <td class="rk">V8 Worker 구현</td>
             <td><span class="badge ok">suspend 정석</span></td>
             <td><span class="badge ok">suspend + 이중 권한</span></td>
             <td><span class="badge warn">runBlocking 안티패턴</span></td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V8 데이터 소스</td>
-            <td><span class="badge ok">실 API (Open-Meteo)</span></td>
-            <td><span class="badge warn">목 데이터 (하드코딩)</span></td>
-            <td><span class="badge ok">실 API (Open-Meteo)</span></td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V8 알림 스타일</td>
-            <td>기본 알림</td>
-            <td class="win">BigTextStyle + 커스텀 아이콘</td>
-            <td>기본 알림</td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V6 소요 시간</td>
-            <td class="mono">506초</td>
-            <td class="mono">~480초</td>
-            <td class="mono win">194초 — 최단</td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V7 토큰 합계</td>
-            <td>1,857,932 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
-            <td class="win">104,195 — 최저</td>
-            <td>4,607,039 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V8 토큰 합계</td>
-            <td>1,526,954 <span style="font-size:12px;color:var(--muted);">(캐시 포함)</span></td>
-            <td class="win">74,945 — 최저</td>
-            <td>427,032</td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V9 리뷰 소요</td>
-            <td class="mono">~980초</td>
-            <td class="mono win">671초 — 최단</td>
-            <td class="mono">~2,400초</td>
-            <td style="color:var(--muted);">한도 초과</td>
-          </tr>
-          <tr>
-            <td class="rk">V9 파일 접근</td>
-            <td><span class="badge ok">성공</span></td>
-            <td><span class="badge ok">성공</span></td>
-            <td><span class="badge warn">샌드박스 제한</span></td>
-            <td style="color:var(--muted);">한도 초과</td>
+            <td style="color:var(--muted);text-align:center">—</td>
           </tr>
           <tr>
             <td class="rk">V9 자가 개선</td>
-            <td>5개 항목</td>
-            <td>5개 항목</td>
-            <td>4개 항목</td>
-            <td style="color:var(--muted);">한도 초과</td>
+            <td>5개 도출</td>
+            <td>5개 도출</td>
+            <td>4개 도출</td>
+            <td style="color:var(--muted);text-align:center">—</td>
+          </tr>
+
+          <!-- ── AI 특성 ── -->
+          <tr style="background:var(--faint)">
+            <td colspan="5" style="padding:7px 18px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)">AI 특성</td>
           </tr>
           <tr>
-            <td class="rk">자동 빌드</td>
-            <td><span class="badge err">수동 필요</span></td>
-            <td><span class="badge ok">자동 성공</span></td>
+            <td class="rk">V1 자동 빌드</td>
+            <td><span class="badge err">수동 보완</span></td>
+            <td><span class="badge ok">자동 완결</span></td>
             <td><span class="badge warn">리소스 누락</span></td>
-            <td><span class="badge ok">자동 성공</span></td>
+            <td><span class="badge ok">자동 완결</span></td>
           </tr>
           <tr>
             <td class="rk">한국어 처리</td>
             <td><span class="badge ok">정상</span></td>
-            <td><span class="badge warn">V1 오류→V2 수정</span></td>
+            <td><span class="badge warn">V1 오류 → V2 자가수정</span></td>
             <td><span class="badge ok">정상</span></td>
             <td><span class="badge ok">정상</span></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p class="note">Codex V1 시간은 당초 "측정 불가"로 표기했으나 로그 검토 결과 457초로 확인. Claude 토큰 918,278 중 865,307이 캐시 읽기(×0.1 과금)라 실질 비용은 경쟁력 있습니다.</p>
+    <p class="note">소요 시간 기준: Gemini가 V1~V6 전 단계 최단, V7·V8부터 Codex가 역전. Cursor는 V4 착수 전 월간 한도 초과로 이탈해 V4 이후 데이터 없음. Gemini V9 시간(~2,400초)은 파일 접근 실패로 인한 재실행이 포함됨.</p>
   </section>
 
   <!-- 코드 성장 추이 -->
