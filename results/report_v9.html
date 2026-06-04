@@ -65,7 +65,7 @@
       </div>
       <div class="callout">
         <div class="callout-k">특이사항</div>
-        <div class="callout-v">Gemini는 자신의 프로젝트 디렉토리 밖 파일 접근 제한으로 상대 코드를 직접 읽지 못했습니다. 제한된 정보로 리뷰를 완성했으며, 이 점 자체가 <strong>각 AI 도구의 샌드박스 정책 차이</strong>를 보여주는 관찰 포인트입니다.</div>
+        <div class="callout-v">Gemini CLI는 초기 실행 시 워크스페이스 밖 파일 접근이 제한됐지만, 리포 루트에서 재실행 후 Claude·Codex 코드 파일을 직접 읽고 리뷰를 작성했습니다. <code>FavoriteCityRepository</code>, <code>fetchJob?.cancel()</code>, <code>FakeOpenMeteoServer</code> 등 실제 코드를 참조한 구체적인 리뷰가 완성됐습니다.</div>
       </div>
     </div>
 
@@ -400,24 +400,24 @@
       <div class="ai-card">
         <div class="ai-card-head gemini"><span class="dot gemini"></span> Gemini</div>
         <div class="ai-card-body">
-          <div class="ai-stat"><span class="ai-stat-k">소요 시간</span><span class="ai-stat-v">~2,400초</span></div>
-          <div class="ai-stat"><span class="ai-stat-k">리뷰 방식</span><span class="ai-stat-v">워크스페이스 제한으로 제한적 읽기</span></div>
-          <div class="ai-stat"><span class="ai-stat-k">리뷰 파일 접근</span><span class="ai-stat-v"><span class="badge warn">실패 — 워크스페이스 샌드박스 제한</span></span></div>
+          <div class="ai-stat"><span class="ai-stat-k">소요 시간</span><span class="ai-stat-v">~800초 (재실행 포함)</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">리뷰 방식</span><span class="ai-stat-v">리포 루트 실행 → 파일 직접 읽기</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">리뷰 파일 접근</span><span class="ai-stat-v"><span class="badge ok">성공 (루트 워크스페이스)</span></span></div>
           <div class="ai-stat"><span class="ai-stat-k">개선 항목</span><span class="ai-stat-v">4개</span></div>
         </div>
       </div>
     </div>
 
     <div class="insight" style="margin-top:16px">
-      <span class="insight-icon">🔒</span>
-      <div><strong>Gemini 샌드박스 제한 — V9에서 새로 발견된 AI 도구 특성:</strong> Gemini CLI는 실행 디렉토리(weather-gemini/) 밖의 파일 접근을 차단합니다. <code>GEMINI_CLI_TRUST_WORKSPACE=true</code>를 설정해도 워크스페이스 경계는 유지됩니다. Codex는 타 프로젝트 파일을 PowerShell로 자유롭게 읽었고, Claude도 동일합니다. 코드 리뷰처럼 <strong>여러 프로젝트를 동시에 참조해야 하는 작업에서 Gemini의 샌드박스 정책이 작업 범위를 제한</strong>하는 실질적 제약임이 확인됐습니다.</div>
+      <span class="insight-icon">💡</span>
+      <div><strong>실행 디렉토리가 리뷰 범위를 결정합니다:</strong> Gemini CLI는 프로젝트 디렉토리에서 실행하면 해당 디렉토리 밖 파일 접근이 제한됩니다. 리포 루트(<code>C:\proj\weather-ai-compare\</code>)에서 실행하면 모든 서브 프로젝트에 접근 가능합니다. 코드 리뷰처럼 여러 프로젝트를 참조해야 하는 작업은 <strong>실행 위치를 신중하게 선택해야 한다</strong>는 것을 보여준 실용적 관찰 포인트입니다.</div>
     </div>
   </section>
 
   <!-- 06 최종 평가 -->
   <section class="card" id="verdict">
     <div class="sh"><span class="sh-num">06</span><h2>최종 평가</h2></div>
-    <div class="score-grid">
+    <div class="score-verdict-grid">
       <div class="score-cell">
         <div class="score-label"><span class="dot claude"></span> Claude</div>
         <div class="score-desc">Codex의 DIP 패턴과 Gemini의 원자적 상태 업데이트를 정확히 식별했다. 5개 개선 항목 모두 클래스·메서드 수준으로 구체적. 리뷰가 가장 자기비판적이었다 — "좋은 결정과 아쉬운 결정이 뒤섞여 있다".</div>
@@ -428,7 +428,7 @@
       </div>
       <div class="score-cell">
         <div class="score-label"><span class="dot gemini"></span> Gemini</div>
-        <div class="score-desc">파일 접근 제한에도 4개 개선 항목을 도출. 내용은 일관됐지만 실제 코드 참조 없이 기억·추론에 의존한 리뷰. 시간이 가장 길었고(재실행 포함), 샌드박스 제약이 협업 시나리오에서 실질적 한계임을 확인.</div>
+        <div class="score-desc">리포 루트에서 재실행해 파일 직접 읽기 성공. Claude의 <code>fetchJob?.cancel()</code>, Codex의 <code>FakeOpenMeteoServer</code>를 코드 레퍼런스로 정확히 인용. 4개 개선 항목 모두 구체적. 실행 위치가 작업 범위에 미치는 영향을 가장 명확히 보여준 AI.</div>
       </div>
     </div>
 
