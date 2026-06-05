@@ -9,6 +9,7 @@
 <body id="top">
 <div class="wrap">
   <header class="rh">
+    <div class="rh-eyebrow">WeatherNow AI 비교 실험 · V2 / 9단계</div>
     <h1 class="rh-title">WeatherNow V2 기능 개선 비교</h1>
     <p class="rh-sub">각 AI가 자신이 만든 V1 코드를 읽고, 시간별 예보·새로고침·즐겨찾기를 추가하도록 동일한 프롬프트를 주었습니다. 처음부터 다시 만드는 게 아니라 <em>기존 코드를 이해하고 확장</em>하는 능력을 측정하는 단계입니다. 4개 AI 모두 6가지 요구사항을 전부 충족했으며, Codex는 V1에서 미해결로 남아 있던 한국어 깨짐 버그를 이 단계에서 명시적 지시 없이 스스로 수정했습니다.</p>
     <div class="rh-meta">
@@ -123,7 +124,7 @@ After implementation:
   <section class="card" id="summary">
     <div class="sh"><span class="sh-num">03</span><h2>종합 비교</h2></div>
     <p class="lead">4개 AI 모두 기능 요구사항(6/6)과 빌드 성공을 달성했습니다. 차이는 <strong>속도</strong>(149초~361초), <strong>토큰 소비량</strong>(64만~161만), <strong>코드 구조</strong>(파일 5~9개, 518~748줄)에서 나타납니다. Codex는 토큰과 시간을 가장 많이 썼고, Gemini는 가장 적게 썼습니다.</p>
-    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th><th class="th-cursor">Cursor</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6 (Claude Code CLI v2.1.153)</td><td>gpt-5.5 (OpenAI Codex CLI v0.134.0)</td><td>gemini-3.1-flash-lite + gemini-3-flash (Gemini CLI v0.43.0)</td><td>auto (Cursor Agent)</td></tr><tr><td class="col-label">소요 시간</td><td>360.6초</td><td>315초</td><td>149.4초</td><td>240초</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>1,043,992</td><td>1,615,940</td><td>642,641</td><td>1,228,000</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>5개 / 580줄</td><td>6개 / 736줄</td><td>5개 / 518줄</td><td>9개 / 748줄</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>성공</td><td>성공</td><td>성공</td><td>성공</td></tr><tr><td class="col-label">요구사항 충족</td><td>6/6</td><td>6/6</td><td>6/6</td><td>6/6</td></tr><tr><td class="col-label">v1 대비 변경 파일</td><td>3개</td><td>6개</td><td>4개</td><td>8개</td></tr><tr><td class="col-label">UI 테마</td><td>밝은 블루 그라디언트, v1 감성 유지</td><td>다크 네이비 대시보드</td><td>블루 그라디언트, 모바일 앱 액션 중심</td><td>라이트 청록(teal) 그라디언트, v1 감성 유지</td></tr></tbody></table></div>
+    <div class="tbl-wrap"><table><thead><tr><th>항목</th><th class="th-claude">Claude</th><th class="th-codex">Codex</th><th class="th-gemini">Gemini</th><th class="th-cursor">Cursor</th></tr></thead><tbody><tr><td class="col-label">모델</td><td>claude-sonnet-4-6 (Claude Code CLI v2.1.153)</td><td>gpt-5.5 (OpenAI Codex CLI v0.134.0)</td><td>gemini-3.1-flash-lite + gemini-3-flash (Gemini CLI v0.43.0)</td><td>auto (Cursor Agent)</td></tr><tr><td class="col-label">소요 시간</td><td>360.6초</td><td>315초</td><td>149.4초</td><td>240초</td></tr><tr class="row-hl"><td class="col-label">총 사용 토큰</td><td>1,043,992</td><td>1,615,940</td><td>642,641</td><td>1,228,000</td></tr><tr><td class="col-label">Kotlin 파일/라인</td><td>5개 / 580줄</td><td>6개 / 736줄</td><td>5개 / 518줄</td><td>9개 / 748줄</td></tr><tr class="row-hl"><td class="col-label">빌드</td><td>성공</td><td>성공</td><td>성공</td><td>성공</td></tr><tr><td class="col-label">요구사항 충족</td><td>6/6</td><td>6/6</td><td>6/6</td><td>6/6</td></tr><tr><td class="col-label">V1 대비 변경 파일</td><td>3개</td><td>6개</td><td>4개</td><td>8개</td></tr><tr><td class="col-label">UI 테마</td><td>밝은 블루 그라디언트, V1 감성 유지</td><td>다크 네이비 대시보드</td><td>블루 그라디언트, 모바일 앱 액션 중심</td><td>라이트 청록(teal) 그라디언트, V1 감성 유지</td></tr></tbody></table></div>
   </section>
 
   <section class="card" id="tokens">
@@ -165,8 +166,12 @@ After implementation:
  .../java/com/example/weathernow/ui/components/CityTabBar.kt        |  신규
  .../java/com/example/weathernow/ui/components/HourlyCard.kt        |  신규
  .../java/com/example/weathernow/ui/components/WeatherHeader.kt     |  신규
- 8 files changed, v1(7파일·473줄) → v2(9파일·748줄), +275줄</pre><p class="tc-note">기존 파일 5개를 수정하고 컴포넌트 파일 3개를 신규 추가했습니다. 단일 파일에 기능을 쌓는 대신 역할별로 파일을 나누는 방식입니다. 변경 범위는 가장 넓지만, 각 파일의 책임이 명확해집니다.</p></div>
+ 8 files changed, V1(7파일·473줄) → V2(9파일·748줄), +275줄</pre><p class="tc-note">기존 파일 5개를 수정하고 컴포넌트 파일 3개를 신규 추가했습니다. 단일 파일에 기능을 쌓는 대신 역할별로 파일을 나누는 방식입니다. 변경 범위는 가장 넓지만, 각 파일의 책임이 명확해집니다.</p></div>
   </section>
+  <nav class="rf">
+    <a href="report.html">← V1 초기 생성</a>
+    <a href="report_v3.html">V3 자율 혁신 →</a>
+  </nav>
 </div>
 </body>
 </html>

@@ -223,7 +223,7 @@
   <!-- 04 실기기 검증 -->
   <section class="card" id="device-test">
     <div class="sh"><span class="sh-num">04</span><h2>실기기 알림 검증</h2></div>
-    <p style="color:var(--fg2);margin-bottom:16px">각 AI가 직접 <code>adb install</code>로 기기에 APK를 설치 → Room DB에 즐겨찾기 도시 입력 → <code>adb shell am broadcast</code>로 WorkManager 작업을 즉시 강제 트리거 → 알림 셰이드 스크린샷 순서로 자가 검증했습니다. 15분 주기를 기다리지 않고 즉시 실행할 수 있는 이 강제 트리거 방법이 실기기 검증을 현실적으로 만들어줬습니다. <strong>이 과정을 거쳐야만 assembleDebug가 잡지 못한 런타임 문제를 발견할 수 있습니다.</strong></p>
+    <p style="color:var(--text2);margin-bottom:16px">각 AI가 직접 <code>adb install</code>로 기기에 APK를 설치 → Room DB에 즐겨찾기 도시 입력 → <code>adb shell am broadcast</code>로 WorkManager 작업을 즉시 강제 트리거 → 알림 셰이드 스크린샷 순서로 자가 검증했습니다. 15분 주기를 기다리지 않고 즉시 실행할 수 있는 이 강제 트리거 방법이 실기기 검증을 현실적으로 만들어줬습니다. <strong>이 과정을 거쳐야만 assembleDebug가 잡지 못한 런타임 문제를 발견할 수 있습니다.</strong></p>
 
     <div class="ai-grid">
       <div class="ai-card">
@@ -343,36 +343,36 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
           <span style="display:flex;align-items:center;gap:6px"><span class="dot codex" style="display:inline-block;width:10px;height:10px;border-radius:50%"></span>Codex</span>
-          <span style="color:var(--fg2)">410초</span>
+          <span style="color:var(--text2)">410초</span>
         </div>
-        <div style="background:var(--border);border-radius:4px;height:12px">
-          <div class="bar-fill codex" style="width:70%"></div>
+        <div style="background:var(--border);border-radius:4px;height:12px;overflow:hidden">
+          <div class="bar-fill codex" style="width:70%;height:100%"></div>
         </div>
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
           <span style="display:flex;align-items:center;gap:6px"><span class="dot claude" style="display:inline-block;width:10px;height:10px;border-radius:50%"></span>Claude</span>
-          <span style="color:var(--fg2)">457초</span>
+          <span style="color:var(--text2)">457초</span>
         </div>
-        <div style="background:var(--border);border-radius:4px;height:12px">
-          <div class="bar-fill claude" style="width:78%"></div>
+        <div style="background:var(--border);border-radius:4px;height:12px;overflow:hidden">
+          <div class="bar-fill claude" style="width:78%;height:100%"></div>
         </div>
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
           <span style="display:flex;align-items:center;gap:6px"><span class="dot gemini" style="display:inline-block;width:10px;height:10px;border-radius:50%"></span>Gemini</span>
-          <span style="color:var(--fg2)">582초</span>
+          <span style="color:var(--text2)">582초</span>
         </div>
-        <div style="background:var(--border);border-radius:4px;height:12px">
-          <div class="bar-fill gemini" style="width:100%"></div>
+        <div style="background:var(--border);border-radius:4px;height:12px;overflow:hidden">
+          <div class="bar-fill gemini" style="width:100%;height:100%"></div>
         </div>
       </div>
     </div>
 
-    <p class="note" style="margin-top:16px">Gemini의 초기 <code>replace</code>·<code>run_shell_command</code> 도구 호출 오류 4회가 약 40초의 추가 소요를 야기했습니다. 실제 구현 시간 기준으로는 Claude와 비슷한 수준입니다.</p>
+    <p class="note-box" style="margin-top:16px">Gemini의 초기 <code>replace</code>·<code>run_shell_command</code> 도구 호출 오류 4회가 약 40초의 추가 소요를 야기했습니다. 실제 구현 시간 기준으로는 Claude와 비슷한 수준입니다.</p>
   </section>
 
-  <!-- 05 최종 평가 -->
+  <!-- 06 최종 평가 -->
   <section class="card" id="verdict">
     <div class="sh"><span class="sh-num">06</span><h2>최종 평가</h2></div>
     <div class="score-verdict-grid">

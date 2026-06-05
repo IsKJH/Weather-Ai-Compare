@@ -10,6 +10,7 @@
   --text:     #09090B;
   --text2:    #52525B;
   --text3:    #A1A1AA;
+  --ink:      #09090B; /* alias for --text, used in report_human and report_tips */
   --code-bg:  #18181B;
   --code-fg:  #D4D4D8;
   --claude:   #C2622A;
@@ -342,12 +343,12 @@ td.col-label { font-weight: 700; color: var(--text2); white-space: nowrap; font-
   margin-bottom: 6px;
 }
 .rh-tldr-val { font-size: 14px; color: var(--text2); line-height: 1.7; }
-.rh-tldr-val strong { color: var(--ink); font-weight: 700; }
+.rh-tldr-val strong { color: var(--text); font-weight: 700; }
 
 /* ── VERDICT CARDS (V8, V9 등 AI별 카드 레이아웃) ── */
 .score-verdict-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 14px 0; }
 .score-cell { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 18px 22px; }
-.score-cell .score-label { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.score-cell .score-label { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
 .score-cell .score-desc { font-size: 14.5px; color: var(--text2); line-height: 1.8; }
 .score-hdr { padding: 8px 14px; background: var(--bg); border-bottom: 1px solid var(--border); font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text3); text-align: center; }
 .score-hdr:first-child { text-align: left; }
@@ -412,6 +413,11 @@ pre.diff {
   font-family: 'JetBrains Mono', monospace;
   line-height: 1.65;
 }
+
+/* ── CODE CARD (used in V2 diff sections) ── */
+.code-card { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin: 10px 0; }
+.cc-head { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
+.cc-name { font-weight: 700; font-size: 14px; }
 
 /* ── INDEX-SPECIFIC (kept for index.html compatibility) ── */
 .index-wrap { max-width: 1200px; margin: 0 auto; padding: 40px 28px 96px; }

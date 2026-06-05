@@ -111,7 +111,7 @@
   </header>
 
   <nav class="toc">
-    <a href="index.html">전체 요약</a>
+    <a href="index.html">← 전체 요약</a>
     <a href="#overview">실험 개요</a>
     <a href="#v1">V1 결과</a>
     <a href="#structure">코드 구조</a>
@@ -163,7 +163,7 @@
     </div>
     <p class="lead">도시 전환(서울·부산·제주), 현재 날씨, 5일 예보를 구현하는 V1 명세 기준입니다.</p>
 
-    <h3 style="font-size:14px;font-weight:850;color:#555;margin:20px 0 10px;">소요 시간 비교</h3>
+    <h3 style="font-size:14px;font-weight:800;color:var(--text2);margin:20px 0 10px;">소요 시간 비교</h3>
     <div class="time-cmp">
       <div class="time-box highlight">
         <div class="time-ai"><span class="dot human" style="display:inline-block;margin-right:5px;"></span>Human · Flutter</div>
@@ -184,11 +184,11 @@
       <div class="time-box">
         <div class="time-ai"><span class="dot codex" style="display:inline-block;margin-right:5px;"></span>Codex · Kotlin</div>
         <div class="time-val">—</div>
-        <div class="time-sub">측정 불가</div>
+        <div class="time-sub">V1 실행 환경 차이로 미기록 · V2는 315초</div>
       </div>
     </div>
 
-    <h3 style="font-size:14px;font-weight:850;color:#555;margin:20px 0 10px;">구현 시간 배율 (Gemini 기준)</h3>
+    <h3 style="font-size:14px;font-weight:800;color:var(--text2);margin:20px 0 10px;">구현 시간 배율 (Gemini 기준)</h3>
     <div class="diff-bar-wrap">
       <div class="diff-bar-row">
         <span class="diff-bar-label"><span class="dot human" style="display:inline-block;margin-right:5px;"></span>Human</span>
@@ -208,7 +208,7 @@
     </div>
     <div class="note-box">언어 차이 고려: Flutter는 Android보다 초기 세팅(pubspec.yaml, build_runner 설정, Riverpod 세팅)에 약 10~15분이 추가됩니다. 순수 화면 구현만 따지면 실제 차이는 약 ×10 수준으로 추정됩니다. Codex V1은 실행 환경 차이로 V1 시간이 기록되지 않았습니다(전체 실험 대시보드의 측정 시간과 다를 수 있음).</div>
 
-    <h3 style="font-size:14px;font-weight:850;color:#555;margin:20px 0 10px;">코드량 비교</h3>
+    <h3 style="font-size:14px;font-weight:800;color:var(--text2);margin:20px 0 10px;">코드량 비교</h3>
     <div class="tbl-wrap">
       <table>
         <thead>
@@ -350,7 +350,7 @@
 
     <!-- 이 코드가 증명하는 것 -->
     <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border,#E8E8E8)">
-      <h3 style="font-size:14px;font-weight:850;color:#555;margin:0 0 10px;">이 코드가 증명하는 것 — AI가 도달하는 데 7단계가 필요했던 설계를 첫 버전에서 적용</h3>
+      <h3 style="font-size:14px;font-weight:800;color:var(--text2);margin:0 0 10px;">이 코드가 증명하는 것 — AI가 도달하는 데 7단계가 필요했던 설계를 첫 버전에서 적용</h3>
       <div class="insight-grid">
         <div class="insight purple">
           <div class="insight-k">V7 패턴을 V1에서 적용</div>
@@ -647,6 +647,13 @@
       </div>
     </div>
   </section>
+
+</div>
+
+  <footer class="rf">
+    <a href="index.html">← 전체 요약</a>
+    <a href="report_tips.html">더 잘 쓰는 방법 →</a>
+  </footer>
 
 </div>
 </body>

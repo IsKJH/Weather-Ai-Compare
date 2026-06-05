@@ -468,7 +468,7 @@ body {
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
       <div style="border:1px solid var(--border);border-left:3px solid var(--gemini);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--gemini);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">속도 · 구현력</div>
-        <p style="font-size:14px;line-height:1.75;color:var(--ink)"><strong>Gemini가 전 단계 최단</strong>(평균 217초). V3에서 날씨 데이터를 자연어로 해석해주는 인사이트 카드와 온도 기반 배경색 같은 스마트 기능을 만들었고, V4 실 API 연동 후에도 이 기능들을 유일하게 유지했습니다.</p>
+        <p style="font-size:14px;line-height:1.75;color:var(--ink)"><strong>Gemini가 V1~V6 최단</strong>(평균 217초). V3에서 날씨 데이터를 자연어로 해석해주는 인사이트 카드와 온도 기반 배경색 같은 스마트 기능을 만들었고, V4 실 API 연동 후에도 이 기능들을 유일하게 유지했습니다. V7부터는 Codex에게 역전됐습니다.</p>
       </div>
       <div style="border:1px solid var(--border);border-left:3px solid var(--claude);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--claude);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">아키텍처 · 설계</div>
@@ -616,9 +616,9 @@ body {
   <!-- 기억할 만한 사건들 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-n">—</span>
+      <span class="sec-n">02</span>
       <h2 class="sec-t">기억할 만한 사건들</h2>
-      <span class="sec-sub">V1 → V8 중 패턴을 바꾼 결정과 실패</span>
+      <span class="sec-sub">V1 → V9 중 패턴을 바꾼 결정과 실패</span>
     </div>
     <div class="events-grid">
       <div class="ev-card">
@@ -672,7 +672,7 @@ body {
   <!-- 수치 비교 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-n">02</span>
+      <span class="sec-n">03</span>
       <h2 class="sec-t">수치 비교</h2>
       <span class="sec-sub">속도 · 핵심 결과 · AI 특성</span>
     </div>
@@ -837,7 +837,7 @@ body {
   <!-- 코드 성장 추이 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-n">03</span>
+      <span class="sec-n">04</span>
       <h2 class="sec-t">코드 성장 추이</h2>
       <span class="sec-sub">V1 → V2 → V3 Kotlin 코드 라인 수 변화</span>
     </div>
@@ -960,7 +960,7 @@ body {
   <!-- 코드 품질 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-n">04</span>
+      <span class="sec-n">05</span>
       <h2 class="sec-t">코드 패턴 비교</h2>
       <span class="sec-sub">실제 코드에서 확인한 사실</span>
     </div>
@@ -1012,7 +1012,7 @@ body {
   <!-- AI별 요약 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-n">05</span>
+      <span class="sec-n">06</span>
       <h2 class="sec-t">AI별 요약</h2>
     </div>
     <div class="ai-grid">
@@ -1029,7 +1029,7 @@ body {
             <span class="ai-tag good">지시 이행 최고</span>
             <span class="ai-tag warn">토큰 최다</span>
           </div>
-          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> V4 Repository 설계가 V5~V8에 연쇄적으로 긍정 영향을 줬습니다. 기능 추가 속도는 가장 느리지만, 그 대신 코드베이스를 오래 건강하게 유지하는 방향을 일관되게 선택했습니다.</div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V9 아크:</strong> V4 Repository 설계가 V5~V9에 연쇄적으로 긍정 영향을 줬습니다. 기능 추가 속도는 가장 느리지만, 그 대신 코드베이스를 오래 건강하게 유지하는 방향을 일관되게 선택했습니다. V9 상호 리뷰에서 Codex에게 Repository DI 패턴을 배우고 Gemini에게 StateFlow 패턴을 제안했습니다.</div>
           <div class="ai-arc" style="border-top:1px dashed var(--border);margin-top:8px;padding-top:8px;font-style:italic"><strong style="color:var(--ink);font-style:normal">실사용 느낌:</strong> 요구사항을 가장 잘 이해하고 원하는 방향으로 움직임. 단, 작업이 길어지면 토큰 한도에 자주 걸림.</div>
         </div>
       </div>
@@ -1046,7 +1046,7 @@ body {
             <span class="ai-tag good">토큰 효율 최고</span>
             <span class="ai-tag good">자가수정 능력</span>
           </div>
-          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 실패에서 배우는 능력(V2 한국어 수정, V5 테스트 자가진단)과 설계 지향적 선택(V3 리팩터링, V7 DIP)이 가장 두드러집니다. V4 이후 무료 플랜 한도를 초과한 Cursor를 제외하면 누적 종합 1위입니다.</div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V9 아크:</strong> 실패에서 배우는 능력(V2 한국어 수정, V5 테스트 자가진단)과 설계 지향적 선택(V3 리팩터링, V7 DIP)이 가장 두드러집니다. V9에서 FakeOpenMeteoServer 접근법이 세 AI 모두로부터 극찬을 받아 이 실험의 기술적 하이라이트가 됐습니다.</div>
           <div class="ai-arc" style="border-top:1px dashed var(--border);margin-top:8px;padding-top:8px;font-style:italic"><strong style="color:var(--ink);font-style:normal">실사용 느낌:</strong> 무난하고 안정적. Claude보다 지시 정확도는 낮지만, 토큰 여유가 많아 긴 작업을 중단 없이 이어갈 수 있음.</div>
         </div>
       </div>
@@ -1057,14 +1057,14 @@ body {
           <span class="ai-model">gemini-3-flash</span>
         </div>
         <div class="ai-card-body">
-          <p class="ai-summary">V1~V8 전 단계 최단(평균 294초)입니다. V3 인사이트 카드, V4 Retrofit 선택 등 사용자가 바로 체감할 수 있는 기능을 가장 적극적으로 추가했습니다. 단 후반부에서 V6 빌드 검증 실패, V7에서 기존 테스트 직접 수정(원칙 위반), V8에서 runBlocking 안티패턴으로 인한 실기기 크래시가 연속으로 발생했습니다.</p>
+          <p class="ai-summary">V1~V6 전 단계 최단(V1~V6 평균 217초)입니다. V7·V8은 Codex가 역전했고, V9 코드 리뷰에서는 약 2,400초로 가장 오래 걸렸습니다. V3 인사이트 카드, V4 Retrofit 선택 등 사용자가 바로 체감할 수 있는 기능을 가장 적극적으로 추가했습니다. 단 후반부에서 V6 빌드 검증 실패, V7에서 기존 테스트 직접 수정(원칙 위반), V8에서 runBlocking 안티패턴으로 인한 실기기 크래시가 연속으로 발생했습니다.</p>
           <div class="ai-tags">
             <span class="ai-tag good">전 단계 최단</span>
             <span class="ai-tag good">V3 스마트 기능</span>
             <span class="ai-tag bad">V7 원칙 위반</span>
             <span class="ai-tag bad">V8 안티패턴</span>
           </div>
-          <div class="ai-arc"><strong style="color:var(--ink)">V1–V8 아크:</strong> 초반 속도와 창의성이 후반 품질 일관성으로 이어지지 못했습니다. V6, V7, V8에서 연속으로 품질 이슈가 발생한 것은 우연이 아닌 패턴으로 보입니다.</div>
+          <div class="ai-arc"><strong style="color:var(--ink)">V1–V9 아크:</strong> 초반 속도와 창의성이 후반 품질 일관성으로 이어지지 못했습니다. V6, V7, V8에서 연속으로 품질 이슈가 발생한 것은 우연이 아닌 패턴으로 보입니다. V9에서 자기 코드를 스스로 비판적으로 분석해 개선점 4개를 도출했습니다.</div>
           <div class="ai-arc" style="border-top:1px dashed var(--border);margin-top:8px;padding-top:8px;font-style:italic"><strong style="color:var(--ink);font-style:normal">실사용 느낌:</strong> 응답이 가장 빠르지만 간헐적으로 무한 로딩, rate limit, 환경 오류가 발생함. 이번 실험에서도 그 패턴이 반복됐음.</div>
         </div>
       </div>
@@ -1091,16 +1091,16 @@ body {
   <!-- 누적 결론 -->
   <section class="section reveal">
     <div class="sec-head">
-      <span class="sec-n">06</span>
-      <h2 class="sec-t">V1 → V8 누적 결론</h2>
-      <span class="sec-sub">8단계를 모두 마친 후 내릴 수 있는 결론</span>
+      <span class="sec-n">07</span>
+      <h2 class="sec-t">V1 → V9 누적 결론</h2>
+      <span class="sec-sub">9단계를 모두 마친 후 내릴 수 있는 결론</span>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
       <div class="vbox" style="border-left:3px solid var(--gemini);">
         <div class="vbox-rank" style="color:var(--gemini);">속도 · 1위</div>
         <div class="vbox-name">Gemini</div>
-        <div class="vbox-desc">V1~V8 전 단계 최단. 평균 294초. 특히 V2에서 149초로 Claude(360초) 대비 2.4배 빠름. 단 후반부 품질 일관성이 아쉬우므로, 프로토타입이나 빠른 시제품 제작에 적합합니다.</div>
+        <div class="vbox-desc">V1~V6 전 단계 최단(평균 217초). 특히 V2에서 149초로 Claude(360초) 대비 2.4배 빠름. V7부터 Codex에 역전. 단 후반부 품질 일관성이 아쉬우므로, 프로토타입이나 빠른 시제품 제작에 적합합니다.</div>
       </div>
       <div class="vbox" style="border-left:3px solid var(--codex);">
         <div class="vbox-rank" style="color:var(--codex);">코드 품질 + 토큰 효율 · 1위</div>
@@ -1110,7 +1110,7 @@ body {
       <div class="vbox" style="border-left:3px solid var(--claude);">
         <div class="vbox-rank" style="color:var(--claude);">일관성 · 1위</div>
         <div class="vbox-name">Claude</div>
-        <div class="vbox-desc">V4 Repository 설계가 V5~V8에 연쇄 긍정 영향. 지시 이행률 최고. V8에서도 runBlocking 없는 정석 코루틴 구현. 여러 사람이 함께 유지보수해야 하는 팀 협업 코드베이스에 적합합니다.</div>
+        <div class="vbox-desc">V4 Repository 설계가 V5~V9에 연쇄 긍정 영향. 지시 이행률 최고. V8에서도 runBlocking 없는 정석 코루틴 구현. V9 상호 리뷰에서 다른 AI들에게 가장 많은 것을 가르쳤습니다. 여러 사람이 함께 유지보수해야 하는 팀 협업 코드베이스에 적합합니다.</div>
       </div>
     </div>
 
@@ -1161,6 +1161,22 @@ body {
       </div>
     </div>
   </section>
+
+  <!-- 빠른 네비게이션 -->
+  <nav style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
+    <a href="report.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;transition:color .1s,border-color .1s;">V1 초기 생성</a>
+    <a href="report_v2.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">V2 기능 추가</a>
+    <a href="report_v3.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">V3 자율 혁신</a>
+    <a href="report_v4.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">V4 실제 API</a>
+    <a href="report_v5.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">V5 단위 테스트</a>
+    <a href="report_v6.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">V6 버그 디버깅</a>
+    <a href="report_v7.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">V7 Room DB</a>
+    <a href="report_v8.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">V8 백그라운드 알림</a>
+    <a href="report_v9.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">V9 상호 리뷰</a>
+    <a href="report_human.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">직접 구현 vs AI</a>
+    <a href="report_tips.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">더 잘 쓰는 방법</a>
+    <a href="code-rules.html" style="text-decoration:none;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;">코드 규칙 분석</a>
+  </nav>
 
   <!-- 실전 적용 가이드 프로모 -->
   <div class="guide-promo">
