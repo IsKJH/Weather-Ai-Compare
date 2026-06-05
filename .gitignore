@@ -12,3 +12,13 @@ captures/
 *.ap_
 *.aab
 *.hprof
+
+# logs
+logs/
+
+# weather-gemini debug/temp files
+projects/weather-gemini/check_tables.py
+projects/weather-gemini/update_db.py
+projects/weather-gemini/notification_dump.txt
+projects/weather-gemini/ui_dump*.xml
+projects/weather-gemini/weather_database*
