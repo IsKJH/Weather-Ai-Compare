@@ -441,7 +441,7 @@ body {
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">코드 품질 · 효율</div>
         <div style="font-size:17px;font-weight:800;margin-bottom:5px">Codex</div>
-        <div style="font-size:14px;opacity:.8;line-height:1.7">V4 토큰 57배 절감. DIP 패턴 일관 적용. V5 자가수정 성공</div>
+        <div style="font-size:14px;opacity:.8;line-height:1.7">V4 토큰 57배 절감. DIP(의존성 역전 원칙) 패턴 일관 적용. V5 자가수정 성공</div>
       </div>
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">설계의 파급효과</div>
@@ -451,7 +451,7 @@ body {
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.4;margin-bottom:7px">핵심 발견</div>
         <div style="font-size:17px;font-weight:800;margin-bottom:5px">빌드 ≠ 실동작</div>
-        <div style="font-size:14px;opacity:.8;line-height:1.7">V8 Gemini는 빌드(assembleDebug)가 성공했지만 실기기에서 즉시 크래시. runBlocking 안티패턴과 플러그인 누락은 컴파일러가 잡지 못합니다. 빌드 성공이 곧 앱 동작 보장이 아닙니다.</div>
+        <div style="font-size:14px;opacity:.8;line-height:1.7">V8 Gemini는 빌드(<code>assembleDebug</code>: 안드로이드 앱 빌드 명령어)가 성공했지만 실기기에서 즉시 크래시. <code>runBlocking</code> 안티패턴과 플러그인 누락은 컴파일러가 잡지 못합니다. 빌드 성공이 곧 앱 동작 보장이 아닙니다.</div>
       </div>
     </div>
   </div>
@@ -459,7 +459,7 @@ body {
   <!-- 이 실험을 하는 이유 -->
   <div class="card" style="margin-bottom:12px;padding:24px 30px;border-left:3px solid var(--ink);">
     <p style="font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">이 실험을 하는 이유</p>
-    <p style="font-size:15px;line-height:1.9;color:var(--ink);max-width:880px">AI 코딩 도구 비교 글은 넘쳐나지만 대부분 초기 코드 생성 한 번으로 끝납니다. 실제 개발은 그렇지 않습니다. <strong>V1에서 내린 아키텍처 결정이 V5 테스트 복잡도를 결정하고, V4에서 선택한 라이브러리가 V8 알림 구현 방식을 제약합니다.</strong> 첫 번째 출력 품질만으로는 이 AI가 실제 프로젝트에서 얼마나 쓸 만한가를 판단할 수 없습니다. 이 실험은 동일한 날씨 앱 스펙에 동일한 프롬프트를 주고 V1(초기 생성)부터 V9(상호 코드 리뷰)까지 9단계를 누적으로 진행했습니다. 속도·토큰 효율에 그치지 않고 <strong>설계 결정의 파급효과, 버그 자가 수정 능력, 지시 이행 일관성</strong>을 단계마다 기록했습니다.</p>
+    <p style="font-size:15px;line-height:1.9;color:var(--ink);max-width:880px">같은 스펙을 주면 AI마다 다른 결정을 내립니다. 그 차이는 코드를 처음 만들 때는 잘 보이지 않습니다. 그런데 그 코드 위에 기능을 추가하고, 실제 API를 붙이고, 단위 테스트를 작성하고, 버그를 고치는 작업이 이어지면 초기 결정의 파급효과가 점점 드러납니다. 실제 API 연동 단계(V4)에서 Claude만 네트워크 로직을 별도 클래스로 분리했고, 그 한 줄의 설계 차이가 이후 테스트 단계(V5)에서 코드량을 <strong>Claude 140줄 · Codex 245줄</strong>로 갈라놓았습니다. 백그라운드 알림 단계(V8)에서 Gemini는 빌드를 통과하고 실기기에서 즉시 크래시했습니다. 이 실험은 이런 차이가 어디서 생기고 어떻게 누적되는지 추적하기 위해, 동일한 날씨 앱에 동일한 프롬프트를 주고 앱 생성부터 상호 코드 리뷰까지 <strong>9단계를 연속으로</strong> 진행했습니다.</p>
   </div>
 
   <!-- 종합 요약 -->
@@ -472,7 +472,7 @@ body {
       </div>
       <div style="border:1px solid var(--border);border-left:3px solid var(--claude);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--claude);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">아키텍처 · 설계</div>
-        <p style="font-size:14px;line-height:1.75;color:var(--ink)"><strong>Claude의 V4 Repository 분리</strong>가 V5 테스트를 140줄로 압축했습니다. Repository는 API 호출 로직을 ViewModel과 분리해 테스트에서 가짜(mock)로 교체할 수 있게 해주는 레이어입니다. <strong>V4 설계 결정 하나가 V5 복잡도를 직접 결정</strong>한 핵심 사례입니다.</p>
+        <p style="font-size:14px;line-height:1.75;color:var(--ink)"><strong>Claude의 API 연동 단계(V4) Repository 분리</strong>가 단위 테스트 단계(V5)를 140줄로 압축했습니다. Repository는 API 호출 로직을 ViewModel(화면 로직을 담당하는 클래스)과 분리해 테스트에서 가짜 데이터(목 데이터·테스트용 가짜 데이터)로 교체할 수 있게 해주는 레이어입니다. <strong>V4 설계 결정 하나가 V5 복잡도를 직접 결정</strong>한 핵심 사례입니다.</p>
       </div>
       <div style="border:1px solid var(--border);border-left:3px solid var(--codex);border-radius:6px;padding:14px 16px;">
         <div style="font-size:11px;font-weight:700;color:var(--codex);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">코드 품질 · 검증</div>
@@ -624,7 +624,7 @@ body {
       <div class="ev-card">
         <div class="ev-tag codex-tag">V1 · Codex</div>
         <div class="ev-title">한국어 깨짐</div>
-        <div class="ev-desc">stdin 인코딩 손실로 도시명이 <code>?????</code>로 출력됨. 3개 AI 중 유일한 V1 기능 실패. V2에서 자가 수정.</div>
+        <div class="ev-desc">stdin(표준 입력 스트림)을 통해 프롬프트를 전달할 때 UTF-8 인코딩이 손실되어 도시명이 <code>?????</code>로 출력됨. 3개 AI 중 유일한 V1 기능 실패. V2에서 자가 수정.</div>
       </div>
       <div class="ev-card">
         <div class="ev-tag gemini-tag">V1–V3 · Gemini</div>
@@ -977,11 +977,11 @@ body {
         </thead>
         <tbody>
           <tr>
-            <td class="rk">private Composable</td>
+            <td class="rk">private Composable<br><span style="font-size:11px;color:var(--muted);font-weight:400;">Compose UI 함수를 외부에서 직접 접근 못하도록 캡슐화</span></td>
             <td>❌</td><td>✅</td><td>❌</td><td>❌</td>
           </tr>
           <tr>
-            <td class="rk">순수 함수 설계<br><span style="font-size:11px;color:var(--muted);font-weight:400;">UiState + callbacks</span></td>
+            <td class="rk">순수 함수 설계<br><span style="font-size:11px;color:var(--muted);font-weight:400;">UiState(화면에 표시할 데이터를 담는 상태 객체) + callbacks</span></td>
             <td>❌</td><td>✅</td><td>❌</td><td>✅</td>
           </tr>
           <tr>
@@ -989,11 +989,11 @@ body {
             <td>❌</td><td>❌</td><td>✅</td><td>❌</td>
           </tr>
           <tr>
-            <td class="rk">computed UiState</td>
+            <td class="rk">computed UiState<br><span style="font-size:11px;color:var(--muted);font-weight:400;">다른 상태로부터 자동 계산되는 화면 상태</span></td>
             <td>❌</td><td>✅</td><td>❌</td><td>✅</td>
           </tr>
           <tr>
-            <td class="rk">LazyColumn 성능</td>
+            <td class="rk">LazyColumn 성능<br><span style="font-size:11px;color:var(--muted);font-weight:400;">화면에 보이는 항목만 렌더링하는 효율적인 목록 구성</span></td>
             <td>❌</td><td>❌</td><td>✅</td><td>❌</td>
           </tr>
           <tr>
@@ -1001,7 +1001,7 @@ body {
             <td>✅</td><td>❌</td><td>❌</td><td>❌</td>
           </tr>
           <tr>
-            <td class="rk">lifecycle 안전<br><span style="font-size:11px;color:var(--muted);font-weight:400;">collectAsStateWithLifecycle</span></td>
+            <td class="rk">lifecycle 안전<br><span style="font-size:11px;color:var(--muted);font-weight:400;">collectAsStateWithLifecycle — 앱이 백그라운드로 가면 자동으로 수집 중단해 메모리 누수 방지</span></td>
             <td>✅</td><td>✅</td><td>⚠️ 누수 있음</td><td>✅</td>
           </tr>
         </tbody>
@@ -1077,7 +1077,7 @@ body {
         <div class="ai-card-body">
           <p class="ai-summary">VS Code IDE 안에서 동작하는 에이전트 방식으로 V1~V3를 진행했습니다. V3에서 쾌적 지수(온도·습도·체감온도를 종합해 '지금 나가기 좋은지' 알려주는 기능)를 추가해 전 단계 코드량 최다(11파일·986줄)를 달성했습니다. V4부터 무료 플랜 한도 도달로 비교에서 이탈했습니다.</p>
           <div class="ai-tags">
-            <span class="ai-tag good">APK 자동 빌드</span>
+            <span class="ai-tag good">APK(안드로이드 앱 설치 파일) 자동 빌드</span>
             <span class="ai-tag good">V3 스마트 기능</span>
             <span class="ai-tag warn">V4부터 한도 초과</span>
           </div>
@@ -1149,7 +1149,7 @@ body {
       </div>
       <div class="learn-item">
         <div class="learn-n">배운 것 2</div>
-        <p class="learn-body"><strong>AI가 만든 코드는 빌드 성공 후 반드시 실기기에서 확인해야 합니다.</strong> Gemini V8은 <code>assembleDebug</code> 빌드가 성공했지만 실기기에서 즉시 크래시가 발생했습니다. <code>runBlocking</code> 안티패턴(Worker 스레드 차단)과 플러그인 누락은 컴파일러가 잡지 못하는 유형의 오류입니다.</p>
+        <p class="learn-body"><strong>AI가 만든 코드는 빌드 성공 후 반드시 실기기에서 확인해야 합니다.</strong> Gemini V8은 <code>assembleDebug</code>(안드로이드 앱 빌드 명령어) 빌드가 성공했지만 실기기에서 즉시 크래시가 발생했습니다. <code>runBlocking</code> 안티패턴(백그라운드 작업 스레드를 강제로 차단하는 잘못된 코드 패턴)과 플러그인 누락은 컴파일러가 잡지 못하는 유형의 오류입니다.</p>
       </div>
       <div class="learn-item">
         <div class="learn-n">배운 것 3</div>

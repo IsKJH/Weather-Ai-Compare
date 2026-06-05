@@ -47,14 +47,14 @@ Turn the current simple mock weather app into a more useful, production-like wea
 
 Fixed constraints:
 - Keep Kotlin.
-- Keep Jetpack Compose.
-- Keep MVVM with ViewModel + UiState.
+- Keep Jetpack Compose (안드로이드 UI 프레임워크).
+- Keep MVVM (화면·로직 분리 아키텍처 패턴) with ViewModel (화면 로직을 담당하는 클래스) + UiState (화면에 표시할 데이터를 담는 상태 객체).
 - Keep package name: com.example.weathernow.
 - Do not add external libraries.
 - Do not use a real weather API.
-- Use mock data only.
+- Use mock data (테스트용 가짜 데이터) only.
 - Keep a single Activity.
-- Ensure ./gradlew assembleDebug succeeds.
+- Ensure ./gradlew assembleDebug (안드로이드 앱 빌드 명령어) succeeds.
 
 Required improvements:
 1. Fix any broken Korean text or garbled strings in the app.
@@ -117,7 +117,7 @@ Important implementation guidance:
 - Use emoji or Compose-drawn icons only. Do not add external image resources.
 
 After implementation:
-- Run ./gradlew assembleDebug.
+- Run ./gradlew assembleDebug (안드로이드 앱 빌드 명령어).
 - Briefly summarize what changed.
 - Mention whether the build passed.</pre>
   </section>

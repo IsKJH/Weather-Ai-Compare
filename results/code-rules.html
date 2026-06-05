@@ -225,7 +225,7 @@ pre.inline-code {
   <header class="guide-hero">
     <div class="guide-kicker">WeatherNow AI 비교 실험 · 코드 분석</div>
     <h1 class="guide-title">AI 바이브 코딩 실전 가이드</h1>
-    <p class="guide-sub">Claude, Codex, Gemini가 생성한 Android Kotlin / Jetpack Compose 코드를 실제 파일 기준으로 분석했습니다. 기능 비교가 아닌 <strong>코드 작성 규칙</strong> 비교입니다 — 상태 관리, 컴포넌트 설계, 패키지 구조, 성능 패턴까지.</p>
+    <p class="guide-sub">Claude, Codex, Gemini가 생성한 Android Kotlin / Jetpack Compose(안드로이드 선언형 UI 프레임워크) 코드를 실제 파일 기준으로 분석했습니다. 기능 비교가 아닌 <strong>코드 작성 규칙</strong> 비교입니다 — 상태 관리, 컴포넌트 설계, 패키지 구조, 성능 패턴까지.</p>
     <div class="hero-stats">
       <div class="hero-stat">
         <div class="hero-stat-k">분석 프로젝트</div>
@@ -268,7 +268,7 @@ pre.inline-code {
 
     <!-- 1-1 -->
     <div class="sec-h3"><span class="sec-num">1-1</span> ViewModel 상태 관리 방식</div>
-    <p class="lead">Kotlin Compose에서 ViewModel 상태를 관리하는 방식은 크게 두 가지입니다. 세 AI가 각각 다른 선택을 했고 안전성 차이가 발생했습니다.</p>
+    <p class="lead">ViewModel(화면 로직을 담당하는 클래스, UI와 데이터 로직을 분리함)의 상태를 관리하는 방식은 크게 두 가지입니다. 세 AI가 각각 다른 선택을 했고 안전성 차이가 발생했습니다.</p>
 
     <div class="pattern-grid">
       <div class="pattern-card">
@@ -277,9 +277,9 @@ pre.inline-code {
           <span class="ph-verdict">⚠ 주의</span>
         </div>
         <div class="pattern-body">
-          <strong>StateFlow + .value = .copy()</strong><br>
+          <strong>StateFlow(상태 변화를 구독자에게 흘려보내는 코루틴 기반 스트림) + .value = .copy()</strong><br>
           <code>MutableStateFlow</code>를 사용하되, 업데이트를 <code>value = value.copy()</code>로 처리.<br><br>
-          <span class="verdict-bad">⚠ 비동기 race condition 위험.</span> 두 코루틴이 동시에 읽고 쓰면 먼저 읽은 값이 덮어씌워질 수 있음.
+          <span class="verdict-bad">⚠ 비동기 race condition 위험.</span> 두 코루틴(비동기 처리를 위한 코틀린 동시성 모델)이 동시에 읽고 쓰면 먼저 읽은 값이 덮어씌워질 수 있음.
         </div>
       </div>
       <div class="pattern-card">
@@ -330,7 +330,7 @@ pre.inline-code {
 
     <!-- 1-2 -->
     <div class="sec-h3"><span class="sec-num">1-2</span> Composable 파라미터 설계</div>
-    <p class="lead">Composable에 ViewModel을 직접 넘기면 @Preview 사용이 불가능하고 단위 테스트가 어려워집니다. 상태(UiState)와 이벤트(콜백)만 파라미터로 받는 순수 함수 형태가 올바른 설계입니다.</p>
+    <p class="lead">Composable(Jetpack Compose에서 UI를 그리는 함수 단위)에 ViewModel을 직접 넘기면 @Preview(Android Studio에서 UI를 미리 보는 기능) 사용이 불가능하고 단위 테스트가 어려워집니다. 상태(UiState)와 이벤트(콜백)만 파라미터로 받는 순수 함수 형태가 올바른 설계입니다.</p>
 
     <div class="diff-grid">
       <div class="diff-pane">
@@ -405,7 +405,7 @@ import androidx.compose.foundation.layout.*
 
     <!-- 1-4 -->
     <div class="sec-h3"><span class="sec-num">1-4</span> UiState에 계산 프로퍼티 넣기</div>
-    <p class="lead">UI에서 매번 계산하는 값이 있다면 <code>data class UiState</code> 안에 계산 프로퍼티로 정의하면 중복이 사라집니다. Codex만 이 패턴을 사용했습니다.</p>
+    <p class="lead">UI에서 매번 계산하는 값이 있다면 <code>data class UiState</code>(화면에 보여줄 데이터를 담는 불변 데이터 묶음) 안에 계산 프로퍼티로 정의하면 중복이 사라집니다. Codex만 이 패턴을 사용했습니다.</p>
 
     <div class="diff-grid">
       <div class="diff-pane">
@@ -434,7 +434,7 @@ val isFavorite =
 
     <!-- 1-5 -->
     <div class="sec-h3"><span class="sec-num">1-5</span> 렌더링 성능 패턴</div>
-    <p class="lead"><code>Column + forEach</code>는 모든 아이템을 한 번에 그립니다. 아이템이 늘어날수록 <code>LazyColumn</code>이 필수입니다. Gemini만 일관되게 Lazy를 사용했습니다.</p>
+    <p class="lead"><code>Column + forEach</code>는 모든 아이템을 한 번에 그립니다. 아이템이 늘어날수록 화면에 보이는 것만 그리는 <code>LazyColumn</code>(화면 밖 항목을 그리지 않아 메모리·성능 절약)이 필수입니다. Gemini만 일관되게 Lazy를 사용했습니다.</p>
 
     <div class="tbl-wrap">
       <table>
@@ -467,9 +467,9 @@ val isFavorite =
           </tr>
           <tr>
             <td class="col-label">StateFlow 수집</td>
-            <td>collectAsStateWithLifecycle ✅</td>
+            <td>collectAsStateWithLifecycle ✅ (앱이 백그라운드일 때 자동 중단)</td>
             <td>mutableStateOf 사용 (직접 관찰 불필요)</td>
-            <td>collectAsState() ❌ lifecycle 누수</td>
+            <td>collectAsState() ❌ lifecycle 누수 (백그라운드에서도 계속 실행됨)</td>
           </tr>
         </tbody>
       </table>
@@ -477,7 +477,7 @@ val isFavorite =
 
     <!-- 1-6 -->
     <div class="sec-h3"><span class="sec-num">1-6</span> 패키지 구조</div>
-    <p class="lead">MVVM 프로젝트는 <code>data/</code>, <code>viewmodel/</code>, <code>ui/</code> 레이어별 폴더 분리가 기본입니다. 세 AI가 서로 다른 구조를 선택했습니다.</p>
+    <p class="lead">MVVM(Model-View-ViewModel — 화면·로직 분리 아키텍처 패턴) 프로젝트는 <code>data/</code>, <code>viewmodel/</code>, <code>ui/</code> 레이어별 폴더 분리가 기본입니다. 세 AI가 서로 다른 구조를 선택했습니다.</p>
 
     <div class="pattern-grid">
       <div class="pattern-card">
@@ -744,11 +744,11 @@ ui/components/
   <!-- ── S4 ── -->
   <section class="card" id="s4">
     <div class="sh"><span class="sh-num">04</span><h2>팀 도입 가이드</h2></div>
-    <p class="lead">이번 실험의 핵심 교훈: <strong>세 AI 모두 규칙을 주지 않으면 제각각으로 만든다.</strong> CLAUDE.md 같은 규칙 파일로 팀 컨벤션을 한 번만 작성해두면 매번 프롬프트에 반복하지 않아도 됩니다.</p>
+    <p class="lead">이번 실험의 핵심 교훈: <strong>세 AI 모두 규칙을 주지 않으면 제각각으로 만든다.</strong> CLAUDE.md(AI에게 프로젝트 규칙을 알려주는 지시서 파일) 같은 규칙 파일로 팀 컨벤션을 한 번만 작성해두면 매번 프롬프트에 반복하지 않아도 됩니다.</p>
 
     <div class="guide-box blue">
       <strong>CLAUDE.md / .cursorrules 활용법</strong><br>
-      프로젝트 루트에 AI 지시 파일을 작성해두면 Claude Code, Cursor 등 대부분의 AI 도구가 해당 규칙을 자동으로 참고합니다. 이 파일을 git에 커밋해 팀 전체가 공유하세요.
+      프로젝트 루트에 AI 지시 파일을 작성해두면 Claude Code, Cursor 등 대부분의 AI 도구가 해당 규칙을 자동으로 참고합니다. 이 파일을 git에 커밋(버전 저장)해 팀 전체가 공유하세요.
     </div>
 
     <pre style="background:#1A1A1A;color:#E2E8F0;border-radius:10px;padding:18px 20px;font-size:12.5px;line-height:1.75;overflow-x:auto;font-family:'Consolas','Menlo',monospace;margin:14px 0;">## Kotlin / Jetpack Compose 컨벤션 (CLAUDE.md 예시)
@@ -811,8 +811,8 @@ ui/components/
           </tr>
           <tr>
             <td class="col-label">APK 빌드 자동화</td>
-            <td>❌ gradlew 미생성</td>
-            <td>✅ assembleDebug 자동</td>
+            <td>❌ gradlew(빌드 실행 스크립트) 미생성</td>
+            <td>✅ assembleDebug(디버그 APK 자동 생성) 자동</td>
             <td>⚠ 수동 보완 필요</td>
           </tr>
         </tbody>
@@ -870,7 +870,7 @@ ui/components/
         <div class="rule-num">1</div>
         <div class="rule-body">
           <div class="rule-title">StateFlow 업데이트는 .update {} 사용</div>
-          <div class="rule-desc"><code>_uiState.value = _uiState.value.copy(...)</code>는 비동기 환경에서 race condition을 일으킬 수 있습니다. <code>_uiState.update { it.copy(...) }</code>로 교체하세요.</div>
+          <div class="rule-desc"><code>_uiState.value = _uiState.value.copy(...)</code>는 비동기 환경에서 race condition(두 작업이 동시에 같은 값을 읽고 쓸 때 나중 결과가 앞 결과를 덮어씌우는 버그)을 일으킬 수 있습니다. <code>_uiState.update { it.copy(...) }</code>로 교체하세요.</div>
           <div class="rule-source">발견: Claude WeatherViewModel.kt — selectCity(), toggleFavorite(), refresh() 전체</div>
         </div>
       </div>
@@ -878,7 +878,7 @@ ui/components/
         <div class="rule-num">2</div>
         <div class="rule-body">
           <div class="rule-title">collectAsStateWithLifecycle() 사용 확인</div>
-          <div class="rule-desc"><code>collectAsState()</code>는 앱이 백그라운드에 있을 때도 Flow를 수집해 불필요한 리소스 낭비와 리컴포지션을 일으킵니다.</div>
+          <div class="rule-desc"><code>collectAsState()</code>는 앱이 백그라운드에 있을 때도 Flow(데이터 스트림)를 수집해 불필요한 리소스 낭비와 리컴포지션(화면 재렌더링)을 일으킵니다. <code>collectAsStateWithLifecycle()</code>은 앱이 포그라운드일 때만 수집합니다.</div>
           <div class="rule-source">발견: Gemini WeatherScreen.kt — val uiState by viewModel.uiState.collectAsState()</div>
         </div>
       </div>
@@ -918,7 +918,7 @@ ui/components/
         <div class="rule-num">7</div>
         <div class="rule-body">
           <div class="rule-title">Theme / ColorScheme 위치 확인</div>
-          <div class="rule-desc"><code>darkColorScheme()</code>, <code>MaterialTheme()</code> 정의는 <code>ui/theme/Theme.kt</code>에만 있어야 합니다. 화면 파일 안에 넣으면 다른 화면에서 재사용이 불가능합니다.</div>
+          <div class="rule-desc"><code>darkColorScheme()</code>, <code>MaterialTheme()</code>(앱 전체 색상·폰트·모양을 정의하는 디자인 시스템 컴포넌트) 정의는 <code>ui/theme/Theme.kt</code>에만 있어야 합니다. 화면 파일 안에 넣으면 다른 화면에서 재사용이 불가능합니다.</div>
           <div class="rule-source">발견: Codex WeatherScreen.kt — private val AppColorScheme = darkColorScheme(...)</div>
         </div>
       </div>
@@ -950,7 +950,7 @@ ui/components/
         <div class="rule-num">11</div>
         <div class="rule-body">
           <div class="rule-title">LazyColumn / LazyRow 사용 여부</div>
-          <div class="rule-desc">아이템 수가 고정되어 있어도 <code>Column + forEach</code> 대신 <code>LazyColumn</code>을 사용하는 것이 안전합니다. 나중에 서버 데이터로 교체할 때 성능 문제가 없습니다.</div>
+          <div class="rule-desc">아이템 수가 고정되어 있어도 <code>Column + forEach</code>(모든 항목을 한 번에 그림) 대신 <code>LazyColumn</code>(화면에 보이는 것만 그림)을 사용하는 것이 안전합니다. 나중에 서버 데이터로 교체할 때 성능 문제가 없습니다.</div>
           <div class="rule-source">발견: Claude / Codex — 5일 예보를 Column + forEach로 렌더링</div>
         </div>
       </div>

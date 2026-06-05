@@ -11,7 +11,7 @@
 
   <header class="rh">
     <h1 class="rh-title">V7 — Room Database 영속성</h1>
-    <p class="rh-sub">즐겨찾기 도시를 앱 재시작 후에도 기억하도록 Room DB를 추가했습니다. DB를 추가하면 기존 단위 테스트가 "DAO를 모르기 때문에" 깨지는 문제가 생기는데, 이 <strong>테스트 호환성</strong> 문제를 세 AI가 완전히 다른 방식으로 해결했습니다: Claude(DAO nullable) / Codex(Repository 인터페이스·DIP) / Gemini(기존 테스트 직접 수정).</p>
+    <p class="rh-sub">즐겨찾기 도시를 앱 재시작 후에도 기억하도록 Room DB(안드로이드 공식 SQLite 래퍼 라이브러리)를 추가했습니다. DB를 추가하면 기존 단위 테스트가 "DAO(Data Access Object — DB 쿼리를 담당하는 인터페이스)를 모르기 때문에" 깨지는 문제가 생기는데, 이 <strong>테스트 호환성</strong> 문제를 세 AI가 완전히 다른 방식으로 해결했습니다: Claude(DAO nullable) / Codex(Repository 인터페이스·DIP) / Gemini(기존 테스트 직접 수정).</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span>
       <span class="ai-pill"><span class="dot codex"></span>Codex</span>
@@ -21,7 +21,7 @@
     </div>
     <div class="rh-tldr">
       <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">즐겨찾기 도시를 앱 재시작 후에도 기억하도록 Room DB 추가</div></div>
-      <div><div class="rh-tldr-label">핵심 차이점</div><div class="rh-tldr-val">기존 테스트 호환 전략 3가지 갈림: Claude DAO nullable / <strong>Codex Repository 인터페이스(DIP)</strong> / Gemini 기존 테스트 수정(원칙 위반)</div></div>
+      <div><div class="rh-tldr-label">핵심 차이점</div><div class="rh-tldr-val">기존 테스트 호환 전략 3가지 갈림: Claude DAO nullable / <strong>Codex Repository 인터페이스(DIP — 추상 인터페이스에 의존해 구현체를 교체 가능하게 하는 설계 원칙)</strong> / Gemini 기존 테스트 수정(원칙 위반)</div></div>
       <div><div class="rh-tldr-label">결론</div><div class="rh-tldr-val">전원 빌드 성공 &middot; <strong>Codex 419초 최단</strong> &middot; Gemini만 기존 테스트 원칙 위반</div></div>
     </div>
   </header>
@@ -87,7 +87,7 @@
           <div class="ai-stat"><span class="ai-stat-k">단위 테스트</span><span class="ai-stat-v"><span class="badge ok">무수정 통과</span></span></div>
           <div class="ai-stat"><span class="ai-stat-k">스키마</span><span class="ai-stat-v">단일행 (id=1 고정)</span></div>
           <div class="ai-stat"><span class="ai-stat-k">테스트 호환 전략</span><span class="ai-stat-v">DAO nullable 파라미터</span></div>
-          <div class="ai-stat"><span class="ai-stat-k">신규 파일</span><span class="ai-stat-v">3개 (Entity·DAO·DB) + Factory</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">신규 파일</span><span class="ai-stat-v">3개 (@Entity(Room DB 테이블 구조를 정의하는 클래스)·DAO·DB) + Factory</span></div>
         </div>
       </div>
       <div class="ai-card">
@@ -101,7 +101,7 @@
           <div class="ai-stat"><span class="ai-stat-k">단위 테스트</span><span class="ai-stat-v"><span class="badge ok">무수정 통과</span></span></div>
           <div class="ai-stat"><span class="ai-stat-k">스키마</span><span class="ai-stat-v">단일행 (nullable cityIndex)</span></div>
           <div class="ai-stat"><span class="ai-stat-k">테스트 호환 전략</span><span class="ai-stat-v">Repository 인터페이스 + NoOp 구현체</span></div>
-          <div class="ai-stat"><span class="ai-stat-k">신규 파일</span><span class="ai-stat-v">5개 (Entity·DAO·DB·Repository인터페이스·NoOp)</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">신규 파일</span><span class="ai-stat-v">5개 (Entity·DAO·DB·Repository인터페이스·NoOp구현체)</span></div>
         </div>
       </div>
       <div class="ai-card">
@@ -165,7 +165,7 @@
 
     <div class="insight">
       <span class="insight-icon">🏆</span>
-      <div><strong>Codex의 Repository 인터페이스 접근이 가장 설계 지향적입니다.</strong> DIP를 적용해 ViewModel이 구체 클래스(Room DAO) 대신 추상(인터페이스)에 의존하도록 했습니다. 이 구조의 강점은 "교체 가능성"에 있습니다. 테스트에선 NoOp 구현체를, 프로덕션에선 Room 구현체를 주입하면 되고, 나중에 DataStore나 다른 저장소로 교체해도 ViewModel 코드를 건드리지 않아도 됩니다. 약점은 파일 수 증가로 인한 초기 코드량이지만, 프로젝트 규모가 커질수록 이 투자는 상쇄됩니다.</div>
+      <div><strong>Codex의 Repository 인터페이스 접근이 가장 설계 지향적입니다.</strong> DIP(Dependency Inversion Principle — 추상 인터페이스에 의존해 구현체를 교체 가능하게 하는 설계 원칙)를 적용해 ViewModel이 구체 클래스(Room DAO) 대신 추상(인터페이스)에 의존하도록 했습니다. 덕분에 테스트에서는 가짜 NoOp 구현체를, 실제 앱에서는 진짜 Room DB 구현체를 교체해 끼울 수 있습니다. 나중에 DataStore나 다른 저장소로 교체해도 ViewModel 코드를 건드리지 않아도 됩니다. 약점은 파일 수 증가로 인한 초기 코드량이지만, 프로젝트 규모가 커질수록 이 투자는 상쇄됩니다.</div>
     </div>
     <div class="insight">
       <span class="insight-icon">💡</span>

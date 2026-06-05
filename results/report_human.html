@@ -99,7 +99,7 @@
 
   <header class="rh">
     <h1 class="rh-title">WeatherNow 손 코딩 vs AI 생성 — 시간 비교 실험</h1>
-    <p class="rh-sub">동일한 날씨 앱 명세를 AI CLI(Kotlin/Compose)로 만든 결과와 직접 Flutter/Dart로 손 코딩한 결과를 속도·코드량·구조 기준으로 비교합니다. AI보다 14.4배 느렸지만, <strong>AI 도구들이 V7에서야 도달한 아키텍처 패턴을 첫 버전부터 적용했습니다.</strong></p>
+    <p class="rh-sub">동일한 날씨 앱 명세를 AI CLI(명령줄 인터페이스, Kotlin/Compose)로 만든 결과와 직접 Flutter/Dart로 손 코딩한 결과를 속도·코드량·구조 기준으로 비교합니다. AI보다 14.4배 느렸지만, <strong>AI 도구들이 7번째 단계(V7)에서야 도달한 아키텍처 패턴을 첫 버전부터 적용했습니다.</strong></p>
     <div class="rh-meta">
       <span class="ai-pill human-pill"><span class="dot human"></span>Human · Flutter</span>
       <span class="ai-pill"><span class="dot claude"></span>Claude · Kotlin</span>
@@ -123,7 +123,7 @@
   <!-- ── 실험 개요 ── -->
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
-    <p class="lead">같은 날씨 앱 명세를 AI는 Android Kotlin/Compose MVVM으로, 직접 구현은 Flutter/Dart Clean Architecture로 진행합니다. 언어와 아키텍처는 다르지만, 구현 기능과 화면 명세는 동일합니다.</p>
+    <p class="lead">같은 날씨 앱 명세를 AI는 Android Kotlin/Compose MVVM(Model-View-ViewModel — 화면·로직 분리 아키텍처 패턴)으로, 직접 구현은 Flutter/Dart Clean Architecture로 진행합니다. 언어와 아키텍처는 다르지만, 구현 기능과 화면 명세는 동일합니다.</p>
     <div class="callout-grid">
       <div class="callout">
         <div class="callout-k">비교 초점</div>
@@ -224,7 +224,7 @@
           <tr>
             <td class="col-label">언어 / UI</td>
             <td>Dart / Flutter</td>
-            <td>Kotlin / Compose</td>
+            <td>Kotlin / Compose(안드로이드 선언형 UI 프레임워크)</td>
             <td>Kotlin / Compose</td>
             <td>Kotlin / Compose</td>
           </tr>
@@ -238,7 +238,7 @@
           <tr>
             <td class="col-label">상태관리</td>
             <td>Riverpod</td>
-            <td>StateFlow</td>
+            <td>StateFlow(상태 변화를 구독자에게 흘려보내는 코루틴 기반 스트림)</td>
             <td>StateFlow</td>
             <td>StateFlow</td>
           </tr>
@@ -304,7 +304,7 @@
       <span class="file">weather_screen.dart</span>        <span class="note">296줄</span>
   <span class="file">main.dart</span>                         <span class="note">21줄</span></div>
           <ul>
-            <li>도메인 레이어: 엔티티 + 리포지토리 인터페이스 분리</li>
+            <li>도메인 레이어: 엔티티 + 리포지토리(Repository — 데이터 출처를 추상화하는 계층) 인터페이스 분리</li>
             <li>데이터 레이어: datasource + 구현체 분리</li>
             <li>Riverpod Provider로 의존성 주입</li>
             <li>Freezed 사용 (불변 데이터 클래스)</li>
@@ -324,7 +324,7 @@
     <span class="dir">components/</span>
       <span class="file">...composables</span></div>
           <ul>
-            <li>MVVM: ViewModel + UiState + Composable 직결</li>
+            <li>MVVM: ViewModel(화면 로직을 담당하는 클래스, UI와 데이터 로직을 분리함) + UiState + Composable 직결</li>
             <li>StateFlow로 단방향 데이터 흐름</li>
             <li>별도 의존성 없음 (표준 Compose만)</li>
             <li>구조는 단순, 코드가 적고 빠르게 생성 가능</li>
@@ -354,7 +354,7 @@
       <div class="insight-grid">
         <div class="insight purple">
           <div class="insight-k">V7 패턴을 V1에서 적용</div>
-          <div class="insight-v">이 실험에서 <strong>Codex가 V7에서 독립적으로 발견한 Repository 인터페이스(DIP) 패턴</strong>을 직접 구현 코드는 첫 버전부터 적용했습니다. <code>abstract interface class WeatherRepository</code>가 domain 레이어에 위치하고, 구현체(<code>WeatherRepositoriesImpl</code>)와 완전히 분리됩니다.</div>
+          <div class="insight-v">이 실험에서 <strong>Codex가 V7(9단계 중 7번째 단계)에서 독립적으로 발견한 Repository 인터페이스(DIP — 의존성 역전 원칙) 패턴</strong>을 직접 구현 코드는 첫 버전부터 적용했습니다. <code>abstract interface class WeatherRepository</code>가 domain 레이어에 위치하고, 구현체(<code>WeatherRepositoriesImpl</code>)와 완전히 분리됩니다.</div>
         </div>
         <div class="insight orange">
           <div class="insight-k">1,010줄 직접 작성 — AI 없이</div>
@@ -362,7 +362,7 @@
         </div>
         <div class="insight blue">
           <div class="insight-k">현대적 Flutter 스택</div>
-          <div class="insight-v">AI 도구들이 선택한 ViewModel/StateFlow 대신 <strong>Riverpod Provider + Freezed 불변 엔티티</strong> 스택을 적용했습니다. Flutter 생태계의 현대적 패턴을 알고 있다는 신호입니다.</div>
+          <div class="insight-v">AI 도구들이 선택한 ViewModel/StateFlow 대신 <strong>Riverpod Provider(Flutter 공식 권장 상태관리 라이브러리) + Freezed 불변 엔티티</strong> 스택을 적용했습니다. Flutter 생태계의 현대적 패턴을 알고 있다는 신호입니다.</div>
         </div>
       </div>
     </div>
@@ -425,7 +425,7 @@
         <span class="diff-bar-num">×1.0 기준</span>
       </div>
     </div>
-    <div class="note-box">V1(×12.5)보다 V2(×21.6) 배율이 더 커졌습니다. AI는 기존 코드를 캐시로 활용해 V2에서 오히려 더 빨라졌지만(Gemini 318초→149초), 사람은 기존 코드를 파악하고 추가 기능을 구현하는 시간이 여전히 필요했기 때문입니다.</div>
+    <div class="note-box">V1(×12.5 — 1단계 기준)보다 V2(×21.6 — 2단계 기준) 배율이 더 커졌습니다. AI는 기존 코드를 캐시로 활용해 V2에서 오히려 더 빨라졌지만(Gemini 318초→149초), 사람은 기존 코드를 파악하고 추가 기능을 구현하는 시간이 여전히 필요했기 때문입니다.</div>
 
     <h3 style="font-size:14px;font-weight:700;color:var(--text2,#555);margin:20px 0 10px;">V2 코드량 비교</h3>
     <div class="tbl-wrap">
@@ -639,7 +639,7 @@
       </div>
       <div class="insight orange">
         <div class="insight-k">아키텍처 우위</div>
-        <div class="insight-v">AI 도구들이 V7에서야 도입한 Repository 인터페이스(DIP)를 Human은 V1에서 적용. AI 실험의 핵심 교훈인 "V4 설계 결정이 V5~V8을 결정한다"를 Human은 처음부터 실천했습니다.</div>
+        <div class="insight-v">AI 도구들이 7번째 단계(V7)에서야 도입한 Repository 인터페이스(DIP — 구현체가 아닌 추상 인터페이스에 의존하는 설계 원칙)를 Human은 V1에서 적용. AI 실험의 핵심 교훈인 "4단계 설계 결정이 5~8단계를 결정한다"를 Human은 처음부터 실천했습니다.</div>
       </div>
       <div class="insight blue">
         <div class="insight-k">스마트 기능 구현</div>

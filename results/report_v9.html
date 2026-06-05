@@ -21,7 +21,7 @@
     </div>
     <div class="rh-tldr">
       <div><div class="rh-tldr-label">이 단계에서 한 것</div><div class="rh-tldr-val">각 AI가 다른 두 AI의 코드를 직접 읽고 품질 평가 + 자가 개선 계획 총 14개 도출</div></div>
-      <div><div class="rh-tldr-label">핵심 차이점</div><div class="rh-tldr-val">Codex FakeOpenMeteoServer가 전원 최고 평가. Claude fetchJob?.cancel(), Gemini generateInsight()를 서로가 강점으로 인정</div></div>
+      <div><div class="rh-tldr-label">핵심 차이점</div><div class="rh-tldr-val">Codex <code>FakeOpenMeteoServer</code>(실제 네트워크 없이 HTTP 응답을 흉내내는 테스트용 가짜 서버)가 전원 최고 평가. Claude <code>fetchJob?.cancel()</code>, Gemini <code>generateInsight()</code>를 서로가 강점으로 인정</div></div>
       <div><div class="rh-tldr-label">결론</div><div class="rh-tldr-val"><strong>서로의 강점을 정확히 인식</strong> &middot; Codex 671초 최단 &middot; 개선 계획 14개 도출 (코드 변경은 이번 실험 범위 밖)</div></div>
     </div>
   </header>
@@ -120,7 +120,7 @@
         <div class="ai-card-head codex"><span class="dot codex"></span> Codex (Claude의 평가)</div>
         <div class="ai-card-body">
           <div class="ai-stat hl"><span class="ai-stat-k">종합 평가</span><span class="ai-stat-v">설계 철학 일관성 최고</span></div>
-          <div class="ai-stat"><span class="ai-stat-k">최고 강점</span><span class="ai-stat-v">FavoriteCityRepository 인터페이스 (DIP 완전 적용)</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">최고 강점</span><span class="ai-stat-v">FavoriteCityRepository 인터페이스 (DIP(Dependency Inversion Principle — 추상 인터페이스에 의존해 구현체를 교체 가능하게 하는 설계 원칙) 완전 적용)</span></div>
           <div class="ai-stat"><span class="ai-stat-k">차별화 포인트</span><span class="ai-stat-v">WeatherUiState computed properties, runCatching 관용구</span></div>
           <div class="ai-stat"><span class="ai-stat-k">주요 지적</span><span class="ai-stat-v">274줄 ViewModel 모놀리식, Worker 목 데이터</span></div>
         </div>
@@ -129,7 +129,7 @@
         <div class="ai-card-head gemini"><span class="dot gemini"></span> Gemini (Claude의 평가)</div>
         <div class="ai-card-body">
           <div class="ai-stat hl"><span class="ai-stat-k">종합 평가</span><span class="ai-stat-v">속도와 스마트 기능 강점, 후반 품질 일관성 아쉬움</span></div>
-          <div class="ai-stat"><span class="ai-stat-k">최고 강점</span><span class="ai-stat-v">_uiState.update{} 원자적 업데이트, generateInsight() V3 유지</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">최고 강점</span><span class="ai-stat-v">_uiState.update{} 원자적 업데이트(동시 접근 시 상태가 중간에 깨지지 않도록 한 번에 갱신), generateInsight() V3 유지</span></div>
           <div class="ai-stat"><span class="ai-stat-k">차별화 포인트</span><span class="ai-stat-v">Retrofit 인터페이스/DTO 분리</span></div>
           <div class="ai-stat"><span class="ai-stat-k">주요 지적</span><span class="ai-stat-v">mapWeatherCode() DRY 위반, FavoriteDatabase.kt 단일 파일 집중, SimpleDateFormat 레거시</span></div>
         </div>
@@ -168,14 +168,14 @@
           <div class="ai-stat hl"><span class="ai-stat-k">종합 평가</span><span class="ai-stat-v">아키텍처와 코루틴 제어의 정석</span></div>
           <div class="ai-stat"><span class="ai-stat-k">최고 강점</span><span class="ai-stat-v">Repository 계층 분리, fetchJob?.cancel(), advanceUntilIdle() 테스트 기법</span></div>
           <div class="ai-stat"><span class="ai-stat-k">차별화 포인트</span><span class="ai-stat-v">날씨·AQI 병렬 fetch, 도메인 모델 명확</span></div>
-          <div class="ai-stat"><span class="ai-stat-k">주요 지적</span><span class="ai-stat-v">JSONObject 직접 파싱 (Retrofit 권장), DAO 직접 주입 (Repository 패턴 권장), Worker 알림 채널·권한 확인 없음</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">주요 지적</span><span class="ai-stat-v">JSONObject 직접 파싱 (Retrofit 권장), DAO(Data Access Object — DB 쿼리를 담당하는 인터페이스) 직접 주입 (Repository 패턴 권장), Worker 알림 채널·권한 확인 없음</span></div>
         </div>
       </div>
       <div class="ai-card">
         <div class="ai-card-head codex"><span class="dot codex"></span> Codex (Gemini의 평가)</div>
         <div class="ai-card-body">
           <div class="ai-stat hl"><span class="ai-stat-k">종합 평가</span><span class="ai-stat-v">테스트 자동화 수준 가장 높음</span></div>
-          <div class="ai-stat"><span class="ai-stat-k">최고 강점</span><span class="ai-stat-v">FakeOpenMeteoServer (URLStreamHandlerFactory), Repository 인터페이스 패턴, POST_NOTIFICATIONS 이중 권한 체크</span></div>
+          <div class="ai-stat"><span class="ai-stat-k">최고 강점</span><span class="ai-stat-v">FakeOpenMeteoServer(URLStreamHandlerFactory — JVM 수준에서 HTTP 요청을 가로채는 기법으로 구현한 테스트용 가짜 서버), Repository 인터페이스 패턴, POST_NOTIFICATIONS 이중 권한 체크</span></div>
           <div class="ai-stat"><span class="ai-stat-k">차별화 포인트</span><span class="ai-stat-v">알림 권한 안전성, 병렬 도시 데이터 fetch</span></div>
           <div class="ai-stat"><span class="ai-stat-k">주요 지적</span><span class="ai-stat-v">mutableStateOf vs StateFlow 일관성, Worker 목 데이터, OpenMeteoWeatherRepository 비주입</span></div>
         </div>
@@ -448,7 +448,7 @@
 
     <div class="insight" style="margin-top:12px">
       <span class="insight-icon">🗂️</span>
-      <div><strong>V1→V9 전체 실험의 결론:</strong> V1 Codex 한국어 깨짐부터 V9 상호 학습 고리까지, 각 AI의 강점과 약점은 첫 버전에서 마지막 버전까지 놀랍도록 일관됐습니다. Gemini는 항상 가장 빨랐지만 후반부 품질 일관성에서 흔들렸습니다. Codex는 효율적이고 설계 지향적이었지만 V8 Worker에서 실 API 대신 목 데이터를 쓰는 현실적 타협을 했습니다. Claude는 레이어 구조가 가장 체계적이었지만 실행 속도는 느렸습니다. <strong>이 패턴은 단일 과제 하나로는 보이지 않습니다. 8단계 누적 실험을 통해 처음으로 드러났습니다.</strong></div>
+      <div><strong>V1→V9 전체 실험의 결론:</strong> V1 Codex 한국어 깨짐부터 V9 상호 학습 고리까지, 각 AI의 강점과 약점은 첫 버전에서 마지막 버전까지 놀랍도록 일관됐습니다. Gemini는 항상 가장 빨랐지만 V7에서 기존 테스트를 직접 수정하고 V8에서 runBlocking 안티패턴을 도입하는 등 후반 단계에서 품질 원칙이 흔들렸습니다. Codex는 효율적이고 설계 지향적이었지만 V8 Worker에서 실 API 대신 목 데이터를 쓰는 현실적 타협을 했습니다. Claude는 Repository 계층 분리와 코루틴 제어가 가장 체계적이었지만 소요 시간은 항상 가장 느렸습니다. <strong>이 패턴은 단일 과제 하나로는 보이지 않습니다. 8단계 누적 실험을 통해 처음으로 드러났습니다.</strong></div>
     </div>
   </section>
 

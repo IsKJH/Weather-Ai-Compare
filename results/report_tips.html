@@ -33,7 +33,7 @@
 
   <header class="rh">
     <h1 class="rh-title">AI 코딩 도구 — 설정하면 달라지는 것들</h1>
-    <p class="rh-sub">이 실험은 CLAUDE.md도, Hooks도, MCP도 없는 <strong>순수 기본 상태</strong>의 AI 기량을 테스트했습니다. 실제 개발 환경에서는 아래 설정들을 추가하면 AI의 약점이 규칙으로 막히고, 반복 작업이 자동화됩니다.</p>
+    <p class="rh-sub">이 실험은 CLAUDE.md(AI에게 프로젝트 규칙을 알려주는 지시서 파일)도, Hooks도, MCP(Model Context Protocol — AI 도구와 외부 서비스 연동 표준)도 없는 <strong>순수 기본 상태</strong>의 AI 기량을 테스트했습니다. 실제 개발 환경에서는 아래 설정들을 추가하면 AI의 약점이 규칙으로 막히고, 반복 작업이 자동화됩니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude Code</span>
       <span class="ai-pill"><span class="dot codex"></span>OpenAI Codex</span>
@@ -64,7 +64,7 @@
   <!-- 01 지시서 파일 -->
   <section class="card" id="context-file">
     <div class="sh"><span class="sh-num">01</span><h2>지시서 파일 — AI에게 프로젝트 규칙 미리 알려주기</h2></div>
-    <p class="lead">모든 AI 도구에는 "이 프로젝트에서 어떻게 행동해야 하는지"를 기록해두는 파일이 있습니다. 이 파일이 없으면 AI는 매 대화마다 처음부터 맥락을 파악하고, 이미 알려진 실수를 반복합니다.</p>
+    <p class="lead">모든 AI 도구에는 "이 프로젝트에서 어떻게 행동해야 하는지"를 기록해두는 파일이 있습니다. <code>CLAUDE.md</code>는 Claude Code가 프로젝트 시작 시 자동으로 읽는 규칙 파일로, 아키텍처 지침·금지 패턴·빌드 명령 등을 한 번만 적어두면 매 대화에서 반복하지 않아도 됩니다. 이 파일이 없으면 AI는 매 대화마다 처음부터 맥락을 파악하고, 이미 알려진 실수를 반복합니다.</p>
 
     <div class="tbl-wrap" style="margin-bottom:16px">
       <table>
@@ -98,7 +98,7 @@
     <div class="code-block"><span class="comment"># WeatherNow Android</span>
 
 <span class="key">## 빌드 명령</span>
-- `./gradlew assembleDebug`  <span class="comment"># 빌드</span>
+- `./gradlew assembleDebug`  <span class="comment"># gradlew(그레이들 래퍼 — 빌드 도구 실행 스크립트) · assembleDebug = 디버그 APK 빌드</span>
 - `./gradlew test`           <span class="comment"># 단위 테스트</span>
 
 <span class="key">## 금지 규칙</span>
@@ -124,7 +124,7 @@
     <span class="feature-badge new">Claude Code 최신</span>
     <span class="feature-badge">공식 문서 확인됨</span>
 
-    <p class="lead" style="margin-top:12px">하나의 큰 작업을 여러 전문 에이전트에게 나눠서 처리합니다. 각 서브에이전트는 독립된 컨텍스트 윈도우를 가지므로, 메인 대화에 불필요한 내용이 쌓이지 않고 토큰 비용을 5~10배 절감할 수 있습니다.</p>
+    <p class="lead" style="margin-top:12px">하나의 큰 작업을 여러 전문 에이전트에게 나눠서 처리합니다. 각 서브에이전트는 독립된 컨텍스트 윈도우(AI가 한 번에 처리할 수 있는 입력 길이 한계)를 가지므로, 메인 대화에 불필요한 내용이 쌓이지 않고 토큰 비용을 5~10배 절감할 수 있습니다.</p>
 
     <div class="tbl-wrap" style="margin-bottom:16px">
       <table>
@@ -223,7 +223,7 @@
   <section class="card" id="mcp">
     <div class="sh"><span class="sh-num">04</span><h2>MCP — AI가 외부 도구를 직접 읽고 쓰는 표준 프로토콜</h2></div>
 
-    <p class="lead">MCP(Model Context Protocol)는 AI가 GitHub, Firebase, Jira, Slack, 데이터베이스 등 외부 도구와 직접 연결되는 표준 방식입니다. 정보를 복사·붙여넣기하지 않아도 AI가 직접 도구에서 읽고 씁니다.</p>
+    <p class="lead">MCP(Model Context Protocol — AI 도구와 외부 서비스 연동 표준)는 AI가 GitHub, Firebase, Jira, Slack, 데이터베이스 등 외부 도구와 직접 연결되는 표준 방식입니다. 정보를 복사·붙여넣기하지 않아도 AI가 직접 도구에서 읽고 씁니다.</p>
 
     <div class="tbl-wrap" style="margin-bottom:16px">
       <table>
@@ -233,7 +233,7 @@
         <tbody>
           <tr>
             <td><strong>android-mcp-server</strong></td>
-            <td>ADB 제어, 스크린샷, UI 트리 분석</td>
+            <td>ADB(안드로이드 기기 연결 도구) 제어, 스크린샷, UI 트리 분석</td>
             <td>AI가 실기기에서 앱 직접 조작 및 버그 확인</td>
           </tr>
           <tr>
@@ -261,7 +261,7 @@ claude mcp add android-mcp-server
 <span class="comment"># 그러면 이런 프롬프트가 가능해짐:</span>
 <span class="val">"앱 설치하고 서울 탭 눌러서 날씨가 뜨는지 스크린샷 찍어서 확인해줘"</span>
 
-<span class="comment"># V8 실험에서 ADB로 WorkManager를 수동 트리거했던 것을 AI가 직접 함</span></div>
+<span class="comment"># V8 실험에서 ADB로 WorkManager(백그라운드 작업 스케줄러)를 수동 트리거했던 것을 AI가 직접 함</span></div>
 
     <div class="insight" style="margin-top:12px">
       <span class="insight-icon">📱</span>
@@ -316,9 +316,9 @@ claude /install-github-app
         <div class="connect-to">GEMINI.md: "기존 단위 테스트 수정 금지" 한 줄</div>
       </div>
       <div class="connect-row">
-        <div class="connect-from">V8 Gemini — runBlocking 안티패턴 → 실기기 크래시</div>
+        <div class="connect-from">V8 Gemini — runBlocking 안티패턴(코루틴 스레드를 강제 차단하는 위험한 사용법) → 실기기 크래시</div>
         <div class="connect-arrow">→</div>
-        <div class="connect-to">GEMINI.md: "CoroutineWorker에서 runBlocking 금지"</div>
+        <div class="connect-to">GEMINI.md: "CoroutineWorker(코루틴 기반 백그라운드 작업 클래스)에서 runBlocking 금지"</div>
       </div>
       <div class="connect-row">
         <div class="connect-from">V6 Gemini — JAVA_HOME 오류로 빌드 검증 실패</div>

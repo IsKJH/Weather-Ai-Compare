@@ -28,7 +28,7 @@
 
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
-    <p class="lead">V4에서 실제 API를 붙인 앱에 단위 테스트를 추가하는 작업입니다. 프로덕션 코드를 수정하지 말고, 5가지 시나리오(초기 로딩·도시 선택·즐겨찾기·에러·성공)를 JVM 유닛 테스트로 커버하라는 동일한 요구사항을 세 AI에게 주었습니다. 단위 테스트의 핵심은 "실제 네트워크 없이 ViewModel 로직만 검증하기"이며, 이를 위해 외부 의존성을 가짜로 교체하는 것이 모킹(mocking)입니다.</p>
+    <p class="lead">V4에서 실제 API를 붙인 앱에 단위 테스트를 추가하는 작업입니다. 프로덕션 코드를 수정하지 말고, 5가지 시나리오(초기 로딩·도시 선택·즐겨찾기·에러·성공)를 JVM 유닛 테스트(실기기 없이 컴퓨터에서 실행되는 단위 테스트)로 커버하라는 동일한 요구사항을 세 AI에게 주었습니다. 단위 테스트의 핵심은 "실제 네트워크 없이 ViewModel 로직만 검증하기"이며, 이를 위해 외부 의존성을 가짜로 교체하는 것이 모킹(mocking — 실제 네트워크 없이 테스트하기 위해 가짜 응답을 주입하는 기법)입니다.</p>
     <div class="callout-grid">
       <div class="callout"><div class="callout-k">비교 초점</div><div class="callout-v">각 AI가 ViewModel의 Repository/Network 의존성을 테스트 환경에서 어떻게 격리하는지를 봅니다. 세 프로젝트의 V4 아키텍처가 서로 달랐기 때문에, 같은 요구사항에도 불구하고 모킹 진입점이 달라졌고 그 결과 전략도 달라졌습니다. "어디를 교체하면 테스트가 가능한가"라는 질문의 답이 V4 설계에서 이미 결정돼 있었습니다.</div></div>
       <div class="callout"><div class="callout-k">핵심 발견</div><div class="callout-v">Claude는 MockK로 싱글톤 Repository 자체를 교체했고(객체 레벨), Codex는 MockK 없이 JVM의 HTTP URL 처리 메커니즘을 가로채 가짜 응답을 주입했으며(네트워크 레벨), Gemini는 MockK + Turbine으로 Retrofit 서비스 생성 시점을 교체하고 Flow 방출 순서까지 정밀 검증했습니다(서비스 팩토리 레벨). 같은 "테스트"라도 어느 레이어를 잘라내느냐가 완전히 달랐습니다.</div></div>
@@ -84,8 +84,8 @@ After implementation:
         <tr><td class="col-label">테스트 코드 라인</td><td>140줄</td><td>245줄</td><td>199줄</td><td>—</td></tr>
         <tr class="row-hl"><td class="col-label">테스트 결과</td><td>5 / 5 통과 ✓</td><td>5 / 5 통과 ✓ (자가수정)</td><td>5 / 5 통과 ✓</td><td>—</td></tr>
         <tr><td class="col-label">1차 실행 결과</td><td>전부 통과</td><td>3개 실패 → 자가수정</td><td>전부 통과</td><td>—</td></tr>
-        <tr><td class="col-label">모킹 방식</td><td>MockK mockkObject</td><td>URLStreamHandlerFactory (직접 구현)</td><td>MockK mockkObject + Turbine</td><td>—</td></tr>
-        <tr><td class="col-label">코루틴 디스패처</td><td>StandardTestDispatcher</td><td>UnconfinedTestDispatcher</td><td>StandardTestDispatcher</td><td>—</td></tr>
+        <tr><td class="col-label">모킹 방식</td><td>MockK(코틀린 모킹 라이브러리) mockkObject</td><td>URLStreamHandlerFactory (직접 구현)</td><td>MockK mockkObject + Turbine(Flow 테스트용 라이브러리)</td><td>—</td></tr>
+        <tr><td class="col-label">코루틴 디스패처(비동기 작업이 실행될 스레드를 결정하는 코루틴 설정)</td><td>StandardTestDispatcher</td><td>UnconfinedTestDispatcher</td><td>StandardTestDispatcher</td><td>—</td></tr>
         <tr><td class="col-label">추가 의존성</td><td>JUnit4, coroutines-test, MockK</td><td>JUnit4, coroutines-test, org.json</td><td>JUnit4, coroutines-test, MockK, Turbine</td><td>—</td></tr>
       </tbody>
     </table></div>
@@ -114,7 +114,7 @@ After implementation:
         <tr class="row-hl">
           <td class="col-label"><span class="dot gemini"></span> Gemini</td>
           <td><code>mockkObject(WeatherApiService.Companion)</code><br>— Retrofit 서비스를 생성하는 팩토리 메서드(Companion.create())를 MockK로 교체.<br><br><strong>장점:</strong> Retrofit 레이어를 통째로 잘라내므로 HTTP 직렬화/역직렬화 없이 깔끔하게 격리. Turbine을 통해 Flow가 어떤 순서로 값을 방출하는지 시퀀스 단위로 검증 가능(단순히 최종 상태만 보는 것보다 정확).<br><strong>단점:</strong> Turbine이라는 추가 라이브러리 의존성이 생기고, Companion 객체 모킹은 MockK 특유의 문법이라 처음 보면 다소 낯설 수 있음.</td>
-          <td>V4에서 Retrofit WeatherApiService를 사용하므로 서비스 인스턴스 생성 시점(Companion.create())을 MockK로 교체. Turbine은 코루틴 Flow의 방출 순서를 <code>awaitItem()</code>으로 순서대로 단언하는 전용 라이브러리로, 비동기 상태 변화 검증을 직관적으로 표현.</td>
+          <td>V4에서 Retrofit WeatherApiService를 사용하므로 서비스 인스턴스 생성 시점(Companion.create())을 MockK로 교체. Turbine은 코루틴 Flow(상태 변화를 구독할 수 있는 코루틴 기반 데이터 흐름)의 방출 순서를 <code>awaitItem()</code>으로 순서대로 단언하는 전용 라이브러리로, 비동기 상태 변화 검증을 직관적으로 표현.</td>
           <td>StandardTestDispatcher + MainDispatcherRule</td>
           <td>프롬프트에서 "optional"로 제시한 Turbine을 유일하게 채택. Flow 방출 시퀀스를 단계별로 검증하는 표현력 높은 테스트 작성.</td>
         </tr>
