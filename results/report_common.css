@@ -458,6 +458,23 @@ pre.diff {
 .phase-link { text-decoration: none; color: var(--text); font-size: 13px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 1px; align-self: flex-start; }
 .phase-link:hover { border-color: var(--text); }
 
+/* ── FOOTER NAV ── */
+.rf {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+}
+.rf a {
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text3);
+  transition: color .1s;
+}
+.rf a:hover { color: var(--text); }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 760px) {
   .wrap { padding: 20px 14px 72px; }

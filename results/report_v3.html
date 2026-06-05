@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WeatherNow v3 자율 혁신 비교</title>
+<title>WeatherNow V3 자율 혁신 비교</title>
 <link rel="stylesheet" href="report_common.css?v=20260601">
 </head>
 <body id="top">
 <div class="wrap">
   <header class="rh">
-    <h1 class="rh-title">WeatherNow v3 자율 혁신 비교</h1>
+    <h1 class="rh-title">WeatherNow V3 자율 혁신 비교</h1>
     <p class="rh-sub">이 실험의 핵심은 "무엇을 만들라"는 스펙을 주지 않은 것입니다. 어떤 기능을 추가할지 AI가 직접 판단하게 했습니다. Gemini와 Cursor는 사용자 화면에 즉시 보이는 UI 기능을 선택했고, Claude는 내부 로직 개선을 선택했으며, Codex는 기능 추가 대신 코드 178줄을 줄이는 리팩터링을 선택했습니다 — 네 AI가 "자율"이라는 같은 조건에서 완전히 다른 방향으로 움직인 것이 이 단계의 핵심입니다.</p>
     <div class="rh-meta">
       <span class="ai-pill"><span class="dot claude"></span>Claude</span><span class="ai-pill"><span class="dot codex"></span>Codex</span><span class="ai-pill"><span class="dot gemini"></span>Gemini</span><span class="ai-pill"><span class="dot cursor"></span>Cursor</span>
@@ -22,7 +22,7 @@
     </div>
   </header>
   <nav class="toc">
-    <a href="index.html">전체 요약</a><a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#evidence">체감 변화</a><a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#code">코드</a>
+    <a href="index.html">← 전체 요약</a><a href="#overview">개요</a><a href="#prompt">프롬프트</a><a href="#summary">종합 비교</a><a href="#evidence">체감 변화</a><a href="#tokens">토큰</a><a href="#screens">스크린샷</a><a href="#code">코드</a>
   </nav>
   <section class="card" id="overview">
     <div class="sh"><span class="sh-num">01</span><h2>실험 개요</h2></div>
@@ -61,7 +61,7 @@ Your task:
     <div class="screen-set"><div class="screen-ai"><div class="screen-ai-head"><span class="dot claude"></span>Claude</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v3/claude/01-top.png" alt="Claude 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 · 하단 (동일)</div><img src="../screenshots/v3/claude/02-middle.png" alt="Claude 중간 기능 영역"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot codex"></span>Codex</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v3/codex/01-top.png" alt="Codex 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 기능 영역</div><img src="../screenshots/v3/codex/02-middle.png" alt="Codex 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 예보/상세</div><img src="../screenshots/v3/codex/03-bottom.png" alt="Codex 하단 예보/상세"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot gemini"></span>Gemini</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v3/gemini/01-top.png" alt="Gemini 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 기능 영역</div><img src="../screenshots/v3/gemini/02-middle.png" alt="Gemini 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 예보/상세</div><img src="../screenshots/v3/gemini/03-bottom.png" alt="Gemini 하단 예보/상세"></div></div></div><div class="screen-ai"><div class="screen-ai-head"><span class="dot cursor"></span>Cursor</div><div class="screen-list"><div class="screen-shot"><div class="screen-shot-title">상단 현재 날씨</div><img src="../screenshots/v3/cursor/01-top.png" alt="Cursor 상단 현재 날씨"></div><div class="screen-shot"><div class="screen-shot-title">중간 기능 영역</div><img src="../screenshots/v3/cursor/02-middle.png" alt="Cursor 중간 기능 영역"></div><div class="screen-shot"><div class="screen-shot-title">하단 예보/상세</div><img src="../screenshots/v3/cursor/03-bottom.png" alt="Cursor 하단 예보/상세"></div></div></div></div>
   </section>
   <section class="card" id="code">
-    <div class="sh"><span class="sh-num">08</span><h2>코드 요약</h2></div>
+    <div class="sh"><span class="sh-num">07</span><h2>코드 요약</h2></div>
     <div class="tbl-wrap"><table><thead><tr><th>AI</th><th>Kotlin 파일</th><th>Kotlin 라인</th><th>변경 파일</th><th>확인 근거</th></tr></thead><tbody><tr><td class="col-label"><span class="dot claude"></span> Claude</td><td>5개</td><td>612줄</td><td>기록상 2개</td><td>UI/로직 변경보다는 내부 레이아웃 인덱싱 최적화("Visual Logic")에 집중. v2 대비 코드 diff에서 사용자 화면에 직접 영향을 주는 변경이 뚜렷하게 잡히지 않습니다.</td></tr><tr><td class="col-label"><span class="dot codex"></span> Codex</td><td>6개</td><td>558줄 <strong>(v2 대비 178줄 감소 — 4개 AI 중 유일한 순감소)</strong></td><td>기록상 2개</td><td>신기능 추가 없이 기존 코드를 리팩터링해 줄 수를 줄이는 방향을 선택. Dynamic Refresh Engine(새로고침 시 mock 데이터 교체 로직)은 런타임 인터랙션이 있어야만 확인 가능하며 정적 스크린샷으로는 검증 불가.</td></tr><tr class="row-hl"><td class="col-label"><span class="dot gemini"></span> Gemini</td><td>5개</td><td>542줄</td><td>기록상 2개</td><td>WeatherViewModel에 현재 날씨 데이터를 분석해 자연어 문장을 생성하는 smartInsight 로직 추가. WeatherScreen에서 인사이트 카드 컴포넌트와 동적 배경색을 렌더링. 변경된 두 파일 모두 스크린샷에서 결과가 즉시 확인됩니다.</td></tr><tr class="row-hl"><td class="col-label"><span class="dot cursor"></span> Cursor</td><td>11개</td><td>986줄</td><td>4개</td><td>SmartComfort.kt 신규 생성: computeSmartInsight()(6요소 기반 0~100 점수 계산) + backgroundColorsFor()(기온별 4단계 그라데이션 색상) 구현. SmartInsightCard.kt 신규 생성: 점수 바·이모지·활동 팁 UI를 독립 Composable로 분리. WeatherViewModel UiState에 smartInsight computed property를 추가해 상태 관리 일원화.</td></tr></tbody></table></div>
   </section>
 </div>
